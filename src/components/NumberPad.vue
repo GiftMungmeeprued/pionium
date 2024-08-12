@@ -5,6 +5,6 @@ import Signs from "./Signs.vue";
 <template>
   <div class="flex">
     <Numbers />
-    <Signs />
+    <!-- <Signs /> -->
   </div>
 </template>
