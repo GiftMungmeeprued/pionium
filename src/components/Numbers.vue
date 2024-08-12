@@ -22,7 +22,7 @@ import Button from "./Button.vue";
     <Button center-upper="Rec">-</Button>
     <Button center-upper="Rnd">0</Button>
     <Button left-upper="Ran#">.</Button>
-    <Button left-upper="π" right-upper="e">
+    <Button left-upper="π" right-upper="e" :left-math="true" :right-math="true">
       ×10<sup
         ><math><mi>x</mi></math></sup
       >

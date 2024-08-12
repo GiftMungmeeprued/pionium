@@ -12,14 +12,14 @@ defineProps({
     type: String,
     default: "",
   },
-  // leftMath: {
-  //   type: bool,
-  //   default: false,
-  // },
-  // rightMath: {
-  //   type: bool,
-  //   default: false,
-  // },
+  leftMath: {
+    type: Boolean,
+    default: false,
+  },
+  rightMath: {
+    type: Boolean,
+    default: false,
+  },
 });
 </script>
 <template scoped>
@@ -28,11 +28,20 @@ defineProps({
       {{ centerUpper }}
     </div>
     <div v-else class="h-6">
-      <!-- <math v-if="leftMath">
-        <mi>{{ leftUpper }}</mi>
-      </math> -->
-      <span class="text-left px-1 float-left">{{ leftUpper }}</span>
-      <span class="text-right px-1 float-right">{{ rightUpper }}</span>
+      <span v-if="leftMath" class="text-left px-1 float-left">
+        <math>
+          <mi>{{ leftUpper }}</mi>
+        </math>
+      </span>
+      <span v-else class="text-left px-1 float-left">
+        {{ leftUpper }}
+      </span>
+      <span v-if="rightMath" class="text-right px-1 float-right"
+        ><math>
+          <mi>{{ rightUpper }}</mi>
+        </math>
+      </span>
+      <span v-else class="text-right px-1 float-right">{{ rightUpper }}</span>
     </div>
     <button
       type="button"
