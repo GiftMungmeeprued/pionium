@@ -1,5 +1,8 @@
 <script setup>
+import { ref } from "vue";
 import Button from "./Button.vue";
+
+const shift = ref(false);
 </script>
 <template>
   <div :class="`bg-gray-200 grid grid-cols-[repeat(5,_1fr)] m-0.5 gap-1`">
