@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "mathquill": "^0.10.1-a",
     "primeicons": "^7.0.0",
     "vue": "^3.4.29"
   },
