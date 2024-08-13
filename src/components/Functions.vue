@@ -8,7 +8,7 @@ import SmallButton from "./SmallButton.vue";
     <SmallButton main-title="Go to previous calculation">▲</SmallButton>
     <SmallButton main-title="Go to next calculation">▼</SmallButton>
     <SmallButton>MODE</SmallButton>
-    <SmallButton><span title="Settings">⛭</span></SmallButton>
+    <SmallButton main-title="Settings"><i class="pi pi-cog"></i></SmallButton>
     <SmallButton main-title="Calculate">
       <template v-slot:left>SOLVE</template>
       <template v-slot:right>=</template>
@@ -34,8 +34,12 @@ import SmallButton from "./SmallButton.vue";
         </mrow>
       </math>
     </SmallButton>
-    <SmallButton main-title="Move cursor left">←</SmallButton>
-    <SmallButton main-title="Move cursor right">→</SmallButton>
+    <SmallButton main-title="Move cursor left">
+      <i class="pi pi-arrow-left"></i>
+    </SmallButton>
+    <SmallButton main-title="Move cursor right">
+      <i class="pi pi-arrow-right"></i>
+    </SmallButton>
     <SmallButton
       main-title="Multiplicative inverse"
       :center-upper="true"

@@ -6,7 +6,7 @@ import Button from "./Button.vue";
     <Button center-upper="CONST">7</Button>
     <Button center-upper="CONV">8</Button>
     <Button center-upper="CLR">9</Button>
-    <Button center-upper="INS"><span title="Delete">DEL</span></Button>
+    <Button center-upper="INS"><i class="pi pi-delete-left"></i></Button>
     <Button center-upper="OFF">AC</Button>
     <Button center-upper="MATRIX">4</Button>
     <Button center-upper="VECTOR">5</Button>
