@@ -33,7 +33,7 @@ defineProps({
           <mi>{{ leftUpper }}</mi>
         </math>
       </span>
-      <span v-else class="text-left px-1 float-left">
+      <span v-else class="text-left px-1 float-left font-mono">
         {{ leftUpper }}
       </span>
       <span v-if="rightMath" class="text-right px-1 float-right"
@@ -41,7 +41,9 @@ defineProps({
           <mi>{{ rightUpper }}</mi>
         </math>
       </span>
-      <span v-else class="text-right px-1 float-right">{{ rightUpper }}</span>
+      <span v-else class="text-right px-1 float-right font-mono">{{
+        rightUpper
+      }}</span>
     </div>
     <button
       type="button"
