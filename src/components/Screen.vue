@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted } from "vue";
 
-import "mathquill/build/mathquill.js";
+import "mathquill/build/mathquill.min.js";
 onMounted(() => {
   const MQ = MathQuill.getInterface(2);
   const mathFieldSpan = document.getElementById("math-field");
