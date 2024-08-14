@@ -5,7 +5,7 @@ import Screen from "./Screen.vue";
 </script>
 <template>
   <main class="flex flex-col items-center content-end h-screen">
-    <Screen class="grow" />
+    <Screen />
     <Functions />
     <NumberPad />
   </main>
