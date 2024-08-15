@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, computed } from "vue";
+import { onMounted, ref, computed, reactive } from "vue";
 import "mathquill/build/mathquill.min.js";
 import { ComputeEngine } from "https://unpkg.com/@cortex-js/compute-engine?module";
 
@@ -9,83 +9,90 @@ import Functions from "./Functions.vue";
 const MQ = MathQuill.getInterface(2);
 const ce = new ComputeEngine();
 
-// const mathFieldEl = ref(null);
-// const answerFieldEl = ref(null);
-// const mathField = ref(null);
-// const staticMath = ref(null);
+const mathFieldEl = ref(null);
+const answerFieldEl = ref(null);
+const mathFieldRef = computed(() => MQ.MathField(mathFieldEl.value));
+const staticMathRef = computed(() => MQ.StaticMath(answerFieldEl.value));
+
+const store = reactive({
+  calculated: "",
+  isRational: false,
+  SD: false,
+});
 
 function handleEnter() {
-  const calculated = ce.parse(mathField.latex()).evaluate();
-  console.log(calculated.json);
-  const isRational =
-    Array.isArray(calculated.json) &&
-    (calculated.json.flat().includes("Rational") ||
-      calculated.json.flat().includes("Sqrt"));
-  const latex = `= ${isRational ? calculated.latex : calculated.value}`;
-  const obj = {
-    latex: `= ${isRational ? calculated.latex : calculated.value}`,
-  };
-  console.log(obj);
-
-  staticMath.latex("= \\frac{17\,722\,777}{26\,111\,821\,184\,927}");
-
-  // console.log(isRational);
-  // staticMath.latex(
-  //   `= ${isRational ? calculated.latex : calculated.value}`
-  // );
-
-  // mathField.blur();
+  const mathField = mathFieldRef.value;
+  const staticMath = staticMathRef.value;
+  store.calculated = ce.parse(mathField.latex()).evaluate();
+  store.isRational =
+    Array.isArray(store.calculated.json) &&
+    (store.calculated.json.flat().includes("Rational") ||
+      store.calculated.json.flat().includes("Sqrt"));
+  if (typeof store.calculated.value === "number") {
+    staticMath.latex(
+      `= ${
+        store.isRational
+          ? store.calculated.latex.replace(/\\,/g, "")
+          : store.calculated.value
+      }`
+    );
+  }
 }
-
 onMounted(() => {
-  const mathFieldEl = document.getElementById("math-field");
-  const answerFieldEl = document.getElementById("answer");
   const config = {
-    autoCommands: "pi sqrt sum",
-    sumStartsWithNEquals: true,
+    autoCommands: "pi sqrt sum int",
+    sumStartsWithNEquals: false,
     handlers: {
       edit: function () {
+        const staticMath = staticMathRef.value;
         staticMath.latex("");
       },
-      enter: () => {
-        const calculated = ce.parse(mathField.latex()).evaluate();
-        const isRational =
-          Array.isArray(calculated.json) &&
-          (calculated.json.flat().includes("Rational") ||
-            calculated.json.flat().includes("Sqrt"));
-        staticMath.latex(
-          `= ${isRational ? calculated.latex : calculated.value}`
-        );
-        console.log(isRational);
-        console.log(calculated.latex);
-        console.log(calculated.value);
-      },
+      enter: handleEnter,
     },
   };
-  const mathField = MQ.MathField(mathFieldEl, config);
-  const staticMath = MQ.StaticMath(answerFieldEl);
-  mathField.focus();
 
-  // const mathField = computed(() => MQ.MathField(mathFieldEl.value, config));
-  // mathField.value = MQ.MathField(mathFieldEl.value, config);
-  // mathField.value.focus();
-  // mathField.value.latex("\\sin(8)");
-  // const staticMath = computed(() => MQ.StaticMath(answerFieldEl.value));
-  // staticMath.value = MQ.StaticMath(answerFieldEl.value);
-  // mathField.typedText("sin(");
+  mathFieldRef.value.config(config);
+  mathFieldRef.value.focus();
 });
 
 function handleTypedText(character) {
-  mathField.typedText(character);
-  mathField.focus();
+  mathFieldRef.value.typedText(character);
+  mathFieldRef.value.focus();
 }
 
 function handleKeystroke(keystroke) {
+  const mathField = mathFieldRef.value;
   if (keystroke == "Enter") {
     handleEnter();
+  } else if (keystroke == "AC") {
+    mathField.latex("");
+  } else {
+    mathField.keystroke(keystroke);
   }
-  // mathField.keystroke("Enter");
-  mathField.focus();
+}
+
+function handleCmd(cmd) {
+  const mathField = mathFieldRef.value;
+  const staticMath = staticMathRef.value;
+
+  if (cmd === "\\int") {
+    mathField.write("\\int_{ }^{ } \\left(\\right) \\mathrm{d}x");
+  } else if (cmd === "\\sum") {
+    mathField.write("\\sum_{x=}^{ }");
+  } else if (cmd === "SD") {
+    if (store.isRational) {
+      staticMath.latex(
+        `= ${
+          store.SD
+            ? store.calculated.latex.replace(/\\,/g, "")
+            : store.calculated.value
+        }`
+      );
+      store.SD = !store.SD;
+    }
+  } else {
+    mathField.write(cmd);
+  }
 }
 </script>
 <template>
@@ -100,7 +107,11 @@ function handleKeystroke(keystroke) {
         <span ref="answerFieldEl" id="answer"></span>
       </div>
     </div>
-    <Functions />
+    <Functions
+      @cmd="handleCmd"
+      @typedText="handleTypedText"
+      @keystroke="handleKeystroke"
+    />
     <NumberPad @typedText="handleTypedText" @keystroke="handleKeystroke" />
   </main>
 </template>

@@ -14,7 +14,11 @@ import SmallButton from "./SmallButton.vue";
       <template v-slot:right>=</template>
       CALC
     </SmallButton>
-    <SmallButton main-title="Integrate" left-title="Differentiate">
+    <SmallButton
+      main-title="Integrate"
+      @click="$emit('cmd', '\\int')"
+      left-title="Differentiate"
+    >
       <template v-slot:left
         ><math display="inline" class="text-[12px]">
           <mfrac
@@ -34,14 +38,21 @@ import SmallButton from "./SmallButton.vue";
         </mrow>
       </math>
     </SmallButton>
-    <SmallButton main-title="Move cursor left">
+    <SmallButton
+      main-title="Move cursor left"
+      @click="$emit('keystroke', 'Left')"
+    >
       <i class="pi pi-arrow-left"></i>
     </SmallButton>
-    <SmallButton main-title="Move cursor right">
+    <SmallButton
+      main-title="Move cursor right"
+      @click="$emit('keystroke', 'Right')"
+    >
       <i class="pi pi-arrow-right"></i>
     </SmallButton>
     <SmallButton
       main-title="Multiplicative inverse"
+      @click="$emit('cmd', '^{-1}')"
       :center-upper="true"
       center-title="Factorial"
       class="text-xl"
@@ -55,6 +66,7 @@ import SmallButton from "./SmallButton.vue";
     </SmallButton>
     <SmallButton
       main-title="Logarithm with specified base"
+      @click="$emit('typedText', 'log_')"
       :center-upper="true"
       center-title="Summation"
     >
@@ -80,6 +92,7 @@ import SmallButton from "./SmallButton.vue";
     </SmallButton>
     <SmallButton
       main-title="Fraction"
+      @click="$emit('typedText', '/')"
       :center-upper="true"
       center-title="Mixed fraction"
     >
@@ -94,6 +107,7 @@ import SmallButton from "./SmallButton.vue";
     </SmallButton>
     <SmallButton
       main-title="Square root"
+      @click="$emit('typedText', 'sqrt')"
       :center-upper="true"
       center-title="Cube root"
     >
@@ -111,7 +125,11 @@ import SmallButton from "./SmallButton.vue";
         </msqrt>
       </math>
     </SmallButton>
-    <SmallButton main-title="Square" left-title="Cube">
+    <SmallButton
+      main-title="Square"
+      @click="$emit('typedText', '^2')"
+      left-title="Cube"
+    >
       <template v-slot:left>
         <math display="inline">
           <msup><mi>x</mi><mn>3</mn></msup>
@@ -121,7 +139,11 @@ import SmallButton from "./SmallButton.vue";
         <msup><mi>x</mi><mn>2</mn></msup>
       </math>
     </SmallButton>
-    <SmallButton main-title="Power" left-title="Root">
+    <SmallButton
+      main-title="Power"
+      @click="$emit('typedText', '^')"
+      left-title="Root"
+    >
       <template v-slot:left>
         <math display="block">
           <mroot>
@@ -136,6 +158,7 @@ import SmallButton from "./SmallButton.vue";
     </SmallButton>
     <SmallButton
       main-title="Logarithm with base 10"
+      @click="$emit('typedText', 'log(')"
       left-title="Power of 10"
       class="text-xl"
     >
@@ -157,7 +180,11 @@ import SmallButton from "./SmallButton.vue";
       </template>
       ln
     </SmallButton>
-    <SmallButton main-title="Negative" class="text-xl">
+    <SmallButton
+      main-title="Negative"
+      @click="$emit('typedText', '-')"
+      class="text-xl"
+    >
       <template v-slot:right>A</template>
       (–)
     </SmallButton>
@@ -173,17 +200,29 @@ import SmallButton from "./SmallButton.vue";
       <template v-slot:right>C</template>
       hyp
     </SmallButton>
-    <SmallButton class="text-xl">
+    <SmallButton
+      main-title="Sin"
+      @click="$emit('typedText', 'sin(')"
+      class="text-xl"
+    >
       <template v-slot:left>sin<sup>-1</sup></template>
       <template v-slot:right>D</template>
       sin
     </SmallButton>
-    <SmallButton class="text-xl">
+    <SmallButton
+      main-title="Cosin"
+      @click="$emit('typedText', 'cos(')"
+      class="text-xl"
+    >
       <template v-slot:left>cos<sup>-1</sup></template>
       <template v-slot:right>E</template>
       cos
     </SmallButton>
-    <SmallButton class="text-xl">
+    <SmallButton
+      main-title="Tan"
+      @click="$emit('typedText', 'tan(')"
+      class="text-xl"
+    >
       <template v-slot:left>tan<sup>-1</sup></template>
       <template v-slot:right>F</template>
       tan
@@ -198,16 +237,30 @@ import SmallButton from "./SmallButton.vue";
       </template>
       ENG
     </SmallButton>
-    <SmallButton :center-upper="true" center-title="Percent" class="text-xl">
+    <SmallButton
+      main-title="("
+      @click="$emit('typedText', '(')"
+      :center-upper="true"
+      center-title="Percent"
+      class="text-xl"
+    >
       <template v-slot:center>%</template>
       (
     </SmallButton>
-    <SmallButton class="text-xl">
+    <SmallButton
+      main-title=")"
+      @click="$emit('typedText', ')')"
+      class="text-xl"
+    >
       <template v-slot:left>,</template>
       <template v-slot:right>X</template>
       )
     </SmallButton>
-    <SmallButton class="text-xl">
+    <SmallButton
+      main-title="Switch been fractions and decimals"
+      @click="$emit('cmd', 'SD')"
+      class="text-xl"
+    >
       <template v-slot:left>
         <math display="inline" class="align-text-bottom text-xs">
           <mi>a</mi><mfrac><mi>b</mi><mi>c</mi></mfrac>

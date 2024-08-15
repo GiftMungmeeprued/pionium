@@ -1,10 +1,6 @@
 <script setup>
 import Button from "./Button.vue";
 import { store } from "./store";
-
-function addChar(char) {
-  store.inputText = ``;
-}
 </script>
 <template>
   <div :class="`bg-gray-200 grid grid-cols-[repeat(5,_1fr)] m-0.5 gap-1`">
@@ -13,8 +9,10 @@ function addChar(char) {
     >
     <Button @click="$emit('typedText', '8')" center-upper="CONV">8</Button>
     <Button @click="$emit('typedText', '9')" center-upper="CLR">9</Button>
-    <Button center-upper="INS"><i class="pi pi-delete-left"></i></Button>
-    <Button center-upper="OFF">AC</Button>
+    <Button @click="$emit('keystroke', 'Backspace')" center-upper="INS"
+      ><i class="pi pi-delete-left"></i
+    ></Button>
+    <Button @click="$emit('keystroke', 'AC')" center-upper="OFF">AC</Button>
     <Button @click="$emit('typedText', '4')" center-upper="MATRIX">4</Button>
     <Button @click="$emit('typedText', '5')" center-upper="VECTOR">5</Button>
     <Button @click="$emit('typedText', '6')">6</Button>
