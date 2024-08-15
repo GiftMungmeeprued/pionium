@@ -1,10 +1,18 @@
 <script setup>
 import Button from "./Button.vue";
-import { store } from "./store";
+import { store, resetShiftAlpha } from "./store";
 </script>
 <template>
   <div :class="`bg-gray-200 grid grid-cols-[repeat(5,_1fr)] m-0.5 gap-1`">
-    <Button @click.prevent="$emit('typedText', '7')" center-upper="CONST"
+    <Button
+      @click="
+        store.onShift
+          ? console.log('const')
+          : store.onAlpha
+          ? resetShiftAlpha
+          : $emit('typedText', '7')
+      "
+      center-upper="CONST"
       >7</Button
     >
     <Button @click="$emit('typedText', '8')" center-upper="CONV">8</Button>

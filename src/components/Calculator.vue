@@ -5,6 +5,7 @@ import { ComputeEngine } from "https://unpkg.com/@cortex-js/compute-engine?modul
 
 import NumberPad from "./NumberPad.vue";
 import Functions from "./Functions.vue";
+import { store, resetShiftAlpha } from "./store";
 
 const MQ = MathQuill.getInterface(2);
 const ce = new ComputeEngine();
@@ -14,7 +15,7 @@ const answerFieldEl = ref(null);
 const mathFieldRef = computed(() => MQ.MathField(mathFieldEl.value));
 const staticMathRef = computed(() => MQ.StaticMath(answerFieldEl.value));
 
-const store = reactive({
+const data = reactive({
   calculated: "",
   isRational: false,
   SD: false,
@@ -23,20 +24,22 @@ const store = reactive({
 function handleEnter() {
   const mathField = mathFieldRef.value;
   const staticMath = staticMathRef.value;
-  store.calculated = ce.parse(mathField.latex()).evaluate();
-  store.isRational =
-    Array.isArray(store.calculated.json) &&
-    (store.calculated.json.flat().includes("Rational") ||
-      store.calculated.json.flat().includes("Sqrt"));
-  if (typeof store.calculated.value === "number") {
+  data.calculated = ce.parse(mathField.latex()).evaluate();
+  data.isRational =
+    Array.isArray(data.calculated.json) &&
+    (data.calculated.json.flat().includes("Rational") ||
+      data.calculated.json.flat().includes("Sqrt"));
+  if (typeof data.calculated.value === "number") {
     staticMath.latex(
       `= ${
-        store.isRational
-          ? store.calculated.latex.replace(/\\,/g, "")
-          : store.calculated.value
+        data.isRational
+          ? data.calculated.latex.replace(/\\,/g, "")
+          : data.calculated.value
       }`
     );
   }
+  console.log({ latex: mathField.latex() });
+  // console.log(ce.parse("\\sin^{\\prime}(x)\\left|_{x=1}").json);
 }
 onMounted(() => {
   const config = {
@@ -58,6 +61,7 @@ onMounted(() => {
 function handleTypedText(character) {
   mathFieldRef.value.typedText(character);
   mathFieldRef.value.focus();
+  resetShiftAlpha();
 }
 
 function handleKeystroke(keystroke) {
@@ -69,37 +73,88 @@ function handleKeystroke(keystroke) {
   } else {
     mathField.keystroke(keystroke);
   }
+  resetShiftAlpha();
 }
 
 function handleCmd(cmd) {
   const mathField = mathFieldRef.value;
   const staticMath = staticMathRef.value;
 
-  if (cmd === "\\int") {
-    mathField.write("\\int_{ }^{ } \\left(\\right) \\mathrm{d}x");
-  } else if (cmd === "\\sum") {
-    mathField.write("\\sum_{x=}^{ }");
-  } else if (cmd === "SD") {
-    if (store.isRational) {
-      staticMath.latex(
-        `= ${
-          store.SD
-            ? store.calculated.latex.replace(/\\,/g, "")
-            : store.calculated.value
-        }`
-      );
-      store.SD = !store.SD;
-    }
-  } else {
-    mathField.write(cmd);
+  switch (cmd) {
+    case "\\int":
+      mathField.write("\\int_{ }^{ } \\left(\\right) \\mathrm{d}x");
+      break;
+    case "\\sum":
+      mathField.write("\\sum_{x=}^{ }");
+      for (let i = 0; i < 2; i++) {
+        mathField.keystroke("Left");
+      }
+      break;
+    case "SD":
+      if (data.isRational) {
+        staticMath.latex(
+          `= ${
+            data.SD
+              ? data.calculated.latex.replace(/\\,/g, "")
+              : data.calculated.value
+          }`
+        );
+        data.SD = !data.SD;
+      }
+      break;
+    case "\\diff":
+      mathField.write("\\frac{d}{dx} \\left(\\right)_{x={ }}");
+      for (let i = 0; i < 5; i++) {
+        mathField.keystroke("Left");
+      }
+      break;
+    default:
+      mathField.write(cmd);
   }
+  mathField.focus();
+  resetShiftAlpha();
+  // if (cmd === "\\int") {
+  //   mathField.write("\\int_{ }^{ } \\left(\\right) \\mathrm{d}x");
+  // } else if (cmd === "\\sum") {
+  //   mathField.write("\\sum_{x=}^{ }");
+  // } else if (cmd === "SD") {
+  //   if (data.isRational) {
+  //     staticMath.latex(
+  //       `= ${
+  //         data.SD
+  //           ? data.calculated.latex.replace(/\\,/g, "")
+  //           : data.calculated.value
+  //       }`
+  //     );
+  //     data.SD = !data.SD;
+  //   }
+  // } else if (){
+  //   mathField.write("\\frac{d}{dx} \\left(\\right)_{x={ }}")
+  // }
+  // else {
+  //   mathField.write(cmd);
+  // }
+  // mathField.focus();
+  // resetShiftAlpha();
 }
 </script>
 <template>
   <main class="flex flex-col items-center content-end h-screen">
     <div class="bg-gray-100 w-[416px] mt-5 border-2 border-gray-500">
+      <div class="bg-gray-200 h-7">
+        <span
+          class="text-gray-200 border-0 py-0.5 px-1 ml-0.5 rounded text-xs font-bold"
+          :class="{ 'bg-gray-500': store.onShift }"
+          >SHIFT</span
+        >
+        <span
+          class="text-gray-200 border-0 py-0.5 px-1 ml-0.5 rounded text-xs font-bold"
+          :class="{ 'bg-gray-500': store.onAlpha }"
+          >ALPHA</span
+        >
+      </div>
       <div
-        class="w-full px-3 py-5 text-5xl"
+        class="w-full px-3 py-5 min-h-20"
         ref="mathFieldEl"
         id="math-field"
       ></div>

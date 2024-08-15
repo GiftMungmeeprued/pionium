@@ -1,10 +1,21 @@
 <script setup>
 import SmallButton from "./SmallButton.vue";
+import { store, resetShiftAlpha } from "./store";
+
+function pressShift() {
+  store.onShift = !store.onShift;
+  store.onAlpha = false;
+}
+
+function pressAlpha() {
+  store.onAlpha = !store.onAlpha;
+  store.onShift = false;
+}
 </script>
 <template>
   <div class="grid grid-cols-6 bg-gray-200 gap-1 my-2 w-[416px]">
-    <SmallButton>SHIFT</SmallButton>
-    <SmallButton>ALPHA</SmallButton>
+    <SmallButton @click="pressShift">SHIFT</SmallButton>
+    <SmallButton @click="pressAlpha">ALPHA</SmallButton>
     <SmallButton main-title="Go to previous calculation">▲</SmallButton>
     <SmallButton main-title="Go to next calculation">▼</SmallButton>
     <SmallButton>MODE</SmallButton>
@@ -16,7 +27,13 @@ import SmallButton from "./SmallButton.vue";
     </SmallButton>
     <SmallButton
       main-title="Integrate"
-      @click="$emit('cmd', '\\int')"
+      @click="
+        store.onShift
+          ? $emit('cmd', '\\diff')
+          : store.onAlpha
+          ? $emit('typedText', ':')
+          : $emit('cmd', '\\int')
+      "
       left-title="Differentiate"
     >
       <template v-slot:left
@@ -52,7 +69,13 @@ import SmallButton from "./SmallButton.vue";
     </SmallButton>
     <SmallButton
       main-title="Multiplicative inverse"
-      @click="$emit('cmd', '^{-1}')"
+      @click="
+        store.onShift
+          ? $emit('typedText', '!')
+          : store.onAlpha
+          ? resetShiftAlpha()
+          : $emit('cmd', '^{-1}')
+      "
       :center-upper="true"
       center-title="Factorial"
       class="text-xl"
@@ -66,7 +89,13 @@ import SmallButton from "./SmallButton.vue";
     </SmallButton>
     <SmallButton
       main-title="Logarithm with specified base"
-      @click="$emit('typedText', 'log_')"
+      @click="
+        store.onShift
+          ? $emit('cmd', '\\sum')
+          : store.onAlpha
+          ? resetShiftAlpha()
+          : $emit('typedText', 'log_')
+      "
       :center-upper="true"
       center-title="Summation"
     >
@@ -127,7 +156,13 @@ import SmallButton from "./SmallButton.vue";
     </SmallButton>
     <SmallButton
       main-title="Square"
-      @click="$emit('typedText', '^2')"
+      @click="
+        store.onShift
+          ? $emit('typedText', '^3')
+          : store.onAlpha
+          ? resetShiftAlpha()
+          : $emit('typedText', '^2')
+      "
       left-title="Cube"
     >
       <template v-slot:left>
@@ -158,7 +193,13 @@ import SmallButton from "./SmallButton.vue";
     </SmallButton>
     <SmallButton
       main-title="Logarithm with base 10"
-      @click="$emit('typedText', 'log(')"
+      @click="
+        store.onShift
+          ? $emit('typedText', '10^')
+          : store.onAlpha
+          ? resetShiftAlpha()
+          : $emit('typedText', 'log(')
+      "
       left-title="Power of 10"
       class="text-xl"
     >
@@ -170,6 +211,13 @@ import SmallButton from "./SmallButton.vue";
     </SmallButton>
     <SmallButton
       main-title="Natural logarithm"
+      @click="
+        store.onShift
+          ? $emit('typedText', 'e^')
+          : store.onAlpha
+          ? resetShiftAlpha()
+          : $emit('typedText', 'ln')
+      "
       left-title="Power of e"
       class="text-xl"
     >
@@ -194,6 +242,13 @@ import SmallButton from "./SmallButton.vue";
     </SmallButton>
     <SmallButton
       main-title="Hyperbolic functions and additional trigonometric functions"
+      @click="
+        store.onShift
+          ? $emit('typedText', '|')
+          : store.onAlpha
+          ? resetShiftAlpha()
+          : resetShiftAlpha()
+      "
       class="text-xl"
     >
       <template v-slot:left>Abs</template>
