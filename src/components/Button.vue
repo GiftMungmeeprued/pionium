@@ -1,52 +1,51 @@
 <script setup>
 defineProps({
-  leftUpper: {
+  leftTitle: {
     type: String,
     default: "",
   },
-  rightUpper: {
+  rightTitle: {
+    type: String,
+    default: "",
+  },
+  centerTitle: {
+    type: String,
+    default: "",
+  },
+  mainTitle: {
     type: String,
     default: "",
   },
   centerUpper: {
-    type: String,
-    default: "",
-  },
-  leftMath: {
     type: Boolean,
     default: false,
   },
-  rightMath: {
+  upperSpace: {
     type: Boolean,
-    default: false,
+    default: true,
   },
 });
 </script>
 <template scoped>
   <div class="flex flex-col">
-    <div v-if="centerUpper" class="text-center px-1 font-mono">
-      {{ centerUpper }}
+    <div
+      v-if="centerUpper"
+      :title="centerTitle"
+      class="h-6 text-center px-1 font-mono"
+    >
+      <slot name="center"></slot>
     </div>
     <div v-else class="h-6">
-      <span v-if="leftMath" class="text-left px-1 float-left">
-        <math>
-          <mi>{{ leftUpper }}</mi>
-        </math>
+      <span :title="leftTitle" class="text-left px-1 float-left font-mono">
+        <slot name="left"></slot>
       </span>
-      <span v-else class="text-left px-1 float-left font-mono">
-        {{ leftUpper }}
-      </span>
-      <span v-if="rightMath" class="text-right px-1 float-right"
-        ><math>
-          <mi>{{ rightUpper }}</mi>
-        </math>
-      </span>
-      <span v-else class="text-right px-1 float-right font-mono">{{
-        rightUpper
-      }}</span>
+      <span :title="rightTitle" class="text-right px-1 float-right font-mono"
+        ><slot name="right"></slot
+      ></span>
     </div>
     <button
       type="button"
+      :title="mainTitle"
       class="button bg-white hover:bg-gray-100 text-gray-800 font-semibold border border-gray-400 rounded shadow w-20 h-12 text-3xl text-center"
     >
       <slot></slot>

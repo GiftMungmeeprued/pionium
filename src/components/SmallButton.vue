@@ -24,14 +24,6 @@ defineProps({
     type: Boolean,
     default: true,
   },
-  // leftMath: {
-  //   type: Boolean,
-  //   default: false,
-  // },
-  // rightMath: {
-  //   type: Boolean,
-  //   default: false,
-  // },
 });
 </script>
 <template>
@@ -59,24 +51,6 @@ defineProps({
       </span>
     </div>
 
-    <!-- <div v-else class="h-5">
-      <span v-if="leftMath" class="text-left px-1 float-left text-sm">
-        <math>
-          <mi>{{ leftUpper }}</mi>
-        </math>
-      </span>
-      <span v-else class="text-left px-1 float-left font-mono text-sm">
-        {{ leftUpper }}
-      </span>
-      <span v-if="rightMath" class="text-right px-1 float-right text-sm"
-        ><math>
-          <mi>{{ rightUpper }}</mi>
-        </math>
-      </span>
-      <span v-else class="text-right px-1 float-right font-mono text-sm">{{
-        rightUpper
-      }}</span>
-    </div> -->
     <button
       type="button"
       class="button bg-white hover:bg-gray-100 text-gray-800 font-semibold border border-gray-400 rounded shadow h-8 px-0.5 py-0"
