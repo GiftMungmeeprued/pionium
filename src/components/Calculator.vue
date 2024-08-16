@@ -2,7 +2,7 @@
 import { onMounted, ref, computed, reactive } from "vue";
 import "mathquill/build/mathquill.min.js";
 import { ComputeEngine } from "https://unpkg.com/@cortex-js/compute-engine?module";
-
+import nerdamer from "nerdamer/all.min.js";
 import NumberPad from "./NumberPad.vue";
 import Functions from "./Functions.vue";
 import { store, resetShiftAlpha } from "./store";
@@ -16,30 +16,32 @@ const mathFieldRef = computed(() => MQ.MathField(mathFieldEl.value));
 const staticMathRef = computed(() => MQ.StaticMath(answerFieldEl.value));
 
 const data = reactive({
-  calculated: "",
+  calculated: null,
   isRational: false,
   SD: false,
+  mixedFraction: false,
 });
+
+function preprocessInputLatex(latex) {
+  // convert //cdot to *
+  latex = latex.replace(/\\cdot/g, " \\cdot ");
+  return latex;
+}
+
+function preprocessDisplayLatex(latex) {
+  // remove //cdot in front of sqrt
+  latex = latex.replace(/ \\cdot \\sqrt/g, "\\sqrt");
+  return latex;
+}
 
 function handleEnter() {
   const mathField = mathFieldRef.value;
   const staticMath = staticMathRef.value;
-  data.calculated = ce.parse(mathField.latex()).evaluate();
-  data.isRational =
-    Array.isArray(data.calculated.json) &&
-    (data.calculated.json.flat().includes("Rational") ||
-      data.calculated.json.flat().includes("Sqrt"));
-  if (typeof data.calculated.value === "number") {
-    staticMath.latex(
-      `= ${
-        data.isRational
-          ? data.calculated.latex.replace(/\\,/g, "")
-          : data.calculated.value
-      }`
-    );
-  }
-  console.log({ latex: mathField.latex() });
-  // console.log(ce.parse("\\sin^{\\prime}(x)\\left|_{x=1}").json);
+
+  const processedLatex = preprocessInputLatex(mathField.latex());
+  const exp = nerdamer.convertFromLaTeX(processedLatex).toString();
+  data.calculated = nerdamer(exp, {}, ["expand"]);
+  staticMath.latex(`= ${preprocessDisplayLatex(data.calculated.toTeX())}`);
 }
 onMounted(() => {
   const config = {
@@ -76,6 +78,16 @@ function handleKeystroke(keystroke) {
   resetShiftAlpha();
 }
 
+function displayMixedFraction(fraction) {
+  const numerator = fraction.numerator();
+  const denominator = fraction.denominator();
+  console.log(numerator);
+  console.log(denominator);
+  const quotient = Math.floor(numerator / denominator);
+  const remainder = numerator % denominator;
+  return `${quotient}\\frac{${remainder}}{${denominator}}`;
+}
+
 function handleCmd(cmd) {
   const mathField = mathFieldRef.value;
   const staticMath = staticMathRef.value;
@@ -91,22 +103,30 @@ function handleCmd(cmd) {
       }
       break;
     case "SD":
-      if (data.isRational) {
-        staticMath.latex(
-          `= ${
-            data.SD
-              ? data.calculated.latex.replace(/\\,/g, "")
-              : data.calculated.value
-          }`
-        );
-        data.SD = !data.SD;
-      }
+      staticMath.latex(
+        `= ${
+          data.SD
+            ? preprocessDisplayLatex(data.calculated.toTeX())
+            : data.calculated.evaluate().text("decimals")
+        }`
+      );
+      data.SD = !data.SD;
       break;
     case "\\diff":
       mathField.write("\\frac{d}{dx} \\left(\\right)_{x={ }}");
       for (let i = 0; i < 5; i++) {
         mathField.keystroke("Left");
       }
+      break;
+    case "mixedFraction":
+      staticMath.latex(
+        `= ${
+          data.mixedFraction
+            ? preprocessDisplayLatex(data.calculated.toTeX())
+            : displayMixedFraction(data.calculated)
+        }`
+      );
+      data.mixedFraction = !data.mixedFraction;
       break;
     default:
       mathField.write(cmd);
