@@ -13,17 +13,38 @@ function pressAlpha() {
 }
 </script>
 <template>
-  <div class="grid grid-cols-6 bg-gray-200 gap-1 my-2 w-[416px]">
-    <SmallButton @click="pressShift">SHIFT</SmallButton>
-    <SmallButton @click="pressAlpha">ALPHA</SmallButton>
-    <SmallButton main-title="Go to previous calculation">▲</SmallButton>
-    <SmallButton main-title="Go to next calculation">▼</SmallButton>
-    <SmallButton>MODE</SmallButton>
-    <SmallButton main-title="Settings"><i class="pi pi-cog"></i></SmallButton>
-    <SmallButton main-title="Calculate">
+  <div class="grid grid-cols-6 bg-gray-200 gap-1 my-2">
+    <SmallButton @click="pressShift" :upper-space="false"
+      ><span class="text-[12px] tall:text-base">SHIFT</span></SmallButton
+    >
+    <SmallButton @click="pressAlpha" :upper-space="false"
+      ><span class="text-[12px] tall:text-base">ALPHA</span></SmallButton
+    >
+    <SmallButton main-title="Go to previous calculation" :upper-space="false"
+      >▲</SmallButton
+    >
+    <SmallButton main-title="Go to next calculation" :upper-space="false"
+      >▼</SmallButton
+    >
+    <SmallButton :upper-space="false"
+      ><span class="text-[12px] tall:text-base">MODE</span></SmallButton
+    >
+    <SmallButton main-title="Settings" :upper-space="false"
+      ><i class="pi pi-cog"></i
+    ></SmallButton>
+    <SmallButton
+      main-title="Calculate"
+      @click="
+        store.onShift
+          ? $emit('cmd', 'solve')
+          : store.onAlpha
+          ? $emit('typedText', '=')
+          : $emit('cmd', 'calc')
+      "
+    >
       <template v-slot:left>SOLVE</template>
       <template v-slot:right>=</template>
-      CALC
+      <span class="text-[12px] tall:text-base">CALC</span>
     </SmallButton>
     <SmallButton
       main-title="Integrate"
@@ -31,19 +52,19 @@ function pressAlpha() {
         store.onShift
           ? $emit('cmd', '\\diff')
           : store.onAlpha
-          ? $emit('typedText', ':')
+          ? resetShiftAlpha()
           : $emit('cmd', '\\int')
       "
-      left-title="Differentiate"
+      :center-upper="true"
+      center-title="Differentiate"
     >
-      <template v-slot:left
-        ><math display="inline" class="text-[12px]">
+      <template v-slot:center
+        ><math display="inline" class="align-top text-[9px] tall:text-[11px]">
           <mfrac
             ><mi>d</mi> <mrow><mi>d</mi><mi>x</mi></mrow></mfrac
           ><mi>▬</mi>
         </math></template
       >
-      <template v-slot:right>:</template>
       <math>
         <mrow>
           <msubsup>
@@ -78,7 +99,6 @@ function pressAlpha() {
       "
       :center-upper="true"
       center-title="Factorial"
-      class="text-xl"
     >
       <template v-slot:center>
         <math><mi>x</mi><mo>!</mo></math>
@@ -126,7 +146,10 @@ function pressAlpha() {
       center-title="Mixed fraction"
     >
       <template v-slot:center>
-        <math display="inline" class="align-text-bottom text-xs">
+        <math
+          display="inline"
+          class="align-text-bottom text-[10px] tall:text-xs"
+        >
           <mi>▬</mi><mfrac><mi>▭</mi><mi>▭</mi></mfrac>
         </math>
       </template>
@@ -163,23 +186,25 @@ function pressAlpha() {
           ? resetShiftAlpha()
           : $emit('typedText', '^2')
       "
-      left-title="Cube"
+      :center-upper="true"
+      center-title="Cube"
     >
-      <template v-slot:left>
+      <template v-slot:center>
         <math display="inline">
           <msup><mi>x</mi><mn>3</mn></msup>
         </math>
       </template>
-      <math display="inline" class="text-xl">
+      <math display="inline">
         <msup><mi>x</mi><mn>2</mn></msup>
       </math>
     </SmallButton>
     <SmallButton
       main-title="Power"
       @click="$emit('typedText', '^')"
-      left-title="Root"
+      :center-upper="true"
+      center-title="Root"
     >
-      <template v-slot:left>
+      <template v-slot:center>
         <math display="block">
           <mroot>
             <mn>▯</mn>
@@ -187,7 +212,7 @@ function pressAlpha() {
           </mroot>
         </math>
       </template>
-      <math display="inline" class="text-xl">
+      <math display="inline">
         <msup><mi>x</mi><mn>◼</mn></msup>
       </math>
     </SmallButton>
@@ -200,10 +225,10 @@ function pressAlpha() {
           ? resetShiftAlpha()
           : $emit('typedText', 'log(')
       "
-      left-title="Power of 10"
-      class="text-xl"
+      :center-upper="true"
+      center-title="Power of 10"
     >
-      <template v-slot:left>
+      <template v-slot:center>
         <math display="inline">
           <msup><mn>10</mn><mn>◼</mn></msup>
         </math> </template
@@ -218,10 +243,10 @@ function pressAlpha() {
           ? resetShiftAlpha()
           : $emit('typedText', 'ln(')
       "
-      left-title="Power of e"
-      class="text-xl"
+      :center-upper="true"
+      center-title="Power of e"
     >
-      <template v-slot:left>
+      <template v-slot:center>
         <math display="inline">
           <msup><mi>e</mi><mn>◼</mn></msup>
         </math>
@@ -230,8 +255,14 @@ function pressAlpha() {
     </SmallButton>
     <SmallButton
       main-title="Negative"
-      @click="$emit('typedText', '-')"
-      class="text-xl"
+      @click="
+        store.onShift
+          ? resetShiftAlpha()
+          : store.onAlpha
+          ? resetShiftAlpha()
+          : $emit('typedText', '-')
+      "
+      right-title="Variable A"
     >
       <template v-slot:right>A</template>
       (–)
@@ -249,7 +280,6 @@ function pressAlpha() {
           ? resetShiftAlpha()
           : resetShiftAlpha()
       "
-      class="text-xl"
     >
       <template v-slot:left>Abs</template>
       <template v-slot:right>C</template>
@@ -264,9 +294,12 @@ function pressAlpha() {
           ? resetShiftAlpha()
           : $emit('typedText', 'sin(')
       "
-      class="text-xl"
     >
-      <template v-slot:left>sin<sup>-1</sup></template>
+      <template v-slot:left>
+        <math display="inline"
+          ><msup><mo>sin</mo><mn>-1</mn></msup></math
+        >
+      </template>
       <template v-slot:right>D</template>
       sin
     </SmallButton>
@@ -279,9 +312,12 @@ function pressAlpha() {
           ? resetShiftAlpha()
           : $emit('typedText', 'cos(')
       "
-      class="text-xl"
     >
-      <template v-slot:left>cos<sup>-1</sup></template>
+      <template v-slot:left>
+        <math display="inline"
+          ><msup><mo>cos</mo><mn>-1</mn></msup></math
+        >
+      </template>
       <template v-slot:right>E</template>
       cos
     </SmallButton>
@@ -294,13 +330,16 @@ function pressAlpha() {
           ? resetShiftAlpha()
           : $emit('typedText', 'tan(')
       "
-      class="text-xl"
     >
-      <template v-slot:left>tan<sup>-1</sup></template>
+      <template v-slot:left
+        ><math display="inline"
+          ><msup><mo>tan</mo><mn>-1</mn></msup></math
+        >
+      </template>
       <template v-slot:right>F</template>
       tan
     </SmallButton>
-    <SmallButton :center-upper="true" class="text-xl">
+    <SmallButton :center-upper="true">
       <template v-slot:center>STO</template>
       RCL
     </SmallButton>
@@ -312,9 +351,10 @@ function pressAlpha() {
           ? $emit('typedText', 'i')
           : $emit('cmd', 'ENG')
       "
-      class="text-xl"
+      :center-upper="true"
+      center-title="Imaginary unit"
     >
-      <template v-slot:right>
+      <template v-slot:center>
         <math><mi>i</mi></math>
       </template>
       ENG
@@ -330,33 +370,39 @@ function pressAlpha() {
       "
       :center-upper="true"
       center-title="Percent"
-      class="text-xl"
     >
       <template v-slot:center>%</template>
       (
     </SmallButton>
     <SmallButton
       main-title=")"
-      @click="$emit('typedText', ')')"
-      class="text-xl"
+      @click="
+        store.onShift
+          ? $emit('typedText', ',')
+          : store.onAlpha
+          ? resetShiftAlpha()
+          : $emit('typedText', ')')
+      "
     >
       <template v-slot:left>,</template>
       <template v-slot:right>X</template>
       )
     </SmallButton>
     <SmallButton
-      main-title="Switch been fractions and decimals"
-      @click="
+      main-title="Convert between fractions and decimals"
+      @click.prevent="
         store.onShift
           ? $emit('cmd', 'mixedFraction')
           : store.onAlpha
           ? resetShiftAlpha()
           : $emit('cmd', 'SD')
       "
-      class="text-xl"
     >
       <template v-slot:left>
-        <math display="inline" class="align-text-bottom text-xs">
+        <math
+          display="inline"
+          class="align-text-bottom text-[10px] tall:text-xs"
+        >
           <mi>a</mi><mfrac><mi>b</mi><mi>c</mi></mfrac>
           <mo>⟺</mo>
           <<mfrac><mi>d</mi><mi>c</mi></mfrac>
@@ -365,7 +411,7 @@ function pressAlpha() {
       <template v-slot:right>Y</template>
       S⟺D
     </SmallButton>
-    <SmallButton class="text-xl">
+    <SmallButton>
       <template v-slot:left>M-</template>
       <template v-slot:right>M</template>
       M+</SmallButton

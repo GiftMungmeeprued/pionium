@@ -3,7 +3,8 @@ import Button from "./Button.vue";
 import { store, resetShiftAlpha } from "./store";
 </script>
 <template>
-  <div :class="`bg-gray-200 grid grid-cols-[repeat(5,_1fr)] m-0.5 gap-1`">
+  <!-- grid-cols-[repeat(5,_minmax(79px,_1fr))] -->
+  <div class="bg-gray-200 grid grid-cols-5 gap-1">
     <Button
       @click="
         store.onShift
@@ -38,6 +39,7 @@ import { store, resetShiftAlpha } from "./store";
       @click="$emit('keystroke', 'Backspace')"
       :center-upper="true"
       center-title="Insert"
+      main-title="Delete backwards"
     >
       <template v-slot:center>INS</template>
       <i class="pi pi-delete-left"></i
@@ -46,6 +48,7 @@ import { store, resetShiftAlpha } from "./store";
       @click="$emit('keystroke', 'AC')"
       :center-upper="true"
       center-title=""
+      main-title="Clear screen"
     >
       <template v-slot:center>OFF</template>
       AC
@@ -68,7 +71,13 @@ import { store, resetShiftAlpha } from "./store";
     >
     <Button @click="$emit('typedText', '6')">6</Button>
     <Button
-      @click="$emit('typedText', '*')"
+      @click="
+        store.onShift
+          ? $emit('cmd', '\\npr')
+          : store.onAlpha
+          ? resetShiftAlpha
+          : $emit('typedText', '*')
+      "
       :center-upper="true"
       center-title="Permutations nPr(n,r) for arranging r items from n items"
     >
@@ -76,7 +85,13 @@ import { store, resetShiftAlpha } from "./store";
       ×</Button
     >
     <Button
-      @click="$emit('typedText', '/')"
+      @click="
+        store.onShift
+          ? $emit('cmd', '\\ncr')
+          : store.onAlpha
+          ? resetShiftAlpha
+          : $emit('typedText', '/')
+      "
       :center-upper="true"
       center-title="Combinations nCr(n,r) for selecting r items from n items"
       ><template v-slot:center>nCr</template>÷</Button
@@ -144,26 +159,21 @@ import { store, resetShiftAlpha } from "./store";
       <template v-slot:right
         ><math><mi>e</mi></math></template
       >
-      ×10<sup
-        ><math><mi>x</mi></math></sup
-      >
+
+      <span class="text-sm relative tall:-top-1 -top-0.5 tall:text-3xl">
+        ×10<sup
+          ><math><mi>x</mi></math></sup
+        >
+      </span>
     </Button>
     <Button
       @click="$emit('typedText', '7')"
       :center-upper="true"
       center-title="Convert between degrees, radians, and gradians"
     >
-      <template v-slot:center>DRG<small>▶</small></template
+      <template v-slot:center>DRG<small class="ml-0.5">▶</small></template
       >Ans</Button
     >
     <Button @click="$emit('keystroke', 'Enter')">=</Button>
   </div>
 </template>
-<style>
-.rtl-grid {
-  direction: rtl;
-}
-.button-grid {
-  grid-template-columns: repeat(3, minmax(2.5rem, 1fr));
-}
-</style>
