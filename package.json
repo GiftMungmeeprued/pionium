@@ -13,6 +13,7 @@
     "mathquill": "^0.10.1-a",
     "nerdamer": "^1.1.13",
     "primeicons": "^7.0.0",
+    "simplebar-vue": "^2.3.5",
     "vue": "^3.4.29"
   },
   "devDependencies": {

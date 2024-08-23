@@ -7,6 +7,9 @@ import NumberPad from "./NumberPad.vue";
 import Functions from "./Functions.vue";
 import { store, resetShiftAlpha } from "./store";
 
+import Simplebar from "simplebar-vue";
+import "simplebar-vue/dist/simplebar.min.css";
+
 const MQ = MathQuill.getInterface(2);
 const ce = new ComputeEngine();
 
@@ -178,9 +181,11 @@ function handleCmd(cmd) {
         ref="mathFieldEl"
         id="math-field"
       ></div>
-      <div class="px-3 min-h-10 bg-gray-200 flex items-center justify-end">
-        <span ref="answerFieldEl" id="answer"></span>
-      </div>
+        <Simplebar
+          class="h-[60px] bg-gray-200 border-solid border-2 text-right leading-[60px] overflow-y-hidden"
+        >
+          <span ref="answerFieldEl" class="mx-4" id="answer"></span>
+        </Simplebar>
     </div>
     <Functions
       @cmd="handleCmd"
