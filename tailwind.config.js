@@ -2,7 +2,11 @@
 export default {
   content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      screens: {
+        tall: { raw: "((min-height: 750px) and (min-width: 425px))" },
+      },
+    },
   },
   plugins: [],
   corePlugins: {
