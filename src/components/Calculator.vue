@@ -240,9 +240,9 @@ function handleCmd(cmd) {
 }
 </script>
 <template>
-  <main class="">
-    <div class="w-[416px] mx-auto">
-      <div id="screen" class="_sticky _top-0">
+  <main>
+    <div class="max-w-[416px] mx-auto">
+      <div id="screen">
         <div class="bg-gray-200 h-5 py-0.5">
           <span
             class="text-gray-200 border-0 py-0.5 px-1 ml-1 rounded text-xs font-bold"
@@ -301,5 +301,10 @@ abbr {
   border-width: 0;
   /* border-color: white; */
   border-radius: 1px;
+}
+
+.mathquill-rendered-math * {
+  box-sizing: content-box;
+  top: auto;
 }
 </style>
