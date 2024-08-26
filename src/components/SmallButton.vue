@@ -38,13 +38,13 @@ defineProps({
     </div>
     <div v-else :class="{ 'h-4 tall:h-5': upperSpace }">
       <span
-        class="text-left px-1 float-left font-mono text-xs tall:text-sm"
+        class="text-left pl-1 float-left font-mono text-xs tall:text-sm"
         :title="leftTitle"
       >
         <slot name="left"></slot>
       </span>
       <span
-        class="text-right px-1 float-right font-mono text-xs tall:text-sm"
+        class="text-right pr-1 float-right font-mono text-xs tall:text-sm"
         :title="rightTitle"
       >
         <slot name="right"></slot>
