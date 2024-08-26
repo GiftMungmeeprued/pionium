@@ -288,23 +288,3 @@ abbr {
   box-sizing: border-box;
 }
 </style>
-<style scoped>
-#math-field {
-  border-width: 0;
-  background: rgba(0, 0, 0, 0);
-}
-#math-field.mq-editable-field.mq-focused,
-#math-field.mq-math-mode .mq-editable-field.mq-focused {
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
-  box-shadow: none;
-  border-width: 0;
-  /* border-color: white; */
-  border-radius: 1px;
-}
-
-.mathquill-rendered-math * {
-  box-sizing: content-box;
-  top: auto;
-}
-</style>
