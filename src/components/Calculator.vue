@@ -21,6 +21,8 @@ const data = reactive({
   SD: false,
   mixedFraction: false,
   solveMode: false,
+  id: 0,
+  focus: true,
 });
 
 function preprocessInputLatex(latex) {
@@ -30,6 +32,10 @@ function preprocessInputLatex(latex) {
   latex = latex.replace(/\\operatorname{arccsc}/g, "\\mathrm{acsc}");
   latex = latex.replace(/\\operatorname{arcsec}/g, "\\mathrm{asec}");
   latex = latex.replace(/\\operatorname{arccot}/g, "\\mathrm{acot}");
+
+  // deal with log, ln
+  latex = latex.replace(/\\ln/g, "log");
+  latex = latex.replace(/\\log/g, "log10");
 
   // deal with npr, ncr
   latex = latex.replace(
@@ -69,22 +75,32 @@ function preprocessDisplayLatex(latex) {
   return latex;
 }
 
-function handleEnter() {
+function saveHistory(answer) {
+  store.history.unshift({
+    id: data.id++,
+    input: mathFieldRef.value.latex(),
+    calculated: data.calculated,
+    answer: answer,
+  });
+  localStorage.setItem("calcHistory", JSON.stringify(store.history));
+}
+
+function calculateInput() {
   const mathField = mathFieldRef.value;
-  const staticMath = staticMathRef.value;
-  console.log({ latex: mathField.latex() });
   if (mathField.latex()) {
     const processedLatex = preprocessInputLatex(mathField.latex());
     console.log(processedLatex);
     const exp = nerdamer.convertFromLaTeX(processedLatex).toString();
     console.log(exp);
     data.calculated = nerdamer(exp, {}, ["expand"]);
-    SD(/sin|cos|tan|csc|sec|cot|factorial/.test(data.calculated.toString()));
+    const answer = displayAnswer();
+    return answer;
   }
 }
 onMounted(() => {
+  store.history = JSON.parse(localStorage.getItem("calcHistory"));
   const config = {
-    autoCommands: "pi sqrt sum",
+    autoCommands: "pi sqrt sum nthroot",
     sumStartsWithNEquals: false,
     handlers: {
       edit: function () {
@@ -95,15 +111,21 @@ onMounted(() => {
         data.mixedFraction = false;
         data.solveMode = false;
       },
-      enter: handleEnter,
+      enter: calculateInput,
     },
   };
 
   mathFieldRef.value.config(config);
   mathFieldRef.value.focus();
+
+  mathFieldRef.value.reflow();
 });
 
 function handleTypedText(character) {
+  if (data.focus === false) {
+    mathFieldRef.value.latex("");
+    data.focus = true;
+  }
   mathFieldRef.value.typedText(character);
   mathFieldRef.value.focus();
   resetShiftAlpha();
@@ -112,7 +134,7 @@ function handleTypedText(character) {
 function handleKeystroke(keystroke) {
   const mathField = mathFieldRef.value;
   if (keystroke == "Enter") {
-    handleEnter();
+    calculateInput();
   } else if (keystroke == "AC") {
     mathField.latex("");
   } else {
@@ -124,8 +146,6 @@ function handleKeystroke(keystroke) {
 function displayMixedFraction(fraction) {
   const numerator = fraction.numerator().toString();
   const denominator = fraction.denominator().toString();
-  console.log(numerator);
-  console.log(denominator);
   const quotient = Math.floor(numerator / denominator);
   const remainder = numerator % denominator;
   return `${quotient != 0 ? quotient : ""}${
@@ -137,26 +157,30 @@ function trim(x) {
   return x.substring(1, x.length - 1);
 }
 
-function SD(condition) {
+function displayAnswer(displayDecimal = false) {
+  let answer = "";
+  const mustSimplify = /sin|cos|tan|csc|sec|cot|factorial|log/.test(
+    data.calculated.toString()
+  );
+  // evaluate expression
   if (!data.solveMode) {
-    staticMathRef.value.latex(
-      `= ${
-        condition
-          ? data.calculated.evaluate().text("decimals")
-          : preprocessDisplayLatex(data.calculated.toTeX())
-      }`
-    );
-    console.log("false");
+    answer = `= ${
+      displayDecimal || mustSimplify
+        ? data.calculated.evaluate().text("decimals")
+        : preprocessDisplayLatex(data.calculated.toTeX())
+    }`;
+    // solve mode
   } else {
-    console.log(trim(data.calculated.toTeX()));
-    staticMathRef.value.latex(
-      `x = ${
-        condition
-          ? trim(data.calculated.evaluate().text("decimals"))
-          : preprocessDisplayLatex(trim(data.calculated.toTeX()))
-      }`
-    );
+    answer = `x = ${
+      displayDecimal || mustSimplify
+        ? trim(data.calculated.evaluate().text("decimals"))
+        : preprocessDisplayLatex(trim(data.calculated.toTeX()))
+    }`;
   }
+  staticMathRef.value.latex(answer);
+  saveHistory(answer);
+  data.focus = false;
+  return answer;
 }
 
 function handleCmd(cmd) {
@@ -167,7 +191,7 @@ function handleCmd(cmd) {
     case "SD":
       if (data.calculated) {
         data.SD = !data.SD;
-        SD(data.SD);
+        displayAnswer(data.SD);
       }
       break;
     case "mixedFraction":
@@ -187,12 +211,8 @@ function handleCmd(cmd) {
         const processedLatex = preprocessInputLatex(mathField.latex());
         const exp = nerdamer.convertFromLaTeX(processedLatex).toString();
         data.calculated = nerdamer(`solve(${exp}, x)`);
-        // SD(data.calculated.toString());
-        console.log({ latex: data.calculated.toString() });
         data.solveMode = true;
-        SD(
-          /sin|cos|tan|csc|sec|cot|factorial/.test(data.calculated.toString())
-        );
+        displayAnswer();
       }
       break;
     case "\\int":
@@ -200,36 +220,42 @@ function handleCmd(cmd) {
       for (let i = 0; i < 8; i++) {
         mathField.keystroke("Left");
       }
+      mathField.focus();
       break;
     case "\\sum":
       mathField.write("\\sum_{x=}^{ }");
       for (let i = 0; i < 2; i++) {
         mathField.keystroke("Left");
       }
+      mathField.focus();
       break;
     case "\\diff":
-      mathField.write("\\frac{d}{dx} \\left[\\right]");
+      mathField.write("\\frac{d}{dx} \\left[\\right]\\left|2\\right|");
       for (let i = 0; i < 1; i++) {
         mathField.keystroke("Left");
       }
+      mathField.focus();
       break;
     case "\\npr":
       mathField.write("\\text{nPr}\\left( \\right)");
       for (let i = 0; i < 1; i++) {
         mathField.keystroke("Left");
       }
+      mathField.focus();
       break;
     case "\\ncr":
       mathField.write("\\text{nCr}\\left( \\right)");
       for (let i = 0; i < 1; i++) {
         mathField.keystroke("Left");
       }
+      mathField.focus();
       break;
     case "\\polar":
       mathField.write("\\left[\\angle\\right]");
       // for (let i = 0; i < 1; i++) {
       //   mathField.keystroke("Left");
       // }
+      mathField.focus();
       break;
     default:
       mathField.write(cmd);
@@ -237,21 +263,39 @@ function handleCmd(cmd) {
   // mathField.focus();
   resetShiftAlpha();
 }
+
+function storeVar(var_name) {
+  store.onSto = false;
+  console.log(mathFieldRef.value.latex());
+  if (mathFieldRef.value.latex()) {
+    const answer = calculateInput();
+    nerdamer.setVar(var_name, data.calculated.toString());
+    console.log(nerdamer.getVars("text"));
+    mathFieldRef.value.moveToRightEnd();
+    mathFieldRef.value.write(`\\rightarrow \\text{${var_name}}`);
+    staticMathRef.value.latex(answer);
+  }
+}
 </script>
 <template>
   <main>
-    <div class="max-w-[416px] mx-auto">
+    <div class="max-w-[416px] min-w-[320px] mx-auto">
       <div id="screen">
-        <div class="bg-gray-200 h-5 py-0.5">
+        <div class="bg-gray-200 h-[20px]">
           <span
-            class="text-gray-200 border-0 py-0.5 px-1 ml-1 rounded text-xs font-bold"
+            class="font-sans text-gray-200 border-0 pb-0.5 px-1 ml-1 rounded text-[9px] font-bold align-[1px]"
             :class="{ 'bg-gray-500': store.onShift }"
             >SHIFT</span
           >
           <span
-            class="text-gray-200 border-0 py-0.5 px-1 ml-1 rounded text-xs font-bold"
+            class="font-sans text-gray-200 border-0 pb-0.5 px-1 ml-1 rounded text-[9px] font-bold align-[1px]"
             :class="{ 'bg-gray-500': store.onAlpha }"
             >ALPHA</span
+          >
+          <span
+            class="font-sans text-gray-200 border-0 pb-0.5 px-1 ml-1 rounded text-[9px] font-bold align-[1px]"
+            :class="{ 'text-gray-500': store.onSto }"
+            >STO</span
           >
         </div>
         <div
@@ -260,7 +304,7 @@ function handleCmd(cmd) {
           id="math-field"
         ></div>
         <Simplebar
-          class="h-[60px] bg-gray-200 border-solid border-2 text-right leading-[60px] overflow-y-hidden"
+          class="h-[60px] bg-gray-200 text-right leading-[60px] overflow-y-hidden"
         >
           <span ref="answerFieldEl" class="mx-4" id="answer"></span>
         </Simplebar>
@@ -269,6 +313,7 @@ function handleCmd(cmd) {
         @cmd="handleCmd"
         @typedText="handleTypedText"
         @keystroke="handleKeystroke"
+        @store="storeVar"
       />
       <NumberPad
         @cmd="handleCmd"

@@ -1,12 +1,15 @@
+<script setup>
+import { store } from "./store";
+import HistoryItem from "./HistoryItem.vue";
+import { TrashIcon } from "@heroicons/vue/16/solid";
+
+function clearHistory() {
+  store.history = [];
+  localStorage.setItem("calcHistory", JSON.stringify(store.history));
+}
+</script>
+
 <template>
-  <button
-    type="button"
-    class="btn btn-primary me-3"
-    data-bs-toggle="offcanvas"
-    data-bs-target="#history-sidepane"
-  >
-    Toggle offcanvas
-  </button>
   <div
     class="offcanvas offcanvas-end box-content font-sans"
     data-bs-scroll="true"
@@ -18,10 +21,25 @@
     <div
       class="offcanvas-header py-2 px-5 border-solid border-b border-0 border-neutral-300"
     >
-      <h3 class="offcanvas-title m-0" id="historySidepaneLabel">
+      <h2 class="offcanvas-title m-0 text-gray-600" id="historySidepaneLabel">
         <i class="pi pi-history"></i>
         History
-      </h3>
+        <div class="dropdown inline">
+          <i
+            class="pi pi-ellipsis-v text-sm border-solid rounded-full border-transparent hover:bg-gray-200 active:bg-gray-300 p-1"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          ></i>
+          <ul class="dropdown-menu w-12">
+            <li>
+              <a class="dropdown-item text-gray-600" @click="clearHistory">
+                <TrashIcon class="size-5 align-text-top text-gray-400" />
+                Clear all</a
+              >
+            </li>
+          </ul>
+        </div>
+      </h2>
       <button
         type="button"
         class="btn-close text-reset"
@@ -29,21 +47,18 @@
         aria-label="Close"
       ></button>
     </div>
-    <div class="offcanvas-body">mousemouse</div>
+    <div class="offcanvas-body p-0">
+      <HistoryItem v-for="item in store.history" :item="item" :key="item.id" />
+    </div>
   </div>
 </template>
-
-<script>
-export default {
-  methods: {
-    toggle() {
-      this.open = !this.open;
-    },
-  },
-};
-</script>
 <style scoped>
 #history-sidepane {
   width: 416px;
+}
+@media (max-width: 416px) {
+  #history-sidepane {
+    transition: none !important;
+  }
 }
 </style>
