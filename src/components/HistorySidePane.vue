@@ -21,7 +21,7 @@ function clearHistory() {
     <div
       class="offcanvas-header py-2 px-5 border-solid border-b border-0 border-neutral-300"
     >
-      <h2 class="offcanvas-title m-0 text-gray-600" id="historySidepaneLabel">
+      <h1 class="offcanvas-title m-0 text-gray-600" id="historySidepaneLabel">
         <i class="pi pi-history"></i>
         History
         <div class="dropdown inline">
@@ -33,13 +33,13 @@ function clearHistory() {
           <ul class="dropdown-menu w-12">
             <li>
               <a class="dropdown-item text-gray-600" @click="clearHistory">
-                <TrashIcon class="size-5 align-text-top text-gray-400" />
+                <TrashIcon class="size-5 align-text-top text-gray-400 inline" />
                 Clear all</a
               >
             </li>
           </ul>
         </div>
-      </h2>
+      </h1>
       <button
         type="button"
         class="btn-close text-reset"

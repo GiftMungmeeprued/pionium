@@ -160,7 +160,7 @@ import { store, resetShiftAlpha } from "./store";
         ><math><mi>e</mi></math></template
       >
 
-      <span class="text-sm relative tall:-top-1 -top-0.5 tall:text-3xl">
+      <span class="text-sm relative tall:text-3xl">
         ×10<sup
           ><math><mi>x</mi></math></sup
         >

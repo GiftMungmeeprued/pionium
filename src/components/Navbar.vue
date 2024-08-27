@@ -25,7 +25,7 @@ import { VariableIcon } from "@heroicons/vue/24/outline";
           >
             <span class="sr-only">History</span>
             <i
-              class="pi pi-history sm:text-xl text-base text-gray-300 hover:text-white"
+              class="pi pi-history sm:text-xl text-base text-gray-300 hover:text-white align-[-0.15em] mx-1"
             ></i>
           </button>
           <button
@@ -36,7 +36,7 @@ import { VariableIcon } from "@heroicons/vue/24/outline";
           >
             <span class="sr-only">Variables</span>
             <VariableIcon
-              class="size-6 sm:size-8 align-middle text-gray-300 hover:text-white"
+              class="size-6 sm:size-8 text-gray-300 hover:text-white mx-1"
             />
           </button>
         </div>
