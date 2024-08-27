@@ -52,11 +52,11 @@ function preprocessInputLatex(latex) {
 
   // deal with integrals
   latex = latex.replace(
-    /\\int_\{(\d+)\}\^\{(\d+)\}\\left\[(.*?)\\right\]\\mathrm{d}x/g,
+    /\\int_\{(\d+)\}\^\{(\d+)\}dx\\left\[(.*?)\\right\]/g,
     "defint($3,$1,$2)"
   );
   latex = latex.replace(
-    /\\int_\{(\s+)\}\^\{(\s+)\}\\left\[(.*?)\\right\]\\mathrm{d}x/g,
+    /\\int_\{(\s+)\}\^\{(\s+)\}dx\\left\[(.*?)\\right\]/g,
     "integrate($3, x)"
   );
 
@@ -218,8 +218,8 @@ function handleCmd(cmd) {
       }
       break;
     case "\\int":
-      mathField.write("\\int_{ }^{ } \\left[\\right] \\mathrm{d}x");
-      for (let i = 0; i < 8; i++) {
+      mathField.write("\\int dx \\left[\\right]");
+      for (let i = 0; i < 1; i++) {
         mathField.keystroke("Left");
       }
       mathField.focus();
@@ -232,7 +232,7 @@ function handleCmd(cmd) {
       mathField.focus();
       break;
     case "\\diff":
-      mathField.write("\\frac{d}{dx} \\left[\\right]\\left|2\\right|");
+      mathField.write("\\frac{d}{dx} \\left[\\right]");
       for (let i = 0; i < 1; i++) {
         mathField.keystroke("Left");
       }
