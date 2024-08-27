@@ -6,6 +6,8 @@ export const store = reactive({
   onAlpha: false,
   onSto: false,
   history: [],
+  variables: {},
+  variableList: ["A", "B", "C", "D", "F", "G", "x", "y", "Ans"],
 });
 
 export function resetShiftAlpha() {

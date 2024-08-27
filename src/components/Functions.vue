@@ -5,10 +5,17 @@ import { store, resetShiftAlpha } from "./store";
 function pressShift() {
   store.onShift = !store.onShift;
   store.onAlpha = false;
+  store.onSto = false;
 }
 
 function pressAlpha() {
   store.onAlpha = !store.onAlpha;
+  store.onShift = false;
+  store.onSto = false;
+}
+
+function pressSto() {
+  store.onSto = true;
   store.onShift = false;
 }
 </script>
@@ -259,7 +266,9 @@ function pressAlpha() {
         store.onShift
           ? resetShiftAlpha()
           : store.onAlpha
-          ? resetShiftAlpha()
+          ? $emit('cmd', '\\text{A}')
+          : store.onSto
+          ? $emit('store', 'A')
           : $emit('typedText', '-')
       "
       right-title="Variable A"
@@ -267,7 +276,17 @@ function pressAlpha() {
       <template v-slot:right>A</template>
       (–)
     </SmallButton>
-    <SmallButton>
+    <SmallButton
+      @click="
+        store.onShift
+          ? resetShiftAlpha()
+          : store.onAlpha
+          ? resetShiftAlpha()
+          : store.onSto
+          ? $emit('store', 'B')
+          : resetShiftAlpha()
+      "
+    >
       <template v-slot:right>B</template>
       ° ′ ″
     </SmallButton>
@@ -278,6 +297,8 @@ function pressAlpha() {
           ? $emit('typedText', '|')
           : store.onAlpha
           ? resetShiftAlpha()
+          : store.onSto
+          ? $emit('store', 'C')
           : resetShiftAlpha()
       "
     >
@@ -292,6 +313,8 @@ function pressAlpha() {
           ? $emit('typedText', 'arcsin(')
           : store.onAlpha
           ? resetShiftAlpha()
+          : store.onSto
+          ? $emit('store', 'D')
           : $emit('typedText', 'sin(')
       "
     >
@@ -310,6 +333,8 @@ function pressAlpha() {
           ? $emit('typedText', 'arccos(')
           : store.onAlpha
           ? resetShiftAlpha()
+          : store.onSto
+          ? $emit('store', 'F')
           : $emit('typedText', 'cos(')
       "
     >
@@ -318,7 +343,7 @@ function pressAlpha() {
           ><msup><mo>cos</mo><mn>-1</mn></msup></math
         >
       </template>
-      <template v-slot:right>E</template>
+      <template v-slot:right>F</template>
       cos
     </SmallButton>
     <SmallButton
@@ -328,6 +353,8 @@ function pressAlpha() {
           ? $emit('typedText', 'arctan(')
           : store.onAlpha
           ? resetShiftAlpha()
+          : store.onSto
+          ? $emit('store', 'G')
           : $emit('typedText', 'tan(')
       "
     >
@@ -336,10 +363,19 @@ function pressAlpha() {
           ><msup><mo>tan</mo><mn>-1</mn></msup></math
         >
       </template>
-      <template v-slot:right>F</template>
+      <template v-slot:right>G</template>
       tan
     </SmallButton>
-    <SmallButton :center-upper="true">
+    <SmallButton
+      @click="
+        store.onShift
+          ? pressSto()
+          : store.onAlpha
+          ? resetShiftAlpha()
+          : resetShiftAlpha()
+      "
+      :center-upper="true"
+    >
       <template v-slot:center>STO</template>
       RCL
     </SmallButton>
@@ -381,11 +417,13 @@ function pressAlpha() {
           ? $emit('typedText', ',')
           : store.onAlpha
           ? resetShiftAlpha()
+          : store.onSto
+          ? $emit('store', 'x')
           : $emit('typedText', ')')
       "
     >
       <template v-slot:left>,</template>
-      <template v-slot:right>X</template>
+      <template v-slot:right>x</template>
       )
     </SmallButton>
     <SmallButton
@@ -395,6 +433,8 @@ function pressAlpha() {
           ? $emit('cmd', 'mixedFraction')
           : store.onAlpha
           ? resetShiftAlpha()
+          : store.onSto
+          ? $emit('store', 'y')
           : $emit('cmd', 'SD')
       "
     >
@@ -408,7 +448,7 @@ function pressAlpha() {
           <<mfrac><mi>d</mi><mi>c</mi></mfrac>
         </math>
       </template>
-      <template v-slot:right>Y</template>
+      <template v-slot:right>y</template>
       S⟺D
     </SmallButton>
     <SmallButton>

@@ -179,6 +179,8 @@ function displayAnswer(displayDecimal = false) {
   }
   staticMathRef.value.latex(answer);
   saveHistory(answer);
+  nerdamer.setVar("Ans", data.calculated.toString());
+  store.variables = nerdamer.getVars("latex");
   data.focus = false;
   return answer;
 }
@@ -270,7 +272,7 @@ function storeVar(var_name) {
   if (mathFieldRef.value.latex()) {
     const answer = calculateInput();
     nerdamer.setVar(var_name, data.calculated.toString());
-    console.log(nerdamer.getVars("text"));
+    store.variables = nerdamer.getVars("latex");
     mathFieldRef.value.moveToRightEnd();
     mathFieldRef.value.write(`\\rightarrow \\text{${var_name}}`);
     staticMathRef.value.latex(answer);
