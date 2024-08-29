@@ -44,12 +44,12 @@ watch(
 <template>
   <tr
     scope="row"
-    class="odd:bg-red even:bg-gray-50 border-solid border-b border-0 border-neutral-300"
+    class="odd:bg-white even:bg-gray-50 border-solid border-b border-0 border-neutral-300"
   >
-    <th class="p-3 text-normal">
+    <th class="py-3 text-center text-normal">
       <span ref="variableEl"></span>
     </th>
-    <td class="p-3">
+    <td class="py-3 pl-10">
       <span ref="valueEl"></span>
     </td>
   </tr>

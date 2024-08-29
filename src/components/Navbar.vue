@@ -1,6 +1,7 @@
 <script setup>
 import { CalculatorIcon } from "@heroicons/vue/16/solid";
 import { VariableIcon } from "@heroicons/vue/24/outline";
+import SidePaneButton from "./SidePaneButton.vue";
 </script>
 
 <template>
@@ -17,28 +18,20 @@ import { VariableIcon } from "@heroicons/vue/24/outline";
         <div
           class="flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0"
         >
-          <button
-            type="button"
-            class="bg-transparent border-0 mx-1"
-            data-bs-toggle="offcanvas"
-            data-bs-target="#history-sidepane"
+          <SidePaneButton
+            sidepane-id="historySidePane"
+            sidepane-label="history sidepane"
           >
-            <span class="sr-only">History</span>
             <i
-              class="pi pi-history sm:text-xl text-base text-gray-300 hover:text-white align-[-0.15em] mx-1"
-            ></i>
-          </button>
-          <button
-            type="button"
-            class="bg-transparent border-0"
-            data-bs-toggle="offcanvas"
-            data-bs-target="#variable-sidepane"
+              class="pi pi-history sm:text-xl text-base align-[-0.15em] mx-1"
+            ></i
+          ></SidePaneButton>
+          <SidePaneButton
+            sidepane-id="variableSidePane"
+            sidepane-label="variable sidepane"
           >
-            <span class="sr-only">Variables</span>
-            <VariableIcon
-              class="size-6 sm:size-8 text-gray-300 hover:text-white mx-1"
-            />
-          </button>
+            <VariableIcon class="size-6 sm:size-8 m-0"
+          /></SidePaneButton>
         </div>
       </div>
     </div>

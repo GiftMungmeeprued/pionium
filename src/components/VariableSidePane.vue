@@ -1,17 +1,13 @@
 <script setup>
-import { store } from "./store";
-import { TrashIcon } from "@heroicons/vue/16/solid";
-import { VariableIcon } from "@heroicons/vue/24/outline";
-import VariableItem from "./VariableItem.vue";
-
-function clearHistory() {
-  store.history = [];
-  localStorage.setItem("calcHistory", JSON.stringify(store.history));
-}
+import VariableList from "./VariableList.vue";
+import SidePane from "./SidePane.vue";
 </script>
 
 <template>
-  <div
+  <SidePane sidepane-id="variableSidePane" sidepane-label="variable sidepane">
+    <VariableList />
+  </SidePane>
+  <!-- <div
     class="offcanvas offcanvas-end box-content font-sans"
     data-bs-scroll="true"
     data-bs-backdrop="false"
@@ -19,62 +15,17 @@ function clearHistory() {
     id="variable-sidepane"
     aria-labelledby="historySidepaneLabel"
   >
-    <div
-      class="offcanvas-header py-2 px-5 border-solid border-b border-0 border-neutral-300"
-    >
-      <h1 class="offcanvas-title m-0 text-gray-600" id="historySidepaneLabel">
-        <VariableIcon class="size-7 text-gray-600 align-[-5px] inline" />
-        Variables
-        <div class="dropdown inline">
-          <i
-            class="pi pi-ellipsis-v text-sm border-solid rounded-full border-transparent hover:bg-gray-200 active:bg-gray-300 p-1"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          ></i>
-          <ul class="dropdown-menu">
-            <li>
-              <a class="dropdown-item text-gray-600" @click="clearHistory">
-                <TrashIcon class="size-5 align-text-top text-gray-400 inline" />
-                Clear all</a
-              >
-            </li>
-          </ul>
-        </div>
-      </h1>
-      <button
-        type="button"
-        class="btn-close text-reset"
-        data-bs-dismiss="offcanvas"
-        aria-label="Close"
-      ></button>
-    </div>
-    <div class="offcanvas-body py-0 px-7 relative overflow-x-auto">
-      <table class="table-auto text-left w-full">
-        <thead
-          class="text-gray-600 bg-gray-50 border-solid border-b border-0 border-neutral-300"
-        >
-          <tr>
-            <th class="py-3">Variable</th>
-            <th class="p-3">Value</th>
-          </tr>
-        </thead>
-        <tbody>
-          <VariableItem
-            v-for="variable_name in store.variableList"
-            :variable="variable_name"
-          />
-        </tbody>
-      </table>
-    </div>
-  </div>
+    <VariableList />
+  </div> -->
 </template>
-<style scoped>
+<!-- <style scoped>
 #history-sidepane {
   width: 416px;
+  height: 800px;
 }
 @media (max-width: 416px) {
   #history-sidepane {
     transition: none !important;
   }
 }
-</style>
+</style> -->
