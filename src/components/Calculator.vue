@@ -52,11 +52,11 @@ function preprocessInputLatex(latex) {
 
   // deal with integrals
   latex = latex.replace(
-    /\\int_\{(\d+)\}\^\{(\d+)\}dx\\left\[(.*?)\\right\]/g,
+    /\\int_\{(\d+)\}\^\{(\d+)\}\\left\[(.*?)\\right\]dx/g,
     "defint($3,$1,$2)"
   );
   latex = latex.replace(
-    /\\int_\{(\s+)\}\^\{(\s+)\}dx\\left\[(.*?)\\right\]/g,
+    /\\int_\{(\s+)\}\^\{(\s+)\}\\left\[(.*?)\\right\]dx/g,
     "integrate($3, x)"
   );
 
@@ -100,7 +100,7 @@ function calculateInput() {
 onMounted(() => {
   store.history = JSON.parse(localStorage.getItem("calcHistory"));
   const config = {
-    autoCommands: "pi sqrt sum nthroot",
+    autoCommands: "pi sqrt sum nthroot choose",
     sumStartsWithNEquals: false,
     handlers: {
       edit: function () {
@@ -117,8 +117,6 @@ onMounted(() => {
 
   mathFieldRef.value.config(config);
   mathFieldRef.value.focus();
-
-  mathFieldRef.value.reflow();
 });
 
 function handleTypedText(character) {
@@ -218,8 +216,8 @@ function handleCmd(cmd) {
       }
       break;
     case "\\int":
-      mathField.write("\\int dx \\left[\\right]");
-      for (let i = 0; i < 1; i++) {
+      mathField.write("\\int\\left[\\right] dx");
+      for (let i = 0; i < 6; i++) {
         mathField.keystroke("Left");
       }
       mathField.focus();
@@ -238,9 +236,9 @@ function handleCmd(cmd) {
       }
       mathField.focus();
       break;
-    case "\\npr":
-      mathField.write("\\text{nPr}\\left( \\right)");
-      for (let i = 0; i < 1; i++) {
+    case "\\diffat":
+      mathField.write("\\frac{d}{dx} \\left[\\right]_{}");
+      for (let i = 0; i < 3; i++) {
         mathField.keystroke("Left");
       }
       mathField.focus();
@@ -252,13 +250,14 @@ function handleCmd(cmd) {
       }
       mathField.focus();
       break;
-    case "\\polar":
-      mathField.write("\\left[\\angle\\right]");
-      // for (let i = 0; i < 1; i++) {
-      //   mathField.keystroke("Left");
-      // }
+    case "\\logbase":
+      mathField.write("\\log_{}\\left[\\right]");
+      for (let i = 0; i < 3; i++) {
+        mathField.keystroke("Left");
+      }
       mathField.focus();
       break;
+
     default:
       mathField.write(cmd);
   }
@@ -305,9 +304,7 @@ function storeVar(var_name) {
           ref="mathFieldEl"
           id="math-field"
         ></div>
-        <Simplebar
-          class="h-[60px] bg-gray-200 text-right leading-[60px] overflow-y-hidden"
-        >
+        <Simplebar class="h-[60px] text-right leading-[60px] overflow-y-hidden">
           <span ref="answerFieldEl" class="mx-4" id="answer"></span>
         </Simplebar>
       </div>

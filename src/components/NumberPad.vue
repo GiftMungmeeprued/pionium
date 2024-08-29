@@ -1,179 +1,61 @@
 <script setup>
 import Button from "./Button.vue";
-import { store, resetShiftAlpha } from "./store";
+import { ArrowTurnDownLeftIcon } from "@heroicons/vue/16/solid";
 </script>
 <template>
-  <!-- grid-cols-[repeat(5,_minmax(79px,_1fr))] -->
-  <div class="bg-gray-200 grid grid-cols-5 gap-1">
+  <div class="bg-[#E9EAEE] grid grid-cols-5 gap-1 p-1.5 py-3">
+    <Button main-title="7" @click="$emit('typedText', '7')"> 7 </Button>
+    <Button main-title="8" @click="$emit('typedText', '8')"> 8</Button>
+    <Button main-title="9" @click="$emit('typedText', '9')"> 9</Button>
+    <Button main-title="Divide" @click="$emit('typedText', '/')">÷</Button>
     <Button
-      @click="
-        store.onShift
-          ? console.log('const')
-          : store.onAlpha
-          ? resetShiftAlpha
-          : $emit('typedText', '7')
-      "
-      :center-upper="true"
-      center-title="Scientific constants"
-    >
-      <template v-slot:center>CONST</template>
-      7
-    </Button>
-    <Button
-      @click="$emit('typedText', '8')"
-      :center-upper="true"
-      center-title="Unit Conversions"
-    >
-      <template v-slot:center>CONV</template>
-      8</Button
-    >
-    <Button
-      @click="$emit('typedText', '9')"
-      :center-upper="true"
-      center-title="Clear all setups and memory"
-    >
-      <template v-slot:center>CLR</template>
-      9</Button
-    >
-    <Button
-      @click="$emit('keystroke', 'Backspace')"
-      :center-upper="true"
-      center-title="Insert"
-      main-title="Delete backwards"
-    >
-      <template v-slot:center>INS</template>
-      <i class="pi pi-delete-left"></i
-    ></Button>
-    <Button
-      @click="$emit('keystroke', 'AC')"
-      :center-upper="true"
-      center-title=""
       main-title="Clear screen"
+      @click="$emit('keystroke', 'AC')"
+      color="gray"
     >
-      <template v-slot:center>OFF</template>
       AC
     </Button>
+    <Button main-title="4" @click="$emit('typedText', '4')">4</Button>
+    <Button main-title="5" @click="$emit('typedText', '5')">5</Button>
+    <Button main-title="6" @click="$emit('typedText', '6')">6</Button>
+    <Button main-title="Multiply" @click="$emit('typedText', '*')">×</Button>
     <Button
-      @click="$emit('typedText', '4')"
-      :center-upper="true"
-      center-title="Matrix mode"
+      main-title="Answer from previous calculation"
+      @click="$emit('typedText', 'Ans')"
+      color="gray"
+      >Ans</Button
     >
-      <template v-slot:center>MATRIX</template>
-      4</Button
-    >
-    <Button
-      @click="$emit('typedText', '5')"
-      :center-upper="true"
-      center-title="Vector mode"
-    >
-      <template v-slot:center>VECTOR</template>
-      5</Button
-    >
-    <Button @click="$emit('typedText', '6')">6</Button>
-    <Button
-      @click="
-        store.onShift
-          ? $emit('cmd', '\\npr')
-          : store.onAlpha
-          ? resetShiftAlpha
-          : $emit('typedText', '*')
-      "
-      :center-upper="true"
-      center-title="Permutations nPr(n,r) for arranging r items from n items"
-    >
-      <template v-slot:center>nPr</template>
-      ×</Button
-    >
-    <Button
-      @click="
-        store.onShift
-          ? $emit('cmd', '\\ncr')
-          : store.onAlpha
-          ? resetShiftAlpha
-          : $emit('typedText', '/')
-      "
-      :center-upper="true"
-      center-title="Combinations nCr(n,r) for selecting r items from n items"
-      ><template v-slot:center>nCr</template>÷</Button
-    >
-    <Button
-      @click="$emit('typedText', '1')"
-      :center-upper="true"
-      center-title="Statistics mode"
-      ><template v-slot:center>STAT</template>1</Button
-    >
-    <Button
-      @click="$emit('typedText', '2')"
-      :center-upper="true"
-      center-title="Complex calculations"
-      ><template v-slot:center>CMPLX</template>2</Button
-    >
-    <Button
-      @click="$emit('typedText', '3')"
-      :center-upper="true"
-      center-title="Base-n calculations"
-      ><template v-slot:center>BASE</template>3</Button
-    >
-    <Button
-      @click="$emit('typedText', '+')"
-      :center-upper="true"
-      center-title="Pol(x,y)=(r,θ) convert cartesian to polar coordinates"
-      ><template v-slot:center>Pol</template>+</Button
-    >
-    <Button
-      @click="$emit('typedText', '-')"
-      :center-upper="true"
-      center-title="Rec(r,θ)=(x,y) convert polar to cartesian coordinates"
-      ><template v-slot:center>Rec</template>–</Button
-    >
-    <Button
-      @click="$emit('typedText', '0')"
-      :center-upper="true"
-      center-title="Generate random number from 0 to 1"
-    >
-      <template v-slot:center>Ran#</template>
-      0</Button
-    >
-    <Button
-      @click="$emit('typedText', '.')"
-      :center-upper="true"
-      center-title="RanInt(a,b) generates random integer from a to b"
-    >
-      <template v-slot:center>RanInt</template>
-      .</Button
-    >
-    <Button
-      @click="
-        store.onShift
-          ? $emit('typedText', 'pi')
-          : store.onAlpha
-          ? $emit('typedText', 'e')
-          : $emit('typedText', '*10^')
-      "
-      left-title="Pi"
-      right-title="Euler's number"
-    >
-      <template v-slot:left
-        ><math><mi>π</mi></math></template
-      >
-      <template v-slot:right
-        ><math><mi>e</mi></math></template
-      >
+    <Button main-title="1" @click="$emit('typedText', '1')">1</Button>
+    <Button main-title="2" @click="$emit('typedText', '2')">2</Button>
+    <Button main-title="3" @click="$emit('typedText', '3')">3</Button>
+    <Button main-title="Subtract" @click="$emit('typedText', '-')">–</Button>
 
+    <Button
+      @click="$emit('keystroke', 'Backspace')"
+      main-title="Delete backwards"
+      color="gray"
+    >
+      <i class="pi pi-delete-left"></i
+    ></Button>
+    <Button main-title="0" @click="$emit('typedText', '0')">0</Button>
+    <Button main-title="Decimal point" @click="$emit('typedText', '.')"
+      >.</Button
+    >
+    <Button main-title="Power of 10" @click="$emit('typedText', '*10^')">
       <span class="text-sm relative tall:text-3xl">
         ×10<sup
           ><math><mi>x</mi></math></sup
         >
       </span>
     </Button>
+    <Button main-title="Add" @click="$emit('typedText', '+')">+</Button>
+
     <Button
-      @click="$emit('typedText', '7')"
-      :center-upper="true"
-      center-title="Convert between degrees, radians, and gradians"
+      main-title="Calculate"
+      @click="$emit('keystroke', 'Enter')"
+      color="blue"
     >
-      <template v-slot:center>DRG<small class="ml-0.5">▶</small></template
-      >Ans</Button
-    >
-    <Button @click="$emit('keystroke', 'Enter')">=</Button>
+      <ArrowTurnDownLeftIcon class="size-6 tall:size-8 inline" />
+    </Button>
   </div>
 </template>

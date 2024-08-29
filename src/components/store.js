@@ -12,6 +12,11 @@ export const store = reactive({
 
 export function resetShiftAlpha() {
   store.onShift = false;
-  store.onAlpha = false;
   store.onSto = false;
 }
+
+export const colors = {
+  white: "bg-white text-gray-800",
+  blue: "bg-blue-500 text-white",
+  gray: "bg-[#CBCED5] text-gray-800",
+};

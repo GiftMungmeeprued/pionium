@@ -1,460 +1,413 @@
 <script setup>
 import SmallButton from "./SmallButton.vue";
 import { store, resetShiftAlpha } from "./store";
+import KeyboardShiftSolid from "./shift_key/KeyboardShiftSolid.vue";
+import KeyboardShift from "./shift_key/KeyboardShift.vue";
 
 function pressShift() {
   store.onShift = !store.onShift;
-  store.onAlpha = false;
-  store.onSto = false;
-}
-
-function pressAlpha() {
-  store.onAlpha = !store.onAlpha;
-  store.onShift = false;
   store.onSto = false;
 }
 
 function pressSto() {
-  store.onSto = true;
+  store.onSto = !store.onSto;
   store.onShift = false;
 }
 </script>
+
+<style>
+.kb-shift {
+  display: inline-block;
+  background-size: 100%;
+  background-image: url("./src/assets/shift-icon/keyboard-shift.svg");
+  background-repeat: no-repeat;
+}
+
+.kb-shift-solid {
+  display: inline-block;
+  background-size: 100%;
+  background-image: url("./src/assets/shift-icon/keyboard-shift-solid.svg");
+  background-repeat: no-repeat;
+}
+</style>
+
 <template>
-  <div class="grid grid-cols-6 bg-gray-200 gap-1 my-2">
-    <SmallButton @click="pressShift" :upper-space="false"
-      ><span class="text-[12px] tall:text-base">SHIFT</span></SmallButton
-    >
-    <SmallButton @click="pressAlpha" :upper-space="false"
-      ><span class="text-[12px] tall:text-base">ALPHA</span></SmallButton
-    >
-    <SmallButton main-title="Go to previous calculation" :upper-space="false"
-      >▲</SmallButton
-    >
-    <SmallButton main-title="Go to next calculation" :upper-space="false"
-      >▼</SmallButton
-    >
-    <SmallButton :upper-space="false"
-      ><span class="text-[12px] tall:text-base">MODE</span></SmallButton
-    >
-    <SmallButton main-title="Settings" :upper-space="false"
-      ><i class="pi pi-cog"></i
-    ></SmallButton>
+  <div class="bg-[#E9EAEE] grid grid-cols-6 gap-1 p-1.5 pt-3">
+    <!-- First row -->
     <SmallButton
-      main-title="Calculate"
-      @click="
-        store.onShift
-          ? $emit('cmd', 'solve')
-          : store.onAlpha
-          ? $emit('typedText', '=')
-          : $emit('cmd', 'calc')
-      "
+      main-title="Shift key"
+      @click="pressShift"
+      :upper-space="false"
+      color="gray"
+      :on-pressed="store.onShift"
     >
-      <template v-slot:left>SOLVE</template>
-      <template v-slot:right>=</template>
-      <span class="text-[12px] tall:text-base">CALC</span>
+      <KeyboardShiftSolid v-if="store.onShift" class="h-5 tall:h-[25px]" />
+      <KeyboardShift v-else class="h-5 tall:h-[25px]" />
     </SmallButton>
     <SmallButton
-      main-title="Integrate"
-      @click="
-        store.onShift
-          ? $emit('cmd', '\\diff')
-          : store.onAlpha
-          ? resetShiftAlpha()
-          : $emit('cmd', '\\int')
-      "
-      :center-upper="true"
-      center-title="Differentiate"
+      main-title="Store the displayed value into a variable"
+      @click="pressSto()"
+      :upper-space="false"
+      color="gray"
+      :on-pressed="store.onSto"
+      ><span class="font-bold text-sm tall:text-[17px]">STO</span></SmallButton
     >
-      <template v-slot:center
-        ><math display="inline" class="align-top text-[9px] tall:text-[11px]">
-          <mfrac
-            ><mi>d</mi> <mrow><mi>d</mi><mi>x</mi></mrow></mfrac
-          ><mi>▬</mi>
-        </math></template
-      >
-      <math>
-        <mrow>
-          <msubsup>
-            <mo>&int;</mo>
-            <mn>□</mn>
-            <mn>□</mn>
-          </msubsup>
-          <mi>▬</mi>
-        </mrow>
-      </math>
-    </SmallButton>
     <SmallButton
       main-title="Move cursor left"
       @click="$emit('keystroke', 'Left')"
-    >
-      <i class="pi pi-arrow-left"></i>
+      :upper-space="false"
+      color="gray"
+      ><i class="pi pi-arrow-left"></i>
     </SmallButton>
     <SmallButton
       main-title="Move cursor right"
       @click="$emit('keystroke', 'Right')"
+      :upper-space="false"
+      color="gray"
     >
       <i class="pi pi-arrow-right"></i>
     </SmallButton>
     <SmallButton
-      main-title="Multiplicative inverse"
-      @click="
-        store.onShift
-          ? $emit('typedText', '!')
-          : store.onAlpha
-          ? resetShiftAlpha()
-          : $emit('cmd', '^{-1}')
-      "
-      :center-upper="true"
-      center-title="Factorial"
+      main-title="Left parenthesis"
+      @click="$emit('typedText', '(')"
+      :upper-space="false"
+      color="gray"
     >
-      <template v-slot:center>
-        <math><mi>x</mi><mo>!</mo></math>
-      </template>
-      <math display="inline"
-        ><msup><mi>x</mi><mn>-1</mn></msup></math
-      >
+      (
     </SmallButton>
     <SmallButton
-      main-title="Logarithm with specified base"
-      @click="
-        store.onShift
-          ? $emit('cmd', '\\sum')
-          : store.onAlpha
-          ? resetShiftAlpha()
-          : $emit('typedText', 'log_')
-      "
-      :center-upper="true"
-      center-title="Summation"
+      main-title="Right parenthesis"
+      @click="$emit('typedText', ')')"
+      :upper-space="false"
+      color="gray"
     >
-      <template v-slot:center>
-        <math display="inline">
-          <munderover>
-            <mo>&sum;</mo>
-            <mi>◻</mi>
-            <mi>◻</mi>
-          </munderover>
-          <mi>▬</mi></math
-        >
-      </template>
-      <math display="inline">
-        <mrow>
-          <msub>
-            <mi>log</mi>
-            <mi>◼</mi>
-          </msub>
-          <mi>▯</mi>
-        </mrow>
-      </math>
+      )
     </SmallButton>
+
+    <!-- Second row -->
     <SmallButton
       main-title="Fraction"
       @click="$emit('typedText', '/')"
-      :center-upper="true"
-      center-title="Mixed fraction"
+      center-title="Modulo"
+    >
+      <template v-slot:center>mod</template>
+      <math display="inline" class="text-[15px] tall:text-[22px]">
+        <mfrac>
+          <mi class="relative -bottom-[2px] tall:-bottom-[3px]">▭</mi>
+          <mi class="relative -top-[3px] tall:-top-[5px]">▭</mi>
+        </mfrac>
+      </math>
+    </SmallButton>
+    <SmallButton
+      main-title="Differentiate"
+      @click="store.onShift ? $emit('cmd', '\\diffat') : $emit('cmd', '\\diff')"
+      center-title="Differentiate and evaluate at given x"
     >
       <template v-slot:center>
         <math
           display="inline"
-          class="align-text-bottom text-[10px] tall:text-xs"
+          class="relative tall:-top-[2px] text-[10px] tall:text-[13px]"
         >
-          <mi>▬</mi><mfrac><mi>▭</mi><mi>▭</mi></mfrac>
+          <msub>
+            <mrow>
+              <!-- <mo>[</mo> -->
+              <mfrac bevelled="true">
+                <mi class="relative -bottom-[2px] tall:-bottom-[2px]">d</mi>
+                <mrow class="relative -top-[3px] tall:-top-[2px]">
+                  <mi>d</mi><mi>x</mi>
+                </mrow>
+              </mfrac>
+              <mi>▭</mi>
+              <mi class="text-xs tall:text-lg">|</mi>
+            </mrow>
+            <mrow
+              class="relative -top-[3px] tall:-top-[5px] text-[6px] tall:text-[8px]"
+              ><mi>x</mi><mn>=</mn><mi>▯</mi>
+            </mrow>
+          </msub>
         </math>
       </template>
-      <math display="inline" class="align-text-bottom">
-        <mfrac><mi>▬</mi><mi>▭</mi></mfrac>
-      </math>
+      <span>d/dx</span>
     </SmallButton>
     <SmallButton
-      main-title="Square root"
-      @click="$emit('typedText', 'sqrt')"
-      :center-upper="true"
-      center-title="Cube root"
+      main-title="Integrate"
+      @click="store.onShift ? $emit('cmd', '\\defint') : $emit('cmd', '\\int')"
+      center-title="Integrate with given limits"
     >
       <template v-slot:center>
-        <math display="block">
-          <mroot>
-            <mn>▮</mn>
-            <mn>3</mn>
-          </mroot>
+        <math display="inline" class="text-[10px] tall:text-[12px]">
+          <mrow>
+            <msubsup>
+              <mo>&int;</mo>
+              <mn>□</mn>
+              <mn>□</mn>
+            </msubsup>
+            <mi>▭</mi>
+          </mrow>
         </math>
       </template>
+      <span class="text-[14px] tall:text-[20px] relative bottom-[2px]">∫</span>
+    </SmallButton>
+    <SmallButton
+      main-title="Sum"
+      @click="store.onShift ? $emit('cmd', '\\prod') : $emit('cmd', '\\sum')"
+      center-title="Product"
+    >
+      <template v-slot:center> Π </template>
+      <span class="relative bottom-[3px]">∑</span>
+    </SmallButton>
+    <SmallButton
+      main-title="Infinity"
+      @click="store.onShift ? $emit('cmd', '\\lim') : $emit('typedText', '∞')"
+      center-title="Limit of a function"
+    >
+      <template v-slot:center> lim </template>
+      <span class="text-[17px] tall:text-[23px] relative bottom-[2px]">∞</span>
+    </SmallButton>
+    <SmallButton
+      center-title="Factor an expression"
+      main-title="Variable x"
+      @click="
+        store.onShift
+          ? $emit('typedText', 'x')
+          : store.onSto
+          ? $emit('store', 'x')
+          : $emit('cmd', '\\factor')
+      "
+    >
+      <template v-slot:center> factor </template>
+      <span class="text-[17px] tall:text-[23px] relative bottom-[2px]">x</span>
+    </SmallButton>
+
+    <!-- 3rd row -->
+    <SmallButton
+      main-title="Sine"
+      @click="
+        store.onShift
+          ? $emit('typedText', 'arcsin(')
+          : $emit('typedText', 'sin(')
+      "
+      center-title="Inverse sine"
+    >
+      <template v-slot:center> sin<sup>-1</sup> </template>
+      sin
+    </SmallButton>
+    <SmallButton
+      main-title="Cosine"
+      @click="
+        store.onShift
+          ? $emit('typedText', 'arccos(')
+          : $emit('typedText', 'cos(')
+      "
+      center-title="Inverse cosine"
+    >
+      <template v-slot:center> cos<sup>-1</sup> </template>
+      cos
+    </SmallButton>
+    <SmallButton
+      main-title="Tangent"
+      @click="
+        store.onShift
+          ? $emit('typedText', 'arctan(')
+          : $emit('typedText', 'tan(')
+      "
+      center-title="Inverse tangent"
+    >
+      <template v-slot:center> tan<sup>-1</sup></template>
+      tan
+    </SmallButton>
+    <SmallButton
+      main-title="Hyperbolic sine"
+      @click="
+        store.onShift
+          ? $emit('typedText', 'arcsinh(')
+          : $emit('typedText', 'sinh(')
+      "
+      center-title="Inverse hyperbolic sine"
+    >
+      <template v-slot:center> sinh<sup>-1</sup></template>
+      sinh
+    </SmallButton>
+    <SmallButton
+      main-title="Hyperbolic cosine"
+      center-title="Inverse hyperbolic cosine"
+      @click="
+        store.onShift
+          ? $emit('typedText', 'arccosh(')
+          : $emit('typedText', 'cosh(')
+      "
+    >
+      <template v-slot:center> cosh<sup>-1</sup></template>
+      cosh
+    </SmallButton>
+    <SmallButton
+      center-title="Inverse hyperbolic tangent"
+      main-title="Hyperbolic tangent"
+      @click="
+        store.onShift
+          ? $emit('typedText', 'arctanh(')
+          : $emit('typedText', 'tanh(')
+      "
+    >
+      <template v-slot:center> tanh<sup>-1</sup></template>
+      tanh
+    </SmallButton>
+
+    <!-- 4th row -->
+    <SmallButton
+      center-title="Scientific constants"
+      main-title="Pi"
+      @click="store.onShift ? $emit('cmd', 'const') : $emit('typedText', 'pi')"
+    >
+      <template v-slot:center
+        ><span class="uppercase text-[13px] font-bold">const</span></template
+      >
+      <span class="text-[17px] tall:text-[23px] relative bottom-[2px]">π</span>
+    </SmallButton>
+    <SmallButton
+      center-title="SI (metric) prefixes"
+      main-title="Percentage"
+      @click="store.onShift ? $emit('cmd', 'const') : $emit('typedText', '%')"
+    >
+      <template v-slot:center
+        ><span class="uppercase text-[13px] font-bold">SI</span></template
+      >
+      %
+    </SmallButton>
+    <SmallButton
+      center-title="Argument of complex number"
+      main-title="Percentage"
+      @click="
+        store.onShift ? $emit('typedText', 'arg(') : $emit('typedText', 'i')
+      "
+    >
+      <template v-slot:center>arg</template>
+      <span class="font-serif">i</span>
+    </SmallButton>
+    <SmallButton
+      center-title="Exponential"
+      main-title="Natural (Euler's) number"
+      @click="
+        store.onShift ? $emit('typedText', 'e^') : $emit('typedText', 'e')
+      "
+    >
+      <template v-slot:center>
+        <span class="font-serif">e</span><sup>▭</sup>
+      </template>
+      <span class="font-serif">e</span>
+    </SmallButton>
+    <SmallButton
+      center-title="Power of 10"
+      main-title="Logarithm with base 10"
+      @click="
+        store.onShift ? $emit('typedText', '10^') : $emit('typedText', 'log(')
+      "
+    >
+      <template v-slot:center> 10<sup>▭</sup></template>
+      log
+    </SmallButton>
+    <SmallButton
+      center-title="Logarithm with specified base"
+      main-title="Natural logarithm"
+      @click="
+        store.onShift ? $emit('cmd', '\\logbase') : $emit('typedText', 'ln(')
+      "
+    >
+      <template v-slot:center> log<sub>▭</sub>▯</template>
+      ln
+    </SmallButton>
+    <SmallButton
+      center-title="Equals sign for inputting equation"
+      main-title="Absolute"
+      @click="store.onShift ? pressSto() : $emit('typedText', '|')"
+    >
+      <template v-slot:center>=</template>
+      <span class="text-[14px] relative bottom-[2px] tall:text-[20px]"
+        >|▭|</span
+      >
+    </SmallButton>
+    <SmallButton
+      center-title="Variable A"
+      main-title="Square"
+      @click="
+        store.onShift
+          ? $emit('cmd', '\\text{A}')
+          : store.onSto
+          ? $emit('store', 'A')
+          : $emit('typedText', '^2')
+      "
+      :is-variable="true"
+    >
+      <template v-slot:center>A</template>
+      <span class="text-[14px] relative bottom-[2px] tall:text-[20px]"
+        >x<sup>2</sup></span
+      >
+    </SmallButton>
+    <SmallButton
+      center-title="Variable B"
+      main-title="Square"
+      @click="
+        store.onShift
+          ? $emit('cmd', '\\text{B}')
+          : store.onSto
+          ? $emit('store', 'B')
+          : $emit('typedText', '^')
+      "
+      :is-variable="true"
+    >
+      <template v-slot:center>B</template>
+      <span class="text-[14px] relative bottom-[2px] tall:text-[20px]"
+        >x<sup>□</sup></span
+      >
+    </SmallButton>
+    <SmallButton
+      center-title="Variable C"
+      main-title="Square"
+      @click="
+        store.onShift
+          ? $emit('cmd', '\\text{C}')
+          : store.onSto
+          ? $emit('store', 'C')
+          : $emit('typedText', 'sqrt')
+      "
+      :is-variable="true"
+    >
+      <template v-slot:center>C</template>
       <math display="block">
         <msqrt>
-          <mi>▮</mi>
+          <mi>□</mi>
         </msqrt>
       </math>
     </SmallButton>
     <SmallButton
-      main-title="Square"
+      center-title="Variable D"
+      main-title="Root"
       @click="
         store.onShift
-          ? $emit('typedText', '^3')
-          : store.onAlpha
-          ? resetShiftAlpha()
-          : $emit('typedText', '^2')
-      "
-      :center-upper="true"
-      center-title="Cube"
-    >
-      <template v-slot:center>
-        <math display="inline">
-          <msup><mi>x</mi><mn>3</mn></msup>
-        </math>
-      </template>
-      <math display="inline">
-        <msup><mi>x</mi><mn>2</mn></msup>
-      </math>
-    </SmallButton>
-    <SmallButton
-      main-title="Power"
-      @click="$emit('typedText', '^')"
-      :center-upper="true"
-      center-title="Root"
-    >
-      <template v-slot:center>
-        <math display="block">
-          <mroot>
-            <mn>▯</mn>
-            <mn>■</mn>
-          </mroot>
-        </math>
-      </template>
-      <math display="inline">
-        <msup><mi>x</mi><mn>◼</mn></msup>
-      </math>
-    </SmallButton>
-    <SmallButton
-      main-title="Logarithm with base 10"
-      @click="
-        store.onShift
-          ? $emit('typedText', '10^')
-          : store.onAlpha
-          ? resetShiftAlpha()
-          : $emit('typedText', 'log(')
-      "
-      :center-upper="true"
-      center-title="Power of 10"
-    >
-      <template v-slot:center>
-        <math display="inline">
-          <msup><mn>10</mn><mn>◼</mn></msup>
-        </math> </template
-      >log
-    </SmallButton>
-    <SmallButton
-      main-title="Natural logarithm"
-      @click="
-        store.onShift
-          ? $emit('typedText', 'e^')
-          : store.onAlpha
-          ? resetShiftAlpha()
-          : $emit('typedText', 'ln(')
-      "
-      :center-upper="true"
-      center-title="Power of e"
-    >
-      <template v-slot:center>
-        <math display="inline">
-          <msup><mi>e</mi><mn>◼</mn></msup>
-        </math>
-      </template>
-      ln
-    </SmallButton>
-    <SmallButton
-      main-title="Negative"
-      @click="
-        store.onShift
-          ? resetShiftAlpha()
-          : store.onAlpha
-          ? $emit('cmd', '\\text{A}')
-          : store.onSto
-          ? $emit('store', 'A')
-          : $emit('typedText', '-')
-      "
-      right-title="Variable A"
-    >
-      <template v-slot:right>A</template>
-      (–)
-    </SmallButton>
-    <SmallButton
-      @click="
-        store.onShift
-          ? resetShiftAlpha()
-          : store.onAlpha
-          ? resetShiftAlpha()
-          : store.onSto
-          ? $emit('store', 'B')
-          : resetShiftAlpha()
-      "
-    >
-      <template v-slot:right>B</template>
-      ° ′ ″
-    </SmallButton>
-    <SmallButton
-      main-title="Hyperbolic functions and additional trigonometric functions"
-      @click="
-        store.onShift
-          ? $emit('typedText', '|')
-          : store.onAlpha
-          ? resetShiftAlpha()
-          : store.onSto
-          ? $emit('store', 'C')
-          : resetShiftAlpha()
-      "
-    >
-      <template v-slot:left>Abs</template>
-      <template v-slot:right>C</template>
-      hyp
-    </SmallButton>
-    <SmallButton
-      main-title="Sin"
-      @click="
-        store.onShift
-          ? $emit('typedText', 'arcsin(')
-          : store.onAlpha
-          ? resetShiftAlpha()
+          ? $emit('cmd', '\\text{D}')
           : store.onSto
           ? $emit('store', 'D')
-          : $emit('typedText', 'sin(')
+          : $emit('typedText', 'sqrt')
       "
+      :is-variable="true"
     >
-      <template v-slot:left>
-        <math display="inline"
-          ><msup><mo>sin</mo><mn>-1</mn></msup></math
-        >
-      </template>
-      <template v-slot:right>D</template>
-      sin
+      <template v-slot:center>D</template>
+      <math display="block">
+        <mroot>
+          <mn>□</mn>
+          <mn>□</mn>
+        </mroot>
+      </math>
     </SmallButton>
     <SmallButton
-      main-title="Cosin"
+      center-title="n chooses r: combinations for selecting r items from n items"
+      main-title="Factorial"
       @click="
-        store.onShift
-          ? $emit('typedText', 'arccos(')
-          : store.onAlpha
-          ? resetShiftAlpha()
-          : store.onSto
-          ? $emit('store', 'F')
-          : $emit('typedText', 'cos(')
+        store.onShift ? $emit('typedText', 'choose') : $emit('typedText', '!')
       "
     >
-      <template v-slot:left>
-        <math display="inline"
-          ><msup><mo>cos</mo><mn>-1</mn></msup></math
-        >
-      </template>
-      <template v-slot:right>F</template>
-      cos
+      <template v-slot:center>nCr</template>
+      <span class="text-[14px] relative bottom-[2px] tall:text-[20px]">x!</span>
     </SmallButton>
-    <SmallButton
-      main-title="Tan"
-      @click="
-        store.onShift
-          ? $emit('typedText', 'arctan(')
-          : store.onAlpha
-          ? resetShiftAlpha()
-          : store.onSto
-          ? $emit('store', 'G')
-          : $emit('typedText', 'tan(')
-      "
-    >
-      <template v-slot:left
-        ><math display="inline"
-          ><msup><mo>tan</mo><mn>-1</mn></msup></math
-        >
-      </template>
-      <template v-slot:right>G</template>
-      tan
-    </SmallButton>
-    <SmallButton
-      @click="
-        store.onShift
-          ? pressSto()
-          : store.onAlpha
-          ? resetShiftAlpha()
-          : resetShiftAlpha()
-      "
-      :center-upper="true"
-    >
-      <template v-slot:center>STO</template>
-      RCL
-    </SmallButton>
-    <SmallButton
-      @click="
-        store.onShift
-          ? resetShiftAlpha()
-          : store.onAlpha
-          ? $emit('typedText', 'i')
-          : $emit('cmd', 'ENG')
-      "
-      :center-upper="true"
-      center-title="Imaginary unit"
-    >
-      <template v-slot:center>
-        <math><mi>i</mi></math>
-      </template>
-      ENG
-    </SmallButton>
-    <SmallButton
-      main-title="("
-      @click="
-        store.onShift
-          ? $emit('typedText', '%')
-          : store.onAlpha
-          ? resetShiftAlpha()
-          : $emit('typedText', '(')
-      "
-      :center-upper="true"
-      center-title="Percent"
-    >
-      <template v-slot:center>%</template>
-      (
-    </SmallButton>
-    <SmallButton
-      main-title=")"
-      @click="
-        store.onShift
-          ? $emit('typedText', ',')
-          : store.onAlpha
-          ? resetShiftAlpha()
-          : store.onSto
-          ? $emit('store', 'x')
-          : $emit('typedText', ')')
-      "
-    >
-      <template v-slot:left>,</template>
-      <template v-slot:right>x</template>
-      )
-    </SmallButton>
-    <SmallButton
-      main-title="Convert between fractions and decimals"
-      @click.prevent="
-        store.onShift
-          ? $emit('cmd', 'mixedFraction')
-          : store.onAlpha
-          ? resetShiftAlpha()
-          : store.onSto
-          ? $emit('store', 'y')
-          : $emit('cmd', 'SD')
-      "
-    >
-      <template v-slot:left>
-        <math
-          display="inline"
-          class="align-text-bottom text-[10px] tall:text-xs"
-        >
-          <mi>a</mi><mfrac><mi>b</mi><mi>c</mi></mfrac>
-          <mo>⟺</mo>
-          <<mfrac><mi>d</mi><mi>c</mi></mfrac>
-        </math>
-      </template>
-      <template v-slot:right>y</template>
-      S⟺D
-    </SmallButton>
-    <SmallButton>
-      <template v-slot:left>M-</template>
-      <template v-slot:right>M</template>
-      M+</SmallButton
-    >
   </div>
 </template>

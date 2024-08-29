@@ -1,0 +1,14 @@
+.button {
+  direction: ltr;
+  filter: drop-shadow(rgb(0 0 0 / 0.25) 0 1.9px 0);
+}
+.button.notpressed:enabled:hover {
+  filter: drop-shadow(rgb(0 0 0 / 0.25) 0 1.9px 0) brightness(0.96);
+}
+.button.notpressed:enabled:active,
+.button.onpressed {
+  filter: brightness(0.9);
+}
+.button:disabled {
+  opacity: 0.6;
+}
