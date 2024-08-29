@@ -387,7 +387,7 @@ function pressSto() {
           ? $emit('cmd', '\\text{D}')
           : store.onSto
           ? $emit('store', 'D')
-          : $emit('typedText', 'sqrt')
+          : $emit('typedText', 'nthroot')
       "
       :is-variable="true"
     >
