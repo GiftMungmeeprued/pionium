@@ -9,7 +9,7 @@ import nerdamer from "nerdamer-prime";
 function clearVariable() {
   nerdamer.clearVars();
   store.variables = {};
-  localStorage.setItem("variables", JSON.stringify(store.variables));
+  localStorage.setItem("calcVariables", JSON.stringify(store.variables));
 }
 </script>
 <template>

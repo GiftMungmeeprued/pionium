@@ -25,7 +25,7 @@ const props = defineProps({
     :aria-controls="props.sidepaneId"
     @click="
       () => {
-        for (key of Object.keys(store.showSidePane)) {
+        for (const key of Object.keys(store.showSidePane)) {
           store.showSidePane[key] =
             key === props.sidepaneId
               ? !store.showSidePane[props.sidepaneId]

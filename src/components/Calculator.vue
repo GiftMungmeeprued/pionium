@@ -76,6 +76,7 @@ function preprocessDisplayLatex(latex) {
 }
 
 function saveHistory(answer) {
+  console.log({ dfjd: store.history });
   store.history.unshift({
     id: data.id++,
     input: mathFieldRef.value.latex(),
@@ -98,7 +99,18 @@ function calculateInput() {
   }
 }
 onMounted(() => {
-  store.history = JSON.parse(localStorage.getItem("calcHistory"));
+  const localStorageHistory = localStorage.getItem("calcHistory");
+  store.history = localStorageHistory ? JSON.parse(localStorageHistory) : [];
+
+  const localStorageVariables = localStorage.getItem("calcVariables");
+  store.variables = localStorageVariables
+    ? JSON.parse(localStorageVariables)
+    : {};
+
+  for (const [key, value] of Object.entries(store.variables)) {
+    nerdamer.setVar(key, nerdamer.convertFromLaTeX(value));
+  }
+
   const config = {
     autoCommands: "pi sqrt sum nthroot choose",
     sumStartsWithNEquals: false,
@@ -272,6 +284,7 @@ function storeVar(var_name) {
     const answer = calculateInput();
     nerdamer.setVar(var_name, data.calculated.toString());
     store.variables = nerdamer.getVars("latex");
+    localStorage.setItem("calcVariables", JSON.stringify(store.variables));
     mathFieldRef.value.moveToRightEnd();
     mathFieldRef.value.write(`\\rightarrow \\text{${var_name}}`);
     staticMathRef.value.latex(answer);
