@@ -6,7 +6,9 @@ import VariableSidePane from "./components/VariableSidePane.vue";
 </script>
 <template>
   <Navbar />
-  <Calculator />
-  <HistorySidePane />
-  <VariableSidePane />
+  <div id="content" class="h-full flex flex-row justify-stretch">
+    <div id="calculator" class="grow h-full"><Calculator /></div>
+    <HistorySidePane />
+    <VariableSidePane />
+  </div>
 </template>
