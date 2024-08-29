@@ -9,8 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@headlessui/vue": "^1.7.22",
     "@heroicons/vue": "^2.1.5",
-    "bootstrap": "^5.3.3",
+    "flowbite": "^2.5.1",
     "mathlive": "^0.101.0",
     "mathquill": "^0.10.1-a",
     "nerdamer-prime": "^1.1.23",

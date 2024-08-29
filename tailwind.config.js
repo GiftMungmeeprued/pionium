@@ -1,32 +1,20 @@
 /** @type {import('tailwindcss').Config} */
 const plugin = require("tailwindcss/plugin");
 export default {
-  content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
+  content: [
+    "./index.html",
+    "./src/**/*.{vue,js,ts,jsx,tsx}",
+    "./node_modules/flowbite/**/*.js",
+  ],
   theme: {
     extend: {
       screens: {
         tall: { raw: "((min-height: 750px) and (min-width: 425px))" },
       },
+      filter: ["hover", "focus"],
     },
   },
-  plugins: [
-    plugin(function ({ addBase, theme }) {
-      addBase({
-        h1: {
-          fontSize: theme("fontSize.2xl"),
-          fontWeight: theme("fontWeight.bold"),
-        },
-        h2: {
-          fontSize: theme("fontSize.xl"),
-          fontWeight: theme("fontWeight.bold"),
-        },
-        h3: {
-          fontSize: theme("fontSize.lg"),
-          fontWeight: theme("fontWeight.bold"),
-        },
-      });
-    }),
-  ],
+  plugins: [require("flowbite/plugin")],
   corePlugins: {
     preflight: true,
   },
