@@ -1,3 +1,14 @@
+<script setup>
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
+import { TrashIcon } from "@heroicons/vue/16/solid";
+const props = defineProps({
+  clearFunction: {
+    type: Function,
+    default: null,
+  },
+});
+</script>
+
 <template>
   <Menu as="div" class="relative inline-block text-left">
     <div>
@@ -39,14 +50,3 @@
     </transition>
   </Menu>
 </template>
-
-<script setup>
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
-import { TrashIcon } from "@heroicons/vue/16/solid";
-const props = defineProps({
-  clearFunction: {
-    type: Function,
-    default: null,
-  },
-});
-</script>

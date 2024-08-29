@@ -1,6 +1,5 @@
 <script setup>
 import { store } from "./store";
-import { TrashIcon } from "@heroicons/vue/16/solid";
 import { VariableIcon } from "@heroicons/vue/24/outline";
 import VariableItem from "./VariableItem.vue";
 import SidePaneDropdown from "./SidePaneDropdown.vue";
