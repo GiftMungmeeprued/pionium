@@ -4,9 +4,9 @@ import { ArrowTurnDownLeftIcon } from "@heroicons/vue/16/solid";
 </script>
 <template>
   <div class="bg-[#E9EAEE] grid grid-cols-5 gap-1 p-1.5 py-3">
-    <Button main-title="7" @click="$emit('typedText', '7')"> 7 </Button>
-    <Button main-title="8" @click="$emit('typedText', '8')"> 8</Button>
-    <Button main-title="9" @click="$emit('typedText', '9')"> 9</Button>
+    <Button main-title="Seven" @click="$emit('typedText', '7')"> 7 </Button>
+    <Button main-title="Eight" @click="$emit('typedText', '8')"> 8</Button>
+    <Button main-title="Nine" @click="$emit('typedText', '9')"> 9</Button>
     <Button main-title="Divide" @click="$emit('typedText', '/')">÷</Button>
     <Button
       main-title="Clear screen"
@@ -15,9 +15,9 @@ import { ArrowTurnDownLeftIcon } from "@heroicons/vue/16/solid";
     >
       AC
     </Button>
-    <Button main-title="4" @click="$emit('typedText', '4')">4</Button>
-    <Button main-title="5" @click="$emit('typedText', '5')">5</Button>
-    <Button main-title="6" @click="$emit('typedText', '6')">6</Button>
+    <Button main-title="Four" @click="$emit('typedText', '4')">4</Button>
+    <Button main-title="Five" @click="$emit('typedText', '5')">5</Button>
+    <Button main-title="Six" @click="$emit('typedText', '6')">6</Button>
     <Button main-title="Multiply" @click="$emit('typedText', '*')">×</Button>
     <Button
       main-title="Answer from previous calculation"
@@ -25,9 +25,9 @@ import { ArrowTurnDownLeftIcon } from "@heroicons/vue/16/solid";
       color="gray"
       >Ans</Button
     >
-    <Button main-title="1" @click="$emit('typedText', '1')">1</Button>
-    <Button main-title="2" @click="$emit('typedText', '2')">2</Button>
-    <Button main-title="3" @click="$emit('typedText', '3')">3</Button>
+    <Button main-title="One" @click="$emit('typedText', '1')">1</Button>
+    <Button main-title="Two" @click="$emit('typedText', '2')">2</Button>
+    <Button main-title="Three" @click="$emit('typedText', '3')">3</Button>
     <Button main-title="Subtract" @click="$emit('typedText', '-')">–</Button>
 
     <Button
@@ -37,7 +37,7 @@ import { ArrowTurnDownLeftIcon } from "@heroicons/vue/16/solid";
     >
       <i class="pi pi-delete-left"></i
     ></Button>
-    <Button main-title="0" @click="$emit('typedText', '0')">0</Button>
+    <Button main-title="Zero" @click="$emit('typedText', '0')">0</Button>
     <Button main-title="Decimal point" @click="$emit('typedText', '.')"
       >.</Button
     >
