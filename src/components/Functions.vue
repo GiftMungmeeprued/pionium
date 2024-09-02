@@ -68,28 +68,23 @@ function pressSto() {
       <i class="pi pi-arrow-right"></i>
     </SmallButton>
     <SmallButton
-      main-title="Left parenthesis"
-      @click="$emit('typedText', '(')"
+      main-title="Physical constants"
       :upper-space="false"
       color="gray"
+      @click="openConst()"
     >
-      (
+      <span class="rubik-font text-xs tall:text-[16px]">CONST</span>
     </SmallButton>
     <SmallButton
-      main-title="Right parenthesis"
-      @click="$emit('typedText', ')')"
+      main-title="SI (metric) prefixes"
       :upper-space="false"
       color="gray"
     >
-      )
+      <span class="rubik-font text-xs tall:text-[16px]">SI</span>
     </SmallButton>
 
     <!-- Second row -->
-    <SmallButton
-      main-title="Fraction"
-      @click="$emit('typedText', '/')"
-      center-title="Modulo"
-    >
+    <SmallButton main-title="Fraction" center-title="Modulo">
       <template v-slot:center>mod</template>
       <math display="inline" class="text-[15px] tall:text-[22px]">
         <mfrac>
@@ -255,24 +250,36 @@ function pressSto() {
 
     <!-- 4th row -->
     <SmallButton
-      center-title="Scientific constants"
-      main-title="Pi"
-      @click="store.onShift ? $emit('cmd', 'const') : $emit('typedText', 'pi')"
+      center-title="Square"
+      main-title="Power"
+      @click="
+        store.onShift ? $emit('typedText', '^2') : $emit('typedText', '^')
+      "
     >
-      <template v-slot:center
-        ><span class="uppercase text-[13px] font-bold">const</span></template
+      <template v-slot:center> x<sup>2</sup></template>
+      <span class="text-[14px] relative bottom-[2px] tall:text-[20px]"
+        >x<sup>□</sup></span
       >
-      <span class="text-[17px] tall:text-[23px] relative bottom-[2px]">π</span>
     </SmallButton>
     <SmallButton
       center-title="SI (metric) prefixes"
       main-title="Percentage"
       @click="store.onShift ? $emit('cmd', 'const') : $emit('typedText', '%')"
     >
-      <template v-slot:center
-        ><span class="uppercase text-[13px] font-bold">SI</span></template
-      >
-      %
+      <template v-slot:center>
+        <math display="block">
+          <mroot>
+            <mn>□</mn>
+            <mn>□</mn>
+          </mroot>
+        </math>
+      </template>
+      <math display="block">
+        <mroot>
+          <mn>□</mn>
+          <mn>□</mn>
+        </mroot>
+      </math>
     </SmallButton>
     <SmallButton
       center-title="Argument of complex number"
@@ -328,76 +335,63 @@ function pressSto() {
     </SmallButton>
     <SmallButton
       center-title="Variable A"
-      main-title="Square"
+      main-title="Pi"
       @click="
         store.onShift
           ? $emit('cmd', '\\text{A}')
           : store.onSto
           ? $emit('store', 'A')
-          : $emit('typedText', '^2')
+          : $emit('typedText', 'pi')
       "
       :is-variable="true"
     >
       <template v-slot:center>A</template>
-      <span class="text-[14px] relative bottom-[2px] tall:text-[20px]"
-        >x<sup>2</sup></span
-      >
+      <span class="text-[17px] tall:text-[23px] relative bottom-[2px]">π</span>
     </SmallButton>
     <SmallButton
       center-title="Variable B"
-      main-title="Square"
+      main-title="Left parenthesis"
       @click="
         store.onShift
           ? $emit('cmd', '\\text{B}')
           : store.onSto
           ? $emit('store', 'B')
-          : $emit('typedText', '^')
+          : $emit('typedText', '(')
       "
       :is-variable="true"
     >
       <template v-slot:center>B</template>
-      <span class="text-[14px] relative bottom-[2px] tall:text-[20px]"
-        >x<sup>□</sup></span
-      >
+      (
     </SmallButton>
     <SmallButton
       center-title="Variable C"
-      main-title="Square"
+      main-title="Right parenthesis"
       @click="
         store.onShift
           ? $emit('cmd', '\\text{C}')
           : store.onSto
           ? $emit('store', 'C')
-          : $emit('typedText', 'sqrt')
+          : $emit('typedText', ')')
       "
       :is-variable="true"
     >
       <template v-slot:center>C</template>
-      <math display="block">
-        <msqrt>
-          <mi>□</mi>
-        </msqrt>
-      </math>
+      )
     </SmallButton>
     <SmallButton
       center-title="Variable D"
-      main-title="Root"
+      main-title="Percentage"
       @click="
         store.onShift
           ? $emit('cmd', '\\text{D}')
           : store.onSto
           ? $emit('store', 'D')
-          : $emit('typedText', 'nthroot')
+          : $emit('typedText', '%')
       "
       :is-variable="true"
     >
       <template v-slot:center>D</template>
-      <math display="block">
-        <mroot>
-          <mn>□</mn>
-          <mn>□</mn>
-        </mroot>
-      </math>
+      %
     </SmallButton>
     <SmallButton
       center-title="n chooses r: combinations for selecting r items from n items"
@@ -411,3 +405,11 @@ function pressSto() {
     </SmallButton>
   </div>
 </template>
+<style>
+.rubik-font {
+  font-family: "Rubik", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
+</style>
