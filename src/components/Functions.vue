@@ -13,6 +13,21 @@ function pressSto() {
   store.onSto = !store.onSto;
   store.onShift = false;
 }
+
+function openConst() {
+  const overlay = HSOverlay.getInstance(
+    '[data-hs-overlay="#physical-constants"]',
+    true
+  );
+  const combobox = HSComboBox.getInstance(
+    "#physical-constants [data-hs-combo-box]",
+    true
+  );
+  if (overlay.element && overlay.element.overlay.classList.contains("open"))
+    return false;
+  overlay.element.open();
+  combobox.element.setCurrent();
+}
 </script>
 
 <style>

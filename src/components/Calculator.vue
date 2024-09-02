@@ -112,7 +112,8 @@ onMounted(() => {
   }
 
   const config = {
-    autoCommands: "pi sqrt sum nthroot choose",
+    autoCommands:
+      "pi sqrt sum nthroot choose mu epsilon gamma alpha sigma phi infinity lambda",
     sumStartsWithNEquals: false,
     handlers: {
       edit: function () {

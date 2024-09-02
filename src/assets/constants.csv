@@ -1,0 +1,46 @@
+name,value,unit,category,constant,symbol
+Proton mass,1.67262192595E-27,kg,Atomic and nuclear,m_p,mₚ
+Neutron mass,1.67492750056E-27,kg,Atomic and nuclear,m_n,mₙ
+Electron mass,9.1093837139E-31,kg,Atomic and nuclear,m_e,mₑ
+Muon mass,1.883531627E-28,kg,Atomic and nuclear,m_mu,mμ
+Bohr radius,5.29177210544E-11,m,Atomic and nuclear,a_0,a₀
+Planck constant,6.62607015E-34,J s,Quantum,h,h
+Nuclear magneton,5.0507837393E-27,J T⁻¹,Atomic and nuclear,mu_N,μN
+Bohr magneton,9.2740100657E-24,J T⁻¹,Atomic and nuclear,mu_B,μB
+Reduced Planck constant,1.054571817E-34,J s,Quantum,hbar,ℏ
+Fine-structure constant,7.2973525643E-03,,Atomic and nuclear,alpha,α
+Classical electron radius,2.8179403205E-15,m,Atomic and nuclear,r_e,rₑ
+Compton wavelength,2.42631023538E-12,m,Quantum,lambda_c,λc
+Proton gyromagnetic ratio,2.6752218708E+08,s⁻¹ T⁻¹,Atomic and nuclear,gamma_p,γₚ
+Proton Compton wavelength,1.32140985360E-15,m,Quantum,"lambda_c,p","λc,p"
+Neutron Compton wavelength,1.31959090382E-15,m,Quantum,"lambda_c,n","λc,n"
+Rydberg constant,10973731.568157,m⁻¹,Atomic and nuclear,R_∞,R∞
+Unified atomic mass unit,1.66053906892E-27,kg,Chemistry,u,u
+Proton magnetic moment,1.41060679545E-26,J T⁻¹,Atomic and nuclear,mu_p,μₚ
+Electron magnetic moment,-9.2847646917E-24,J T⁻¹,Atomic and nuclear,mu_e,μₑ
+Neutron magnetic moment,-9.6623653E-27,J T⁻¹,Atomic and nuclear,mu_n,μₙ
+Muon magnetic moment,-4.49044830E-26,J T⁻¹,Atomic and nuclear,mu_mu,μμ
+Faraday constant,96485.33212,C mol⁻¹,Chemistry,F,F
+Elementary charge,1.602176634E-19,C,Universal,e,e
+Avogadro constant,6.02214076E+23,mol⁻¹,Chemistry,N_A,Nₐ
+Boltzmann constant,1.380649E-23,J K⁻¹,Thermodynamics,k,k
+"Molar volume of ideal gas (273.15 K, 100 kPa)",22.71095464E-03,m³ mol⁻¹,Thermodynamics,V_m,Vₘ
+Molar gas constant,8.314462618,J mol⁻¹ K⁻¹,Thermodynamics,R,R
+Speed of light in vacuum,299792458,m s⁻¹,Universal,c,c
+First radiation constant,3.741771852E-16,W m²,Quantum,c_1,c₁
+Second radiation constant,1.438776877E-02,m K,Quantum,c_2,c₂
+Stefan-Boltzmann constant,5.670374419E-08,W m⁻² K⁻⁴,Quantum,sigma,σ
+Vacuum electric permittivity,8.8541878188E-12,F m⁻¹,Electromagnetism,epsilon_0,ε₀
+Vacuum magnetic permeability,1.25663706127E-06,N A⁻²,Electromagnetism,mu_0,μ₀
+Magnetic flux quantum,2.067833848E-15,Wb,Quantum,phi_0,φ₀
+Standard acceleration of gravity,9.80665,m s⁻²,Mechanics,g,g
+Conductance quantum,7.748091729E-05,s,Quantum,G_0,G₀
+Characteristic impedance of vacuum,376.730313412,Ω,Electromagnetism,Z_0,Z₀
+Celsius zero temperature,273.15,K,Thermodynamics,t,t
+Newtonian constant of gravitation,6.67430E-11,m³ kg⁻¹ s⁻²,Mechanics,G,G
+Standard atmosphere,101325,Pa,Thermodynamics,atm,atm
+Earth mass,5.9722E+24,kg,Astronomy,M_earth,M🜨
+Earth volumetric mean radius,6371E+03,m,Astronomy,R_earth,R🜨
+Sun mass,1988400E+24,kg,Astronomy,M_sun,M☉
+Sun volumetric mean radius,695700E+03,m,Astronomy,R_sun,R☉
+Astronomical unit,1.495978707E+11,m,Astronomy,au,au

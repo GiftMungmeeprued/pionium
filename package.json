@@ -11,15 +11,18 @@
   "dependencies": {
     "@headlessui/vue": "^1.7.22",
     "@heroicons/vue": "^2.1.5",
+    "@preline/combobox": "^2.4.1",
     "flowbite": "^2.5.1",
     "mathlive": "^0.101.0",
     "mathquill": "^0.10.1-a",
     "nerdamer-prime": "^1.1.23",
+    "preline": "^2.4.1",
     "primeicons": "^7.0.0",
     "simplebar-vue": "^2.3.5",
     "vue": "^3.4.29"
   },
   "devDependencies": {
+    "@tailwindcss/forms": "^0.5.8",
     "@vitejs/plugin-vue": "^5.0.5",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.41",
