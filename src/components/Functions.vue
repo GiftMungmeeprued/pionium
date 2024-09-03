@@ -65,7 +65,7 @@ function openConst() {
       :upper-space="false"
       color="gray"
       :on-pressed="store.onSto"
-      ><span class="font-bold text-sm tall:text-[17px]">STO</span></SmallButton
+      ><span class="rubik-font text-xs tall:text-[16px]">STO</span></SmallButton
     >
     <SmallButton
       main-title="Move cursor left"
