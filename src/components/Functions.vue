@@ -99,7 +99,11 @@ function openConst() {
     </SmallButton>
 
     <!-- Second row -->
-    <SmallButton main-title="Fraction" center-title="Modulo">
+    <SmallButton
+      center-title="Modulo"
+      main-title="Fraction"
+      @click="store.onShift ? $emit('cmd', '\\mod') : $emit('typedText', '/')"
+    >
       <template v-slot:center>mod</template>
       <math display="inline" class="text-[15px] tall:text-[22px]">
         <mfrac>
@@ -109,9 +113,9 @@ function openConst() {
       </math>
     </SmallButton>
     <SmallButton
+      center-title="Differentiate and evaluate at given x"
       main-title="Differentiate"
       @click="store.onShift ? $emit('cmd', '\\diffat') : $emit('cmd', '\\diff')"
-      center-title="Differentiate and evaluate at given x"
     >
       <template v-slot:center>
         <math
