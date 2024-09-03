@@ -1,5 +1,7 @@
 <script setup>
 import { onMounted, ref } from "vue";
+import Simplebar from "simplebar-vue";
+import "simplebar-vue/dist/simplebar.min.css";
 
 const props = defineProps({
   item: {
@@ -18,9 +20,13 @@ onMounted(() => {
 </script>
 <template>
   <div
-    class="pt-5 pb-3 px-5 border-solid border-b border-0 border-neutral-300 hover:bg-neutral-100"
+    class="border-solid border-b border-0 border-neutral-300 hover:bg-neutral-100"
   >
-    <div class="h-8 w-full" ref="inputEl"></div>
-    <div class="h-8 w-full text-right" ref="answerEl"></div>
+    <Simplebar class="w-full pt-5 px-5">
+      <span class="h-8" ref="inputEl"></span>
+    </Simplebar>
+    <Simplebar class="w-full px-5 pb-3 text-right">
+      <span class="h-8" ref="answerEl"></span>
+    </Simplebar>
   </div>
 </template>

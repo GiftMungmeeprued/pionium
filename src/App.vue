@@ -8,7 +8,7 @@ import SearchBox from "./components/SearchBox.vue";
 <template>
   <div id="page" class="h-full flex flex-col justify-items-stretch">
     <Navbar />
-    <div id="content" class="flex flex-row justify-stretch grow">
+    <div id="content" class="flex flex-row justify-stretch grow relative">
       <div id="calculator" class="grow h-full"><Calculator /></div>
       <HistorySidePane />
       <VariableSidePane />

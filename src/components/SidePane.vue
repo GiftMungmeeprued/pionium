@@ -19,13 +19,13 @@ const props = defineProps({
     v-show="store.showSidePane[props.sidepaneId]"
   >
     <div
-      class="sm:absolute h-full w-full p-0 bg-white dark:bg-gray-800 overflow-y-auto"
+      class="sm:absolute h-full w-full p-0 bg-white dark:bg-gray-800 overflow-auto"
     >
       <button
         type="button"
         :data-drawer-hide="props.sidepaneId"
         :aria-controls="props.sidepaneId"
-        class="sm:invisible text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-2.5 end-2.5 flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white"
+        class="sm:invisible z-50 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-2.5 end-2.5 flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white"
         @click="
           () => {
             store.showSidePane[props.sidepaneId] = false;
