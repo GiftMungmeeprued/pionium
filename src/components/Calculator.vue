@@ -18,7 +18,7 @@ const staticMathRef = computed(() => MQ.StaticMath(answerFieldEl.value));
 const data = reactive({
   calculated: null,
   isRational: false,
-  SD: false,
+  SD: true,
   mixedFraction: false,
   solveMode: false,
   id: 0,
@@ -76,7 +76,6 @@ function preprocessDisplayLatex(latex) {
 }
 
 function saveHistory(answer) {
-  console.log({ dfjd: store.history });
   store.history.unshift({
     id: data.id++,
     input: mathFieldRef.value.latex(),
@@ -93,7 +92,14 @@ function calculateInput() {
     console.log(processedLatex);
     const exp = nerdamer.convertFromLaTeX(processedLatex).toString();
     console.log(exp);
-    data.calculated = nerdamer(exp, {}, ["expand"]);
+    // evaluate mode
+    if (!exp.includes("=")) {
+      data.calculated = nerdamer(exp, {}, ["expand"]);
+      // solve mode
+    } else {
+      data.calculated = nerdamer(`solve(${exp}, x)`);
+      data.solveMode = true;
+    }
     const answer = displayAnswer();
     return answer;
   }
@@ -120,7 +126,7 @@ onMounted(() => {
         const staticMath = staticMathRef.value;
         staticMath.latex("");
         data.calculated = null;
-        data.SD = false;
+        data.SD = true;
         data.mixedFraction = false;
         data.solveMode = false;
       },
@@ -130,7 +136,57 @@ onMounted(() => {
 
   mathFieldRef.value.config(config);
   mathFieldRef.value.focus();
+
+  nerdamer.setConstant("m_p", 1.67262192595e-27);
 });
+
+function displayNumeric(number) {
+  // display format for complex and scientific notation from fractions
+  const realPartFraction = nerdamer(`realpart(${number})`).toString();
+  const imagPartFraction = nerdamer(`imagpart(${number})`).toString();
+
+  function convertToDecimals(fractionString) {
+    // convert 1.2488e-20 to 1.2488 \\cdot 10^{-20}
+    const decimalNumber = eval?.(`"use strict";(${fractionString})`).toString();
+
+    if (decimalNumber.includes("e")) {
+      const [coeff, expon] = decimalNumber.split("e");
+      const latex = `${coeff} \\cdot 10^{${expon}}`;
+      return latex;
+    } else {
+      return decimalNumber;
+    }
+  }
+
+  let latexReal, latexImag;
+  if (realPartFraction == "0") {
+    latexReal = "";
+  } else {
+    const realPartDecimal = convertToDecimals(realPartFraction);
+    latexReal = `${realPartDecimal}`;
+  }
+
+  if (imagPartFraction == "0") {
+    latexImag = "";
+  } else {
+    const imagPartDecimal = convertToDecimals(imagPartFraction);
+    latexImag = `${imagPartDecimal.includes("-") ? "" : "+"} ${
+      imagPartDecimal == "1" ? "" : imagPartDecimal
+    }i`;
+  }
+
+  const latex = latexReal + latexImag;
+
+  if (latex === "") {
+    return "0";
+  } else {
+    if (latex.startsWith("+")) {
+      return latex.slice(1);
+    } else {
+      return latex;
+    }
+  }
+}
 
 function handleTypedText(character) {
   if (data.focus === false) {
@@ -168,23 +224,32 @@ function trim(x) {
   return x.substring(1, x.length - 1);
 }
 
-function displayAnswer(displayDecimal = false) {
+function displayNumericSolutions(solutions) {
+  const solutionsArray = trim(solutions).split(",");
+  return solutionsArray.map(displayNumeric);
+}
+
+function displayAnswer() {
   let answer = "";
   const mustSimplify = /sin|cos|tan|csc|sec|cot|factorial|log/.test(
     data.calculated.toString()
   );
+  const isEvaluable = /^[0-9+\-/i\[\]\(\),*]*$/.test(
+    data.calculated.evaluate().text("fractions")
+  );
+
   // evaluate expression
   if (!data.solveMode) {
     answer = `= ${
-      displayDecimal || mustSimplify
-        ? data.calculated.evaluate().text("decimals")
+      (data.SD || mustSimplify) && isEvaluable
+        ? displayNumeric(data.calculated.evaluate().text("fractions"))
         : preprocessDisplayLatex(data.calculated.toTeX())
     }`;
     // solve mode
   } else {
     answer = `x = ${
-      displayDecimal || mustSimplify
-        ? trim(data.calculated.evaluate().text("decimals"))
+      (data.SD || mustSimplify) && isEvaluable
+        ? displayNumericSolutions(data.calculated.evaluate().text("fractions"))
         : preprocessDisplayLatex(trim(data.calculated.toTeX()))
     }`;
   }
@@ -204,7 +269,7 @@ function handleCmd(cmd) {
     case "SD":
       if (data.calculated) {
         data.SD = !data.SD;
-        displayAnswer(data.SD);
+        displayAnswer();
       }
       break;
     case "mixedFraction":
@@ -217,15 +282,6 @@ function handleCmd(cmd) {
               : preprocessDisplayLatex(data.calculated.toTeX())
           }`
         );
-      }
-      break;
-    case "solve":
-      if (mathField.latex()) {
-        const processedLatex = preprocessInputLatex(mathField.latex());
-        const exp = nerdamer.convertFromLaTeX(processedLatex).toString();
-        data.calculated = nerdamer(`solve(${exp}, x)`);
-        data.solveMode = true;
-        displayAnswer();
       }
       break;
     case "\\int":
