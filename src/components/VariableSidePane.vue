@@ -4,7 +4,6 @@ import SidePane from "./SidePane.vue";
 import { store } from "./store";
 import SidePaneDropdown from "./SidePaneDropdown.vue";
 import { VariableIcon } from "@heroicons/vue/24/outline";
-import nerdamer from "nerdamer-prime";
 
 function clearVariable() {
   nerdamer.clearVars();
