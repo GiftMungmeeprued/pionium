@@ -7,7 +7,8 @@ function handleConst(element) {
   const MQ = MathQuill.getInterface(2);
   const mathField = MQ.MathField(document.getElementById("math-field"));
   const constName = element.firstChild.lastChild.children[2].textContent;
-  mathField.typedText(constName);
+  mathField.typedText("\\mathrm " + constName);
+  mathField.keystroke("Right");
   if (constName.includes("_")) {
     mathField.keystroke("Right");
   }

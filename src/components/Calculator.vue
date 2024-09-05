@@ -6,6 +6,7 @@ import { store, resetShiftAlpha } from "./store";
 
 import Simplebar from "simplebar-vue";
 import "simplebar-vue/dist/simplebar.min.css";
+import constants from "../assets/constants.json";
 
 const MQ = MathQuill.getInterface(2);
 
@@ -61,8 +62,11 @@ function preprocessInputLatex(latex) {
 
   // differentiation
   latex = latex.replace(
-    /\\frac\{d\}\{dx\}\\left\[(.*?)\\right\]/g,
-    "diff($1, x)"
+  // constants
+  constants.forEach((item) => {
+    const regex = new RegExp(`\\\\mathrm\\{\\\\ ${item.latex}\\}`, "g");
+    latex = latex.replace(regex, item.constant + "_");
+  });
   );
 
   return latex;
