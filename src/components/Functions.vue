@@ -102,9 +102,9 @@ function openConst() {
     <SmallButton
       center-title="Modulo"
       main-title="Fraction"
-      @click="store.onShift ? $emit('cmd', '\\mod') : $emit('typedText', '/')"
+      @click="store.onShift ? $emit('typedText', '=') : $emit('typedText', '/')"
     >
-      <template v-slot:center>mod</template>
+      <template v-slot:center>=</template>
       <math display="inline" class="text-[15px] tall:text-[22px]">
         <mfrac>
           <mi class="relative -bottom-[2px] tall:-bottom-[3px]">▭</mi>
@@ -183,10 +183,8 @@ function openConst() {
       main-title="Variable x"
       @click="
         store.onShift
-          ? $emit('typedText', 'x')
-          : store.onSto
-          ? $emit('store', 'x')
-          : $emit('cmd', '\\factor')
+          ? $emit('typedText', '\\factor(')
+          : $emit('typedText', 'x')
       "
     >
       <template v-slot:center> factor </template>
@@ -283,14 +281,17 @@ function openConst() {
     <SmallButton
       center-title="SI (metric) prefixes"
       main-title="Percentage"
-      @click="store.onShift ? $emit('cmd', 'const') : $emit('typedText', '%')"
+      @click="
+        store.onShift
+          ? $emit('typedText', 'sqrt')
+          : $emit('typedText', 'nthroot')
+      "
     >
       <template v-slot:center>
         <math display="block">
-          <mroot>
+          <msqrt>
             <mn>□</mn>
-            <mn>□</mn>
-          </mroot>
+          </msqrt>
         </math>
       </template>
       <math display="block">
@@ -345,9 +346,9 @@ function openConst() {
     <SmallButton
       center-title="Equals sign for inputting equation"
       main-title="Absolute"
-      @click="store.onShift ? pressSto() : $emit('typedText', '|')"
+      @click="store.onShift ? $emit('typedText', '=') : $emit('typedText', '|')"
     >
-      <template v-slot:center>=</template>
+      <template v-slot:center></template>
       <span class="text-[14px] relative bottom-[2px] tall:text-[20px]"
         >|▭|</span
       >

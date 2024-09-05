@@ -25,47 +25,122 @@ const data = reactive({
   focus: true,
 });
 
+const latexFunctionMap = [
+  { latex: "\\\\cdot", exp: "*" },
+  { latex: "\\\\%", exp: "%" },
+
+  { latex: "\\\\sin", exp: "sin" },
+  { latex: "\\\\cos", exp: "cos" },
+  { latex: "\\\\tan", exp: "tan" },
+  { latex: "\\\\arcsin", exp: "asin" },
+  { latex: "\\\\arccos", exp: "acos" },
+  { latex: "\\\\arctan", exp: "atan" },
+  { latex: "\\\\operatorname\\{arcsinh\\}", exp: "asinh" },
+  { latex: "\\\\operatorname\\{arccosh\\}", exp: "acosh" },
+  { latex: "\\\\operatorname\\{arctanh\\}", exp: "atanh" },
+
+  { latex: "\\\\arg", exp: "arg" },
+  { latex: "\\\\text\\{factor\\}", exp: "factor" },
+
+  { latex: "\\\\log\\\\left\\(", exp: "log10(" },
+  { latex: "\\\\ln\\\\left\\(", exp: "log(" },
+
+  { latex: "\\\\left\\(", exp: "(" },
+  { latex: "\\\\right\\)", exp: ")" },
+
+  { latex: "\\infty", exp: "∞" },
+
+  { latex: "\\{", exp: "(" },
+  { latex: "\\}", exp: ")" },
+];
+
 function preprocessInputLatex(latex) {
-  // convert //cdot to *
-  latex = latex.replace(/\\cdot/g, " \\cdot ");
-  // convert \\operatorname{arccsc} to \\mathrm{acsc}
-  latex = latex.replace(/\\operatorname{arccsc}/g, "\\mathrm{acsc}");
-  latex = latex.replace(/\\operatorname{arcsec}/g, "\\mathrm{asec}");
-  latex = latex.replace(/\\operatorname{arccot}/g, "\\mathrm{acot}");
-
-  // deal with log, ln
-  latex = latex.replace(/\\ln/g, "log");
-  latex = latex.replace(/\\log/g, "log10");
-
-  // deal with npr, ncr
-  latex = latex.replace(
-    /\\text{nCr}\\left\((\d+),(\d+)\\right\)/g,
-    "\\frac{$1!}{($1-$2)!*$2!}"
-  );
-  latex = latex.replace(
-    /\\text{nPr}\\left\((\d+),(\d+)\\right\)/g,
-    "\\frac{$1!}{($1-$2)!}"
-  );
+  // deal with ^: convert e^2x to e^(2)x
+  latex = latex.replace(/(\^)(\d)/, "$1($2)");
 
   // deal with abs
   latex = latex.replace(/\\left\|(.*?)\\right\|/g, "abs($1)");
 
-  // deal with integrals
+  // deal with log of base n
   latex = latex.replace(
-    /\\int_\{(\d+)\}\^\{(\d+)\}\\left\[(.*?)\\right\]dx/g,
-    "defint($3,$1,$2)"
+    /\\log_(.*?)\\left\[(.*?)\\right\]/g,
+    "log($2)/log($1)"
+  );
+
+  // deal with ncr
+  latex = latex.replace(/\\binom\{(.*?)\}\{(.*?)\}/g, "$1!/(($1-$2)!*$2!)");
+
+  // deal with sum
+  latex = latex.replace(
+    /\\sum_\{(\w+)=(.*?)\}\^\{(.*?)\}(.*?)$/g,
+    "sum($4,$1,$2,$3)"
+  );
+
+  // deal with prod
+  latex = latex.replace(
+    /\\prod_\{(\w+)=(.*?)\}\^\{(.*?)\}(.*?)$/g,
+    "product($4,$1,$2,$3)"
+  );
+
+  // deal with indefinite/definite integrals
+  latex = latex.replace(
+    /\\int\\left\[(.*?)\\right\]d(\w+)/g,
+    "integrate($1,$2)"
   );
   latex = latex.replace(
-    /\\int_\{(\s+)\}\^\{(\s+)\}\\left\[(.*?)\\right\]dx/g,
-    "integrate($3, x)"
+    /\\defint_\{(.*?)\}\^\{(.*?)\}\\left\[(.*?)\\right\]d(\w+)/g,
+    "defint($3,$1,$2,$4)"
   );
 
   // differentiation
   latex = latex.replace(
+    /\\frac\{d\}\{d(\w+)\}\\left\[(.*?)\\right\]_\{(.*?)\}/g,
+    "diffat($2, $1, $3)"
+  );
+  latex = latex.replace(
+    /\\frac\{d\}\{d(\w+)\}\\left\[(.*?)\\right\]/g,
+    "diff($2, $1)"
+  );
+
   // constants
   constants.forEach((item) => {
     const regex = new RegExp(`\\\\mathrm\\{\\\\ ${item.latex}\\}`, "g");
     latex = latex.replace(regex, "const_" + item.constant);
+  });
+
+  // add a 0 in front of a dot (.) if the dot isn't preceded by a number
+  latex = latex.replace(/(?<!\d)\./g, "0.");
+
+  // deal with sqrt, root of n
+  latex = latex.replace(/\\sqrt\{(.*?)\}/g, function (_, base) {
+    return `sqrt(${base})`;
+  });
+
+  latex = latex.replace(/\\sqrt\[(.*?)\]\{(.*?)\}/g, function (_, root, base) {
+    return `(${base})^(1/(${root}))`;
+  });
+
+  // deal with fractions
+  function replaceFractions(str) {
+    // Regular expression to match \frac{numerator}{denominator}
+    const fracRegex = /\\frac{([^{}]+)}{([^{}]+)}/;
+    // Recursively replace all occurrences of \frac{a}{b}
+    while (fracRegex.test(str)) {
+      // Replace one occurrence of \frac{a}{b} with (a)/(b)
+      str = str.replace(fracRegex, (match, numerator, denominator) => {
+        return `(${replaceFractions(numerator)})/(${replaceFractions(
+          denominator
+        )})`;
+      });
+    }
+    return str;
+  }
+  latex = replaceFractions(latex);
+
+  // functions
+  latexFunctionMap.forEach((item) => {
+    const regex = new RegExp(`${item.latex}`, "g");
+    latex = latex.replace(regex, item.exp);
   });
   return latex;
 }
@@ -89,13 +164,15 @@ function saveHistory(answer) {
 function calculateInput() {
   const mathField = mathFieldRef.value;
   if (mathField.latex()) {
-    const processedLatex = preprocessInputLatex(mathField.latex());
-    console.log(processedLatex);
-    const exp = nerdamer.convertFromLaTeX(processedLatex).toString();
-    console.log(exp);
+    const exp = preprocessInputLatex(mathField.latex());
+    console.log({ latex: mathField.latex() });
+    console.log({ exp: exp });
     // evaluate mode
     if (!exp.includes("=")) {
-      data.calculated = nerdamer(exp, {}, ["expand"]);
+      data.calculated =
+        exp.includes("factor") || exp.includes("diffat")
+          ? nerdamer(exp)
+          : nerdamer(exp, {}, ["expand"]);
       // solve mode
     } else {
       data.calculated = nerdamer(`solve(${exp}, x)`);
@@ -140,6 +217,23 @@ onMounted(() => {
 
   constants.forEach((item) => {
     nerdamer.setConstant("const_" + item.constant, item.value);
+  });
+
+  function diffAt(exp_, x_, value_) {
+    const exp = exp_.clone();
+    const x = x_.clone();
+    const value = value_.clone();
+    const core = nerdamer.getCore();
+    return nerdamer(core.Calculus.diff(exp, x).sub(x, value)).evaluate();
+  }
+
+  nerdamer.register({
+    name: "diffat",
+    visible: true,
+    numargs: 3,
+    build: function () {
+      return diffAt;
+    },
   });
 });
 
@@ -289,6 +383,13 @@ function handleCmd(cmd) {
       break;
     case "\\int":
       mathField.write("\\int\\left[\\right] dx");
+      for (let i = 0; i < 3; i++) {
+        mathField.keystroke("Left");
+      }
+      mathField.focus();
+      break;
+    case "\\defint":
+      mathField.write("\\defint_{ }^{ }\\left[\\right] dx");
       for (let i = 0; i < 6; i++) {
         mathField.keystroke("Left");
       }
@@ -296,6 +397,13 @@ function handleCmd(cmd) {
       break;
     case "\\sum":
       mathField.write("\\sum_{x=}^{ }");
+      for (let i = 0; i < 2; i++) {
+        mathField.keystroke("Left");
+      }
+      mathField.focus();
+      break;
+    case "\\prod":
+      mathField.write("\\prod_{x=}^{ }");
       for (let i = 0; i < 2; i++) {
         mathField.keystroke("Left");
       }
@@ -311,13 +419,6 @@ function handleCmd(cmd) {
     case "\\diffat":
       mathField.write("\\frac{d}{dx} \\left[\\right]_{}");
       for (let i = 0; i < 3; i++) {
-        mathField.keystroke("Left");
-      }
-      mathField.focus();
-      break;
-    case "\\ncr":
-      mathField.write("\\text{nCr}\\left( \\right)");
-      for (let i = 0; i < 1; i++) {
         mathField.keystroke("Left");
       }
       mathField.focus();
