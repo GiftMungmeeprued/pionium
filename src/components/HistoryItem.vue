@@ -23,10 +23,10 @@ onMounted(() => {
     class="border-solid border-b border-0 border-neutral-300 hover:bg-neutral-100"
   >
     <Simplebar class="w-full pt-5 px-5">
-      <span class="h-8" ref="inputEl"></span>
+      <span class="min-h-8" ref="inputEl"></span>
     </Simplebar>
     <Simplebar class="w-full px-5 pb-3 text-right">
-      <span class="h-8" ref="answerEl"></span>
+      <span class="min-h-8" ref="answerEl"></span>
     </Simplebar>
   </div>
 </template>
