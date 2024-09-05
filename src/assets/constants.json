@@ -5,7 +5,7 @@
     "unit": "kg",
     "category": "Atomic and nuclear",
     "constant": "m_p",
-    "latex": "m_p",
+    "latex": "m_\\{p\\}",
     "symbol": "mₚ"
   },
   {
@@ -14,7 +14,7 @@
     "unit": "kg",
     "category": "Atomic and nuclear",
     "constant": "m_n",
-    "latex": "m_n",
+    "latex": "m_\\{n\\}",
     "symbol": "mₙ"
   },
   {
@@ -23,7 +23,7 @@
     "unit": "kg",
     "category": "Atomic and nuclear",
     "constant": "m_e",
-    "latex": "m_e",
+    "latex": "m_\\{e\\}",
     "symbol": "mₑ"
   },
   {
@@ -41,7 +41,7 @@
     "unit": "m",
     "category": "Atomic and nuclear",
     "constant": "a_0",
-    "latex": "a_0",
+    "latex": "a_\\{0\\}",
     "symbol": "a₀"
   },
   {
@@ -59,7 +59,7 @@
     "unit": "J T⁻¹",
     "category": "Atomic and nuclear",
     "constant": "mu_N",
-    "latex": "\\\\mu_N",
+    "latex": "\\\\mu_\\{N\\}",
     "symbol": "μN"
   },
   {
@@ -68,7 +68,7 @@
     "unit": "J T⁻¹",
     "category": "Atomic and nuclear",
     "constant": "mu_B",
-    "latex": "\\\\mu_B",
+    "latex": "\\\\mu_\\{B\\}",
     "symbol": "μB"
   },
   {
@@ -95,7 +95,7 @@
     "unit": "m",
     "category": "Atomic and nuclear",
     "constant": "r_e",
-    "latex": "r_e",
+    "latex": "r_\\{e\\}",
     "symbol": "rₑ"
   },
   {
@@ -104,7 +104,7 @@
     "unit": "m",
     "category": "Quantum",
     "constant": "lambda_c",
-    "latex": "\\\\lambda_c",
+    "latex": "\\\\lambda_\\{c\\}",
     "symbol": "λc"
   },
   {
@@ -113,7 +113,7 @@
     "unit": "s⁻¹ T⁻¹",
     "category": "Atomic and nuclear",
     "constant": "gamma_p",
-    "latex": "\\\\gamma_p",
+    "latex": "\\\\gamma_\\{p\\}",
     "symbol": "γₚ"
   },
   {
@@ -158,7 +158,7 @@
     "unit": "J T⁻¹",
     "category": "Atomic and nuclear",
     "constant": "mu_p",
-    "latex": "\\\\mu_p",
+    "latex": "\\\\mu_\\{p\\}",
     "symbol": "μₚ"
   },
   {
@@ -167,7 +167,7 @@
     "unit": "J T⁻¹",
     "category": "Atomic and nuclear",
     "constant": "mu_e",
-    "latex": "\\\\mu_e",
+    "latex": "\\\\mu_\\{e\\}",
     "symbol": "μₑ"
   },
   {
@@ -176,7 +176,7 @@
     "unit": "J T⁻¹",
     "category": "Atomic and nuclear",
     "constant": "mu_n",
-    "latex": "\\\\mu_n",
+    "latex": "\\\\mu_\\{n\\}",
     "symbol": "μₙ"
   },
   {
@@ -185,7 +185,7 @@
     "unit": "J T⁻¹",
     "category": "Atomic and nuclear",
     "constant": "mu_mu",
-    "latex": "\\\\mu_\\\\mu",
+    "latex": "\\\\mu_\\{\\\\mu\\}",
     "symbol": "μμ"
   },
   {
@@ -212,7 +212,7 @@
     "unit": "mol⁻¹",
     "category": "Chemistry",
     "constant": "N_A",
-    "latex": "N_A",
+    "latex": "N_\\{A\\}",
     "symbol": "Nₐ"
   },
   {
@@ -230,7 +230,7 @@
     "unit": "m³ mol⁻¹",
     "category": "Thermodynamics",
     "constant": "V_m",
-    "latex": "V_m",
+    "latex": "V_\\{m\\}",
     "symbol": "Vₘ"
   },
   {
@@ -257,7 +257,7 @@
     "unit": "W m²",
     "category": "Quantum",
     "constant": "c_1",
-    "latex": "c_1",
+    "latex": "c_\\{1\\}",
     "symbol": "c₁"
   },
   {
@@ -266,7 +266,7 @@
     "unit": "m K",
     "category": "Quantum",
     "constant": "c_2",
-    "latex": "c_2",
+    "latex": "c_\\{2\\}",
     "symbol": "c₂"
   },
   {

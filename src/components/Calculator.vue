@@ -65,10 +65,8 @@ function preprocessInputLatex(latex) {
   // constants
   constants.forEach((item) => {
     const regex = new RegExp(`\\\\mathrm\\{\\\\ ${item.latex}\\}`, "g");
-    latex = latex.replace(regex, item.constant + "_");
+    latex = latex.replace(regex, "const_" + item.constant);
   });
-  );
-
   return latex;
 }
 
@@ -140,7 +138,9 @@ onMounted(() => {
   mathFieldRef.value.config(config);
   mathFieldRef.value.focus();
 
-  nerdamer.setConstant("m_p", 1.67262192595e-27);
+  constants.forEach((item) => {
+    nerdamer.setConstant("const_" + item.constant, item.value);
+  });
 });
 
 function displayNumeric(number) {
