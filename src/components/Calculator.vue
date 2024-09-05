@@ -1,6 +1,5 @@
 <script setup>
 import { onMounted, ref, computed, reactive } from "vue";
-import nerdamer from "nerdamer-prime/all.min.js";
 import NumberPad from "./NumberPad.vue";
 import Functions from "./Functions.vue";
 import { store, resetShiftAlpha } from "./store";
