@@ -49,99 +49,161 @@ const latexFunctionMap = [
   { latex: "\\\\right\\)", exp: ")" },
 
   { latex: "\\infty", exp: "∞" },
-
-  { latex: "\\{", exp: "(" },
-  { latex: "\\}", exp: ")" },
 ];
 
 function preprocessInputLatex(latex) {
-  // deal with ^: convert e^2x to e^(2)x
-  latex = latex.replace(/(\^)(\d)/, "$1($2)");
-
-  // deal with abs
-  latex = latex.replace(/\\left\|(.*?)\\right\|/g, "abs($1)");
-
-  // deal with log of base n
-  latex = latex.replace(
-    /\\log_(.*?)\\left\[(.*?)\\right\]/g,
-    "log($2)/log($1)"
-  );
-
-  // deal with ncr
-  latex = latex.replace(/\\binom\{(.*?)\}\{(.*?)\}/g, "$1!/(($1-$2)!*$2!)");
-
-  // deal with sum
-  latex = latex.replace(
-    /\\sum_\{(\w+)=(.*?)\}\^\{(.*?)\}(.*?)$/g,
-    "sum($4,$1,$2,$3)"
-  );
-
-  // deal with prod
-  latex = latex.replace(
-    /\\prod_\{(\w+)=(.*?)\}\^\{(.*?)\}(.*?)$/g,
-    "product($4,$1,$2,$3)"
-  );
-
-  // deal with indefinite/definite integrals
-  latex = latex.replace(
-    /\\int\\left\[(.*?)\\right\]d(\w+)/g,
-    "integrate($1,$2)"
-  );
-  latex = latex.replace(
-    /\\defint_\{(.*?)\}\^\{(.*?)\}\\left\[(.*?)\\right\]d(\w+)/g,
-    "defint($3,$1,$2,$4)"
-  );
-
-  // differentiation
-  latex = latex.replace(
-    /\\frac\{d\}\{d(\w+)\}\\left\[(.*?)\\right\]_\{(.*?)\}/g,
-    "diffat($2, $1, $3)"
-  );
-  latex = latex.replace(
-    /\\frac\{d\}\{d(\w+)\}\\left\[(.*?)\\right\]/g,
-    "diff($2, $1)"
-  );
-
+  //////// Simple substitution : no nesting of {} ////////
   // constants
   constants.forEach((item) => {
     const regex = new RegExp(`\\\\mathrm\\{\\\\ ${item.latex}\\}`, "g");
     latex = latex.replace(regex, "const_" + item.constant);
   });
-
-  // add a 0 in front of a dot (.) if the dot isn't preceded by a number
-  latex = latex.replace(/(?<!\d)\./g, "0.");
-
-  // deal with sqrt, root of n
-  latex = latex.replace(/\\sqrt\{(.*?)\}/g, function (_, base) {
-    return `sqrt(${base})`;
-  });
-
-  latex = latex.replace(/\\sqrt\[(.*?)\]\{(.*?)\}/g, function (_, root, base) {
-    return `(${base})^(1/(${root}))`;
-  });
-
-  // deal with fractions
-  function replaceFractions(str) {
-    // Regular expression to match \frac{numerator}{denominator}
-    const fracRegex = /\\frac{([^{}]+)}{([^{}]+)}/;
-    // Recursively replace all occurrences of \frac{a}{b}
-    while (fracRegex.test(str)) {
-      // Replace one occurrence of \frac{a}{b} with (a)/(b)
-      str = str.replace(fracRegex, (match, numerator, denominator) => {
-        return `(${replaceFractions(numerator)})/(${replaceFractions(
-          denominator
-        )})`;
-      });
-    }
-    return str;
-  }
-  latex = replaceFractions(latex);
-
+  // add a 0 in front of a dot (.) if the dot isn't preceded by a number or another dot
+  latex = latex.replace(/(?<![\d.])\./g, "0.");
   // functions
   latexFunctionMap.forEach((item) => {
     const regex = new RegExp(`${item.latex}`, "g");
     latex = latex.replace(regex, item.exp);
   });
+  // stored variable
+  latex = latex.replace(/\\text{([A-D])}/, "$1");
+
+  // //////// Require recursion: contains nesting of {} ////////
+  // // detect the substring within {} that is the last child and located last in position
+  // // ex. {abc}{def} match {def}
+  // // ex. {{abc}def} match {abc}
+  // // ex. {a}{b{c}d{{e}fg}} match {e}
+  // const lastEnclosedSubstring = "{((?!.*{)[^{]+)}";
+  // // detect any enclosed substring in a non-greedy way
+  // const anyEnclosedSubstring = "{(.+?)}";
+
+  function parse(latex) {
+    // leaf node content: doesn't contain {,},[,]
+    const s = "([^{}\\[\\]]+?)";
+    const l = "\\\\left\\[";
+    const r = "\\\\right\\]";
+    let count = 0;
+
+    // keep replacing until latex is a leaf node content
+    while (/[{}\[\]]/.test(latex) && count < 10) {
+      // log of base n: \\log_{a}\\left[b\\right] -> (log(b))/(log(a))
+      latex = latex.replace(
+        new RegExp(`\\\\log_{${s}}${l + s + r}`, "g"),
+        (_, b, x) => `(log(${parse(x)}))/(log(${parse(b)}))`
+      );
+
+      // ncr: \\binom{a}{b} -> ((a)!)/((a-b)!*(c)!)
+      latex = latex.replace(
+        new RegExp(`\\\\binom{${s}}{${s}}`, "g"),
+        (_, n, r) => {
+          n = parse(n);
+          r = parse(r);
+          return `((${n})!)/(((${n})-(${r}))!*(${r})!)`;
+        }
+      );
+
+      // sum: \\sum_{x=1}^{3}x^2 -> sum(x^2,x,1,3)
+      latex = latex.replace(
+        new RegExp(`\\\\sum_{(\\w+)=${s}}\\^{${s}}${l + s + r}`, "g"),
+        (_, x, a, b, f) =>
+          `sum(${parse(f)},${parse(x)},${parse(a)},${parse(b)})`
+      );
+
+      // prod: \\prod_{x=1}^{3}x^2 -> product(x^2,x,1,3)
+      latex = latex.replace(
+        new RegExp(`\\\\prod_{(\\w+)=${s}}\\^{${s}}${l + s + r}`, "g"),
+        (_, x, a, b, f) =>
+          `product(${parse(f)},${parse(x)},${parse(a)},${parse(b)})`
+      );
+
+      // indefinite/definite integrals
+      // \\int\\left\[x^2\\right\]dx -> integrate(x^2,x)
+      latex = latex.replace(
+        new RegExp(`\\\\int${l + s + r}d(\\w+)`, "g"),
+        (_, f, x) => `integrate(${parse(f)},${parse(x)})`
+      );
+
+      // \\defint_{a}^{b}\\left\[x^2\\right\]dx -> defint(x^2,a,b,x)
+      latex = latex.replace(
+        new RegExp(`\\\\defint_{${s}}\\^{${s}}${l + s + r}d(\\w+)`, "g"),
+        (_, a, b, f, x) =>
+          `defint(${parse(f)},${parse(a)},${parse(b)},${parse(x)})`
+      );
+
+      // differentiation
+      // \\frac{d}{dx}\\left\[x^2\\right\]_{1} -> diffat(x^2,x,1)
+      latex = latex.replace(
+        new RegExp(`\\\\frac{d}{d(\\w+)}${l + "(.+)" + r}_{${s}}`, "g"),
+        (_, x, f, a) => `diffat(${parse(f)},${parse(x)},${parse(a)})`
+      );
+
+      // \\frac{d}{dx}\\left\[x^2\\right\] -> diff(x^2,x)
+      latex = latex.replace(
+        new RegExp(`\\\\frac{d}{d(\\w+)}${l + s + r}`, "g"),
+        (_, x, f) => `diff(${parse(f)},${parse(x)})`
+      );
+
+      // limit: \\lim_{x\\to0}\\left\[x^2\\right\] -> limit(x^2,x,0)
+      latex = latex.replace(
+        new RegExp(`\\\\lim_{(\\w+)\\\\to${s}}${l + s + r}`, "g"),
+        (_, x, a, f) => `limit(${parse(f)},${parse(x)},${parse(a)})`
+      );
+
+      // sqrt: \\sqrt{b} -> sqrt(b)
+      latex = latex.replace(
+        new RegExp(`\\\\sqrt{${s}}`, "g"),
+        (_, x) => `sqrt(${parse(x)})`
+      );
+
+      // root of n: \\sqrt[a]{b} -> (a)^(-1/(b))
+      latex = latex.replace(
+        new RegExp(`\\\\sqrt\\[${s}\\]{${s}}`, "g"),
+        (_, e, x) => `(${parse(x)})^(1/(${parse(e)}))`
+      );
+
+      // REDUNDANT WITH ABOVE!
+      // power: a^{b} -> a^(b)
+      latex = latex.replace(
+        new RegExp(`(?<!})\\^{${s}}`, "g"),
+        (_, e) => `^(${parse(e)})`
+      );
+
+      // fractions: \\frac{1}{2} -> (1)/(2)
+      latex = latex.replace(
+        new RegExp(`\\\\frac{([^d{}\\[\\]]+?)}{${s}}`, "g"),
+        (_, n, d) => `(${parse(n)})/(${parse(d)})`
+      );
+
+      count++;
+      if (count === 10) {
+        throw Error("Invalid input");
+      }
+    }
+    return latex;
+  }
+
+  latex = parse(latex);
+
+  //////// Require recursion: contains nesting of || ////////
+  // deal with abs: \\left\|x\\right\| -> abs(x)
+  function parseAbs(latex) {
+    let count = 0;
+    while (/\|/.test(latex) && count < 10) {
+      latex = latex.replace(
+        /\\left\|([^\|]+)\\right\|/g,
+        (_, x) => `abs(${parseAbs(x)})`
+      );
+
+      count++;
+      if (count === 10) {
+        throw Error("Invalid input of |");
+      }
+    }
+    return latex;
+  }
+
+  latex = parseAbs(latex);
+
   return latex;
 }
 
@@ -164,8 +226,8 @@ function saveHistory(answer) {
 function calculateInput() {
   const mathField = mathFieldRef.value;
   if (mathField.latex()) {
-    const exp = preprocessInputLatex(mathField.latex());
     console.log({ latex: mathField.latex() });
+    const exp = preprocessInputLatex(mathField.latex());
     console.log({ exp: exp });
     // evaluate mode
     if (!exp.includes("=")) {
@@ -197,8 +259,8 @@ onMounted(() => {
 
   const config = {
     autoCommands:
-      "pi sqrt sum nthroot choose mu epsilon gamma alpha sigma phi infinity lambda",
-    sumStartsWithNEquals: false,
+      "pi sqrt sum nthroot binom mu epsilon gamma alpha sigma phi infinity lambda",
+    sumStartsWithNEquals: true,
     handlers: {
       edit: function () {
         const staticMath = staticMathRef.value;
@@ -224,7 +286,7 @@ onMounted(() => {
     const x = x_.clone();
     const value = value_.clone();
     const core = nerdamer.getCore();
-    return nerdamer(core.Calculus.diff(exp, x).sub(x, value)).evaluate();
+    return core.Calculus.diff(exp, x).sub(x, value);
   }
 
   nerdamer.register({
@@ -235,6 +297,8 @@ onMounted(() => {
       return diffAt;
     },
   });
+
+  // test here
 });
 
 function displayNumeric(number) {
@@ -396,15 +460,15 @@ function handleCmd(cmd) {
       mathField.focus();
       break;
     case "\\sum":
-      mathField.write("\\sum_{x=}^{ }");
-      for (let i = 0; i < 2; i++) {
+      mathField.write("\\sum_{x=}^{ }\\left[\\right]");
+      for (let i = 0; i < 4; i++) {
         mathField.keystroke("Left");
       }
       mathField.focus();
       break;
     case "\\prod":
-      mathField.write("\\prod_{x=}^{ }");
-      for (let i = 0; i < 2; i++) {
+      mathField.write("\\prod_{x=}^{ }\\left[\\right]");
+      for (let i = 0; i < 4; i++) {
         mathField.keystroke("Left");
       }
       mathField.focus();
@@ -425,6 +489,13 @@ function handleCmd(cmd) {
       break;
     case "\\logbase":
       mathField.write("\\log_{}\\left[\\right]");
+      for (let i = 0; i < 3; i++) {
+        mathField.keystroke("Left");
+      }
+      mathField.focus();
+      break;
+    case "\\lim":
+      mathField.write("\\lim_{x\\to}\\left[\\right]");
       for (let i = 0; i < 3; i++) {
         mathField.keystroke("Left");
       }
