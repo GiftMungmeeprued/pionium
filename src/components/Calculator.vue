@@ -242,12 +242,13 @@ function preprocessDisplayLatex(latex) {
 
 function saveHistory(answer) {
   store.history.unshift({
-    id: data.id++,
+    id: store.id++,
     input: mathFieldRef.value.latex(),
     calculated: data.calculated,
     answer: answer,
   });
   localStorage.setItem("calcHistory", JSON.stringify(store.history));
+  localStorage.setItem("historyId", store.id);
 }
 
 function calculateInput() {
@@ -272,6 +273,9 @@ function calculateInput() {
   }
 }
 onMounted(() => {
+  const localStorageId = localStorage.getItem("historyId");
+  store.id = localStorageId ? localStorageId : 0;
+
   const localStorageHistory = localStorage.getItem("calcHistory");
   store.history = localStorageHistory ? JSON.parse(localStorageHistory) : [];
 

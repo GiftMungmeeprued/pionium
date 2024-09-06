@@ -7,6 +7,8 @@ import SidePaneDropdown from "./SidePaneDropdown.vue";
 function clearHistory() {
   store.history = [];
   localStorage.setItem("calcHistory", JSON.stringify(store.history));
+  store.id = 0;
+  localStorage.setItem("historyId", store.id);
 }
 </script>
 

@@ -12,6 +12,14 @@ const props = defineProps({
 const inputEl = ref(null);
 const answerEl = ref(null);
 
+function loadHistory(item) {
+  const MQ = MathQuill.getInterface(2);
+  const mathField = MQ.MathField(document.getElementById("math-field"));
+  mathField.latex(item.input);
+  const answerField = MQ.StaticMath(document.getElementById("answer"));
+  answerField.latex(item.answer);
+}
+
 onMounted(() => {
   const MQ = MathQuill.getInterface(2);
   MQ.StaticMath(inputEl.value).latex(props.item.input);
@@ -20,7 +28,8 @@ onMounted(() => {
 </script>
 <template>
   <div
-    class="border-solid border-b border-0 border-neutral-300 hover:bg-neutral-100"
+    class="border-solid border-b border-0 border-neutral-300 hover:bg-neutral-100 cursor-pointer"
+    @click="loadHistory(props.item)"
   >
     <Simplebar class="w-full pt-5 px-5">
       <span class="min-h-8" ref="inputEl"></span>

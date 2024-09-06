@@ -12,6 +12,7 @@ export const store = reactive({
     historySidePane: false,
     variableSidePane: false,
   },
+  id: 0,
 });
 
 export function resetShiftAlpha() {
