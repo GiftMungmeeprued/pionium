@@ -85,7 +85,7 @@ function preprocessInputLatex(latex) {
     let count = 0;
 
     // keep replacing until latex is a leaf node content
-    while (/[{}\[\]]/.test(latex) && count < 10) {
+    while (/[{}\[\]\\]/.test(latex) && count < 10) {
       // log of base n: \\log_{a}\\left[b\\right] -> (log(b))/(log(a))
       latex = latex.replace(
         new RegExp(`\\\\log_{${s}}${l + s + r}`, "g"),
@@ -108,10 +108,20 @@ function preprocessInputLatex(latex) {
         (_, x, a, b, f) =>
           `sum(${parse(f)},${parse(x)},${parse(a)},${parse(b)})`
       );
+      latex = latex.replace(
+        new RegExp(`\\\\sum_{(\\w+)=${s}}\\^{${s}}${s}$`, "g"),
+        (_, x, a, b, f) =>
+          `sum(${parse(f)},${parse(x)},${parse(a)},${parse(b)})`
+      );
 
       // prod: \\prod_{x=1}^{3}x^2 -> product(x^2,x,1,3)
       latex = latex.replace(
         new RegExp(`\\\\prod_{(\\w+)=${s}}\\^{${s}}${l + s + r}`, "g"),
+        (_, x, a, b, f) =>
+          `product(${parse(f)},${parse(x)},${parse(a)},${parse(b)})`
+      );
+      latex = latex.replace(
+        new RegExp(`\\\\prod_{(\\w+)=${s}}\\^{${s}}${s}$`),
         (_, x, a, b, f) =>
           `product(${parse(f)},${parse(x)},${parse(a)},${parse(b)})`
       );
@@ -122,10 +132,19 @@ function preprocessInputLatex(latex) {
         new RegExp(`\\\\int${l + s + r}d(\\w+)`, "g"),
         (_, f, x) => `integrate(${parse(f)},${parse(x)})`
       );
+      latex = latex.replace(
+        new RegExp(`\\\\int${s}d(\\w+)`, "g"),
+        (_, f, x) => `integrate(${parse(f)},${parse(x)})`
+      );
 
       // \\defint_{a}^{b}\\left\[x^2\\right\]dx -> defint(x^2,a,b,x)
       latex = latex.replace(
         new RegExp(`\\\\defint_{${s}}\\^{${s}}${l + s + r}d(\\w+)`, "g"),
+        (_, a, b, f, x) =>
+          `defint(${parse(f)},${parse(a)},${parse(b)},${parse(x)})`
+      );
+      latex = latex.replace(
+        new RegExp(`\\\\defint_{${s}}\\^{${s}}${s}d(\\w+)`, "g"),
         (_, a, b, f, x) =>
           `defint(${parse(f)},${parse(a)},${parse(b)},${parse(x)})`
       );
@@ -142,10 +161,18 @@ function preprocessInputLatex(latex) {
         new RegExp(`\\\\frac{d}{d(\\w+)}${l + s + r}`, "g"),
         (_, x, f) => `diff(${parse(f)},${parse(x)})`
       );
+      latex = latex.replace(
+        new RegExp(`\\\\frac{d}{d(\\w+)}${s}$`, "g"),
+        (_, x, f) => `diff(${parse(f)},${parse(x)})`
+      );
 
       // limit: \\lim_{x\\to0}\\left\[x^2\\right\] -> limit(x^2,x,0)
       latex = latex.replace(
         new RegExp(`\\\\lim_{(\\w+)\\\\to${s}}${l + s + r}`, "g"),
+        (_, x, a, f) => `limit(${parse(f)},${parse(x)},${parse(a)})`
+      );
+      latex = latex.replace(
+        new RegExp(`\\\\lim_{(\\w+)\\\\to${s}}${s}$`, "g"),
         (_, x, a, f) => `limit(${parse(f)},${parse(x)},${parse(a)})`
       );
 
