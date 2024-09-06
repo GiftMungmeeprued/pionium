@@ -417,7 +417,7 @@ function openConst() {
       center-title="n chooses r: combinations for selecting r items from n items"
       main-title="Factorial"
       @click="
-        store.onShift ? $emit('typedText', 'choose') : $emit('typedText', '!')
+        store.onShift ? $emit('typedText', 'binom') : $emit('typedText', '!')
       "
     >
       <template v-slot:center>nCr</template>
