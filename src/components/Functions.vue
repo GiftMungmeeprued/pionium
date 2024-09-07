@@ -28,6 +28,18 @@ function openConst() {
   overlay.element.open();
   combobox.element.setCurrent();
 }
+
+function openSI() {
+  const overlay = HSOverlay.getInstance('[data-hs-overlay="#prefixes"]', true);
+  const combobox = HSComboBox.getInstance(
+    "#prefixes [data-hs-combo-box]",
+    true
+  );
+  if (overlay.element && overlay.element.overlay.classList.contains("open"))
+    return false;
+  overlay.element.open();
+  combobox.element.setCurrent();
+}
 </script>
 
 <style>
@@ -51,7 +63,7 @@ function openConst() {
     <!-- First row -->
     <SmallButton
       main-title="Shift key"
-      @click="pressShift"
+      @btndown="pressShift"
       :upper-space="false"
       color="gray"
       :on-pressed="store.onShift"
@@ -61,7 +73,7 @@ function openConst() {
     </SmallButton>
     <SmallButton
       main-title="Store the displayed value into a variable"
-      @click="pressSto()"
+      @btndown="pressSto()"
       :upper-space="false"
       color="gray"
       :on-pressed="store.onSto"
@@ -69,14 +81,14 @@ function openConst() {
     >
     <SmallButton
       main-title="Move cursor left"
-      @click="$emit('keystroke', 'Left')"
+      @btndown="$emit('keystroke', 'Left')"
       :upper-space="false"
       color="gray"
       ><i class="pi pi-arrow-left"></i>
     </SmallButton>
     <SmallButton
       main-title="Move cursor right"
-      @click="$emit('keystroke', 'Right')"
+      @btndown="$emit('keystroke', 'Right')"
       :upper-space="false"
       color="gray"
     >
@@ -86,7 +98,7 @@ function openConst() {
       main-title="Physical constants"
       :upper-space="false"
       color="gray"
-      @click="openConst()"
+      @btndown="openConst()"
     >
       <span class="rubik-font text-xs tall:text-[16px]">CONST</span>
     </SmallButton>
@@ -94,6 +106,7 @@ function openConst() {
       main-title="SI (metric) prefixes"
       :upper-space="false"
       color="gray"
+      @btndown="openSI()"
     >
       <span class="rubik-font text-xs tall:text-[16px]">SI</span>
     </SmallButton>
@@ -102,7 +115,9 @@ function openConst() {
     <SmallButton
       center-title="Modulo"
       main-title="Fraction"
-      @click="store.onShift ? $emit('typedText', '=') : $emit('typedText', '/')"
+      @btndown="
+        store.onShift ? $emit('typedText', '=') : $emit('typedText', '/')
+      "
     >
       <template v-slot:center>=</template>
       <math display="inline" class="text-[15px] tall:text-[22px]">
@@ -115,7 +130,9 @@ function openConst() {
     <SmallButton
       center-title="Differentiate and evaluate at given x"
       main-title="Differentiate"
-      @click="store.onShift ? $emit('cmd', '\\diffat') : $emit('cmd', '\\diff')"
+      @btndown="
+        store.onShift ? $emit('cmd', '\\diffat') : $emit('cmd', '\\diff')
+      "
     >
       <template v-slot:center>
         <math
@@ -145,7 +162,9 @@ function openConst() {
     </SmallButton>
     <SmallButton
       main-title="Integrate"
-      @click="store.onShift ? $emit('cmd', '\\defint') : $emit('cmd', '\\int')"
+      @btndown="
+        store.onShift ? $emit('cmd', '\\defint') : $emit('cmd', '\\int')
+      "
       center-title="Integrate with given limits"
     >
       <template v-slot:center>
@@ -164,7 +183,7 @@ function openConst() {
     </SmallButton>
     <SmallButton
       main-title="Sum"
-      @click="store.onShift ? $emit('cmd', '\\prod') : $emit('cmd', '\\sum')"
+      @btndown="store.onShift ? $emit('cmd', '\\prod') : $emit('cmd', '\\sum')"
       center-title="Product"
     >
       <template v-slot:center> Π </template>
@@ -172,7 +191,7 @@ function openConst() {
     </SmallButton>
     <SmallButton
       main-title="Infinity"
-      @click="store.onShift ? $emit('cmd', '\\lim') : $emit('typedText', '∞')"
+      @btndown="store.onShift ? $emit('cmd', '\\lim') : $emit('typedText', '∞')"
       center-title="Limit of a function"
     >
       <template v-slot:center> lim </template>
@@ -181,7 +200,7 @@ function openConst() {
     <SmallButton
       center-title="Factor an expression"
       main-title="Variable x"
-      @click="
+      @btndown="
         store.onShift
           ? $emit('typedText', '\\factor(')
           : $emit('typedText', 'x')
@@ -194,7 +213,7 @@ function openConst() {
     <!-- 3rd row -->
     <SmallButton
       main-title="Sine"
-      @click="
+      @btndown="
         store.onShift
           ? $emit('typedText', 'arcsin(')
           : $emit('typedText', 'sin(')
@@ -206,7 +225,7 @@ function openConst() {
     </SmallButton>
     <SmallButton
       main-title="Cosine"
-      @click="
+      @btndown="
         store.onShift
           ? $emit('typedText', 'arccos(')
           : $emit('typedText', 'cos(')
@@ -218,7 +237,7 @@ function openConst() {
     </SmallButton>
     <SmallButton
       main-title="Tangent"
-      @click="
+      @btndown="
         store.onShift
           ? $emit('typedText', 'arctan(')
           : $emit('typedText', 'tan(')
@@ -230,7 +249,7 @@ function openConst() {
     </SmallButton>
     <SmallButton
       main-title="Hyperbolic sine"
-      @click="
+      @btndown="
         store.onShift
           ? $emit('typedText', 'arcsinh(')
           : $emit('typedText', 'sinh(')
@@ -243,7 +262,7 @@ function openConst() {
     <SmallButton
       main-title="Hyperbolic cosine"
       center-title="Inverse hyperbolic cosine"
-      @click="
+      @btndown="
         store.onShift
           ? $emit('typedText', 'arccosh(')
           : $emit('typedText', 'cosh(')
@@ -255,7 +274,7 @@ function openConst() {
     <SmallButton
       center-title="Inverse hyperbolic tangent"
       main-title="Hyperbolic tangent"
-      @click="
+      @btndown="
         store.onShift
           ? $emit('typedText', 'arctanh(')
           : $emit('typedText', 'tanh(')
@@ -269,7 +288,7 @@ function openConst() {
     <SmallButton
       center-title="Square"
       main-title="Power"
-      @click="
+      @btndown="
         store.onShift ? $emit('typedText', '^2') : $emit('typedText', '^')
       "
     >
@@ -279,32 +298,32 @@ function openConst() {
       >
     </SmallButton>
     <SmallButton
-      center-title="SI (metric) prefixes"
-      main-title="Percentage"
-      @click="
+      center-title="Nth root"
+      main-title="Square root"
+      @btndown="
         store.onShift
-          ? $emit('typedText', 'sqrt')
-          : $emit('typedText', 'nthroot')
+          ? $emit('typedText', 'nthroot')
+          : $emit('typedText', 'sqrt')
       "
     >
       <template v-slot:center>
         <math display="block">
-          <msqrt>
+          <mroot>
             <mn>□</mn>
-          </msqrt>
+            <mn>□</mn>
+          </mroot>
         </math>
       </template>
       <math display="block">
-        <mroot>
+        <msqrt>
           <mn>□</mn>
-          <mn>□</mn>
-        </mroot>
+        </msqrt>
       </math>
     </SmallButton>
     <SmallButton
       center-title="Argument of complex number"
       main-title="Percentage"
-      @click="
+      @btndown="
         store.onShift ? $emit('typedText', 'arg(') : $emit('typedText', 'i')
       "
     >
@@ -314,7 +333,7 @@ function openConst() {
     <SmallButton
       center-title="Exponential"
       main-title="Natural (Euler's) number"
-      @click="
+      @btndown="
         store.onShift ? $emit('typedText', 'e^') : $emit('typedText', 'e')
       "
     >
@@ -326,7 +345,7 @@ function openConst() {
     <SmallButton
       center-title="Power of 10"
       main-title="Logarithm with base 10"
-      @click="
+      @btndown="
         store.onShift ? $emit('typedText', '10^') : $emit('typedText', 'log(')
       "
     >
@@ -336,7 +355,7 @@ function openConst() {
     <SmallButton
       center-title="Logarithm with specified base"
       main-title="Natural logarithm"
-      @click="
+      @btndown="
         store.onShift ? $emit('cmd', '\\logbase') : $emit('typedText', 'ln(')
       "
     >
@@ -346,7 +365,9 @@ function openConst() {
     <SmallButton
       center-title="Equals sign for inputting equation"
       main-title="Absolute"
-      @click="store.onShift ? $emit('typedText', '=') : $emit('typedText', '|')"
+      @btndown="
+        store.onShift ? $emit('typedText', '=') : $emit('typedText', '|')
+      "
     >
       <template v-slot:center></template>
       <span class="text-[14px] relative bottom-[2px] tall:text-[20px]"
@@ -356,7 +377,7 @@ function openConst() {
     <SmallButton
       center-title="Variable A"
       main-title="Pi"
-      @click="
+      @btndown="
         store.onShift
           ? $emit('cmd', '\\text{A}')
           : store.onSto
@@ -371,7 +392,7 @@ function openConst() {
     <SmallButton
       center-title="Variable B"
       main-title="Left parenthesis"
-      @click="
+      @btndown="
         store.onShift
           ? $emit('cmd', '\\text{B}')
           : store.onSto
@@ -386,7 +407,7 @@ function openConst() {
     <SmallButton
       center-title="Variable C"
       main-title="Right parenthesis"
-      @click="
+      @btndown="
         store.onShift
           ? $emit('cmd', '\\text{C}')
           : store.onSto
@@ -401,7 +422,7 @@ function openConst() {
     <SmallButton
       center-title="Variable D"
       main-title="Percentage"
-      @click="
+      @btndown="
         store.onShift
           ? $emit('cmd', '\\text{D}')
           : store.onSto
@@ -416,7 +437,7 @@ function openConst() {
     <SmallButton
       center-title="n chooses r: combinations for selecting r items from n items"
       main-title="Factorial"
-      @click="
+      @btndown="
         store.onShift ? $emit('typedText', 'binom') : $emit('typedText', '!')
       "
     >
