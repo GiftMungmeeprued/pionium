@@ -38,6 +38,7 @@ const props = defineProps({
       <slot name="center"></slot>
     </div>
     <button
+      @mousedown.prevent="$emit('btndown')"
       type="button"
       :class="`button flex justify-center items-center font-semibold border-0 rounded shadow px-0.5 py-0 h-6 tall:h-8 text-xs tall:text-xl ${
         colors[props.color]
