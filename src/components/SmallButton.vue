@@ -29,7 +29,7 @@ const props = defineProps({
 });
 </script>
 <template>
-  <div class="flex flex-col">
+  <div class="flex flex-col select-none">
     <div
       class="text-center px-1 text-xs tall:text-sm text-[#5F5F5F]"
       :title="centerTitle"
