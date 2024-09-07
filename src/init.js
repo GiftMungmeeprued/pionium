@@ -14,3 +14,13 @@ function handleConst(element) {
   }
   mathField.focus();
 }
+
+function handlePrefix(element) {
+  const overlay = HSOverlay.getInstance('[data-hs-overlay="#prefixes"]', true);
+  overlay.element.close();
+  const MQ = MathQuill.getInterface(2);
+  const mathField = MQ.MathField(document.getElementById("math-field"));
+  const prefix = element.firstChild.children[1].textContent;
+  mathField.typedText(prefix);
+  mathField.focus();
+}

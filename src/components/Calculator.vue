@@ -7,6 +7,7 @@ import { store, resetShiftAlpha } from "./store";
 import Simplebar from "simplebar-vue";
 import "simplebar-vue/dist/simplebar.min.css";
 import constants from "../assets/constants.json";
+import prefixes from "../assets/prefixes.json";
 
 const MQ = MathQuill.getInterface(2);
 
@@ -310,6 +311,9 @@ onMounted(() => {
 
   constants.forEach((item) => {
     nerdamer.setConstant("const_" + item.constant, item.value);
+  });
+  prefixes.forEach((item) => {
+    nerdamer.setConstant(item.symbol, item.value);
   });
 
   function diffAt(exp_, x_, value_) {

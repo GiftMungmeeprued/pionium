@@ -4,6 +4,7 @@ import HistorySidePane from "./components/HistorySidePane.vue";
 import Navbar from "./components/Navbar.vue";
 import VariableSidePane from "./components/VariableSidePane.vue";
 import SearchBox from "./components/SearchBox.vue";
+import SearchBoxSI from "./components/SearchBoxSI.vue";
 </script>
 <template>
   <div id="page" class="h-full flex flex-col justify-items-stretch">
@@ -15,4 +16,5 @@ import SearchBox from "./components/SearchBox.vue";
     </div>
   </div>
   <SearchBox />
+  <SearchBoxSI />
 </template>
