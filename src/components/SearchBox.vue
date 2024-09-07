@@ -31,6 +31,7 @@
           class="relative"
           data-hs-combo-box='{
           "isOpenOnFocus": true,
+          "preventVisibility": true,
           "groupingType": "tabs",
           "apiUrl": "src/assets/constants.json",
           "apiGroupField": "category",
