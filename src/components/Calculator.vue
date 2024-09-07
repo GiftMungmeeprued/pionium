@@ -333,6 +333,12 @@ onMounted(() => {
     },
   });
 
+  window.addEventListener("keydown", (evt) => {
+    if (evt.shiftKey === true) {
+      store.onShift = !store.onShift;
+    }
+  });
+
   // test here
 });
 
