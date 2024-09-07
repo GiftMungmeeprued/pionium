@@ -23,7 +23,6 @@ const data = reactive({
   mixedFraction: false,
   solveMode: false,
   id: 0,
-  focus: true,
 });
 
 const latexFunctionMap = [
@@ -262,6 +261,7 @@ function saveHistory(answer) {
 
 function calculateInput() {
   const mathField = mathFieldRef.value;
+  mathField.blur();
   if (mathField.latex()) {
     console.log({ latex: mathField.latex() });
     const exp = preprocessInputLatex(mathField.latex());
@@ -282,6 +282,11 @@ function calculateInput() {
   }
 }
 onMounted(() => {
+  // prevent focus on answer field
+  document.getElementsByClassName(
+    "simplebar-content-wrapper"
+  )[0].attributes[1].nodeValue = -1;
+
   const localStorageId = localStorage.getItem("historyId");
   store.id = localStorageId ? localStorageId : 0;
 
@@ -399,9 +404,8 @@ function displayNumeric(number) {
 }
 
 function handleTypedText(character) {
-  if (data.focus === false) {
+  if (!(document.activeElement.nodeName === "TEXTAREA")) {
     mathFieldRef.value.latex("");
-    data.focus = true;
   }
   mathFieldRef.value.typedText(character);
   mathFieldRef.value.focus();
@@ -467,7 +471,6 @@ function displayAnswer() {
   saveHistory(answer);
   nerdamer.setVar("Ans", data.calculated.toString());
   store.variables = nerdamer.getVars("latex");
-  data.focus = false;
   return answer;
 }
 
@@ -560,7 +563,6 @@ function handleCmd(cmd) {
 
 function storeVar(var_name) {
   store.onSto = false;
-  console.log(mathFieldRef.value.latex());
   if (mathFieldRef.value.latex()) {
     const answer = calculateInput();
     nerdamer.setVar(var_name, data.calculated.toString());
