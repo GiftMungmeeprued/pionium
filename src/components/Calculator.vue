@@ -50,6 +50,7 @@ const latexFunctionMap = [
   { latex: "\\\\right\\)", exp: ")" },
 
   { latex: "\\infty", exp: "∞" },
+  { latex: "\\\\pi", exp: "pi " },
 ];
 
 function preprocessInputLatex(latex) {
@@ -238,6 +239,13 @@ function preprocessInputLatex(latex) {
 function preprocessDisplayLatex(latex) {
   // remove //cdot in front of sqrt
   latex = latex.replace(/ \\cdot \\sqrt/g, "\\sqrt");
+  // convert asin to arcsin, etc.
+  latex = latex.replace(/\\mathrm{asin}/g, "\\arcsin");
+  latex = latex.replace(/\\mathrm{acos}/g, "\\arccos");
+  latex = latex.replace(/\\mathrm{atan}/g, "\\arctan");
+  latex = latex.replace(/\\mathrm{asinh}/g, "\\arcsinh");
+  latex = latex.replace(/\\mathrm{acosh}/g, "\\arccosh");
+  latex = latex.replace(/\\mathrm{atanh}/g, "\\arctanh");
   return latex;
 }
 
