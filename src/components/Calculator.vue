@@ -2,7 +2,8 @@
 import { onMounted, ref, computed, reactive } from "vue";
 import NumberPad from "./NumberPad.vue";
 import Functions from "./Functions.vue";
-import { store, resetShiftAlpha } from "./store";
+import { store, resetShiftSto } from "./store";
+import DisplayButton from "./DisplayButton.vue";
 
 import Simplebar from "simplebar-vue";
 import "simplebar-vue/dist/simplebar.min.css";
@@ -19,11 +20,13 @@ const staticMathRef = computed(() => MQ.StaticMath(answerFieldEl.value));
 const data = reactive({
   calculated: null,
   isRational: false,
-  SD: true,
   mixedFraction: false,
   solveMode: false,
   id: 0,
+  displaymodes: [],
 });
+
+const helperText = ref("Enter the value of x :");
 
 const latexFunctionMap = [
   { latex: "\\\\cdot", exp: "*" },
@@ -57,7 +60,7 @@ function preprocessInputLatex(latex) {
   // constants
   constants.forEach((item) => {
     const regex = new RegExp(`\\\\mathrm\\{\\\\ ${item.latex}\\}`, "g");
-    latex = latex.replace(regex, "const_" + item.constant);
+    latex = latex.replace(regex, "const_" + item.constant + " ");
   });
   // add a 0 in front of a dot (.) if the dot isn't preceded by a number or another dot
   latex = latex.replace(/(?<![\d.])\./g, "0.");
@@ -67,7 +70,7 @@ function preprocessInputLatex(latex) {
     latex = latex.replace(regex, item.exp);
   });
   // stored variable
-  latex = latex.replace(/\\text{([A-D])}/, "$1");
+  latex = latex.replace(/\\text{([A-D])}/g, "$1 ");
 
   // //////// Require recursion: contains nesting of {} ////////
   // // detect the substring within {} that is the last child and located last in position
@@ -80,13 +83,13 @@ function preprocessInputLatex(latex) {
 
   function parse(latex) {
     // leaf node content: doesn't contain {,},[,]
-    const s = "([^{}\\[\\]]+?)";
+    const s = "([^{}\\[\\]\\|]+?)";
     const l = "\\\\left\\[";
     const r = "\\\\right\\]";
     let count = 0;
 
     // keep replacing until latex is a leaf node content
-    while (/[{}\[\]\\]/.test(latex) && count < 10) {
+    while (/[{}\[\]\\\|]/.test(latex) && count < 10) {
       // log of base n: \\log_{a}\\left[b\\right] -> (log(b))/(log(a))
       latex = latex.replace(
         new RegExp(`\\\\log_{${s}}${l + s + r}`, "g"),
@@ -202,9 +205,15 @@ function preprocessInputLatex(latex) {
         (_, n, d) => `(${parse(n)})/(${parse(d)})`
       );
 
+      // abs: \\left\|x\\right\| -> abs(x)
+      latex = latex.replace(
+        new RegExp(`\\\\left\\|${s}\\\\right\\|`, "g"),
+        (_, x) => `abs(${parse(x)})`
+      );
+
       count++;
       if (count === 10) {
-        throw Error("Invalid input");
+        throw Error("Invalid input: ", latex);
       }
     }
     return latex;
@@ -232,6 +241,11 @@ function preprocessInputLatex(latex) {
 
   latex = parseAbs(latex);
 
+  // deal with variables i,e,pi,A,B,C,D,x when use with no space
+  latex = latex.replace(/i(?=([A-Dxie]|pi))/g, "i ");
+  latex = latex.replace(/e(?=([A-Dxie]|pi))/g, "e ");
+  console.log(latex);
+
   return latex;
 }
 
@@ -257,11 +271,14 @@ function saveHistory(answer) {
   });
   localStorage.setItem("calcHistory", JSON.stringify(store.history));
   localStorage.setItem("historyId", store.id);
+  nerdamer.setVar("Ans", data.calculated.toString());
+  store.variables = nerdamer.getVars("latex");
 }
 
 function calculateInput() {
   const mathField = mathFieldRef.value;
   mathField.blur();
+  store.displaymodeId = 0;
   if (mathField.latex()) {
     console.log({ latex: mathField.latex() });
     const exp = preprocessInputLatex(mathField.latex());
@@ -278,6 +295,7 @@ function calculateInput() {
       data.solveMode = true;
     }
     const answer = displayAnswer();
+    saveHistory(answer);
     return answer;
   }
 }
@@ -310,8 +328,10 @@ onMounted(() => {
       edit: function () {
         const staticMath = staticMathRef.value;
         staticMath.latex("");
+        store.displaymodeId = 0;
+        store.displaymodes = [];
         data.calculated = null;
-        data.SD = true;
+        data.displayDecimal = true;
         data.mixedFraction = false;
         data.solveMode = false;
       },
@@ -347,12 +367,13 @@ onMounted(() => {
   });
 
   window.addEventListener("keydown", (evt) => {
-    if (evt.shiftKey === true) {
+    if (evt.shiftKey === true && evt.ctrlKey === true) {
       store.onShift = !store.onShift;
     }
   });
 
   // test here
+  console.log(nerdamer("x").toString());
 });
 
 function displayNumeric(number) {
@@ -386,7 +407,11 @@ function displayNumeric(number) {
   } else {
     const imagPartDecimal = convertToDecimals(imagPartFraction);
     latexImag = `${imagPartDecimal.includes("-") ? "" : "+"} ${
-      imagPartDecimal == "1" ? "" : imagPartDecimal
+      imagPartDecimal == "1"
+        ? ""
+        : imagPartDecimal == "-1"
+        ? "-"
+        : imagPartDecimal
     }i`;
   }
 
@@ -405,11 +430,11 @@ function displayNumeric(number) {
 
 function handleTypedText(character) {
   if (!(document.activeElement.nodeName === "TEXTAREA")) {
-    mathFieldRef.value.latex("");
+    clearScreen();
   }
   mathFieldRef.value.typedText(character);
   mathFieldRef.value.focus();
-  resetShiftAlpha();
+  resetShiftSto();
 }
 
 function handleKeystroke(keystroke) {
@@ -417,11 +442,13 @@ function handleKeystroke(keystroke) {
   if (keystroke == "Enter") {
     calculateInput();
   } else if (keystroke == "AC") {
-    mathField.latex("");
+    clearScreen();
+    mathField.focus();
   } else {
     mathField.keystroke(keystroke);
+    mathField.focus();
   }
-  resetShiftAlpha();
+  resetShiftSto();
 }
 
 function displayMixedFraction(fraction) {
@@ -444,7 +471,6 @@ function displayNumericSolutions(solutions) {
 }
 
 function displayAnswer() {
-  let answer = "";
   const mustSimplify = /sin|cos|tan|csc|sec|cot|factorial|log/.test(
     data.calculated.toString()
   );
@@ -453,35 +479,71 @@ function displayAnswer() {
   );
 
   // evaluate expression
-  if (!data.solveMode) {
-    answer = `= ${
-      (data.SD || mustSimplify) && isEvaluable
-        ? displayNumeric(data.calculated.evaluate().text("fractions"))
-        : preprocessDisplayLatex(data.calculated.toTeX())
-    }`;
-    // solve mode
+  const fractionAns = data.calculated.evaluate();
+  // display format: standard form ex 25/2, pi, e, sqrt(3)/2, x^2
+  const standardAns = !data.solveMode
+    ? preprocessDisplayLatex(data.calculated.toTeX())
+    : preprocessDisplayLatex(trim(data.calculated.toTeX()));
+  let decimalAns;
+  if (isEvaluable) {
+    // display format: decimal point ex 1.254
+    decimalAns = !data.solveMode
+      ? displayNumeric(fractionAns.text("fractions"))
+      : displayNumericSolutions(fractionAns.text("fractions"));
+
+    console.log("denominator", fractionAns.denominator().toString());
+
+    // find available display modes
+    store.displaymodes = ["dec"];
+    if (
+      standardAns !== decimalAns &&
+      !mustSimplify &&
+      fractionAns.denominator().toString() < 9999
+    ) {
+      store.displaymodes.push("std");
+      if (decimalAns > 1) {
+        store.displaymodes.push("mix");
+      }
+    }
   } else {
-    answer = `x = ${
-      (data.SD || mustSimplify) && isEvaluable
-        ? displayNumericSolutions(data.calculated.evaluate().text("fractions"))
-        : preprocessDisplayLatex(trim(data.calculated.toTeX()))
-    }`;
+    store.displaymodes = ["std"];
   }
+
+  let answer = "= ";
+
+  const displaymode = store.displaymodes[store.displaymodeId];
+  if (displaymode === "std") {
+    answer = answer + standardAns;
+  } else if (displaymode === "mix") {
+    answer = answer + displayMixedFraction(fractionAns);
+  } else {
+    // simple decimal format
+    answer = answer + decimalAns;
+  }
+
   staticMathRef.value.latex(answer);
-  saveHistory(answer);
-  nerdamer.setVar("Ans", data.calculated.toString());
-  store.variables = nerdamer.getVars("latex");
+
   return answer;
+}
+
+function clearScreen() {
+  mathFieldRef.value.latex("");
+  store.displaymodes = [];
+  store.displaymodeId = 0;
 }
 
 function handleCmd(cmd) {
   const mathField = mathFieldRef.value;
   const staticMath = staticMathRef.value;
 
+  if (!(document.activeElement.nodeName === "TEXTAREA")) {
+    clearScreen();
+  }
+
   switch (cmd) {
     case "SD":
       if (data.calculated) {
-        data.SD = !data.SD;
+        data.displayDecimal = !data.displayDecimal;
         displayAnswer();
       }
       break;
@@ -557,8 +619,8 @@ function handleCmd(cmd) {
     default:
       mathField.write(cmd);
   }
-  // mathField.focus();
-  resetShiftAlpha();
+  mathField.focus();
+  resetShiftSto();
 }
 
 function storeVar(var_name) {
@@ -572,14 +634,26 @@ function storeVar(var_name) {
     mathFieldRef.value.write(`\\rightarrow \\text{${var_name}}`);
     staticMathRef.value.latex(answer);
   }
+  resetShiftSto();
+}
+
+function toggleDisplay() {
+  // go to the next display mode in the array displaymodes
+  store.displaymodeId = (store.displaymodeId + 1) % store.displaymodes.length;
+  displayAnswer();
 }
 </script>
 <template>
   <main>
     <div class="max-w-[416px] min-w-[320px] mx-auto">
       <div id="screen">
-        <div class="bg-gray-200 h-[20px]">
+        <div class="bg-gray-200 h-[20px] text-center">
           <span
+            class="text-gray-800 border-0 pb-0.5 px-1 ml-1 rounded text-sm align-top font-bold"
+          >
+            {{ helperText }}
+          </span>
+          <!-- <span
             class="font-sans text-gray-200 border-0 pb-0.5 px-1 ml-1 rounded text-[9px] font-bold align-[1px]"
             :class="{ 'bg-gray-500': store.onShift }"
             >SHIFT</span
@@ -593,16 +667,21 @@ function storeVar(var_name) {
             class="font-sans text-gray-200 border-0 pb-0.5 px-1 ml-1 rounded text-[9px] font-bold align-[1px]"
             :class="{ 'text-gray-500': store.onSto }"
             >STO</span
-          >
+          > -->
         </div>
         <div
           class="w-full px-3 py-5 min-h-20 tall:h-30"
           ref="mathFieldEl"
           id="math-field"
         ></div>
-        <Simplebar class="h-[60px] text-right leading-[60px] overflow-y-hidden">
-          <span ref="answerFieldEl" class="mx-4" id="answer"></span>
-        </Simplebar>
+        <div class="flex">
+          <Simplebar
+            class="h-[60px] text-right leading-[60px] overflow-y-hidden w-10/12 grow"
+          >
+            <span ref="answerFieldEl" class="mx-2" id="answer"></span>
+          </Simplebar>
+          <DisplayButton @toggledisplay="toggleDisplay()" />
+        </div>
       </div>
       <Functions
         @cmd="handleCmd"
@@ -625,5 +704,19 @@ abbr {
 }
 * {
   box-sizing: border-box;
+}
+
+.button:hover {
+  filter: brightness(0.96);
+}
+.button:active {
+  filter: brightness(0.9);
+}
+
+.rubik-font {
+  font-family: "Rubik", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
 }
 </style>

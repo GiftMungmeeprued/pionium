@@ -13,9 +13,11 @@ export const store = reactive({
     variableSidePane: false,
   },
   id: 0,
+  displaymodes: [],
+  displaymodeId: 0,
 });
 
-export function resetShiftAlpha() {
+export function resetShiftSto() {
   store.onShift = false;
   store.onSto = false;
 }

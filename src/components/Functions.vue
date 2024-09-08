@@ -1,6 +1,6 @@
 <script setup>
 import SmallButton from "./SmallButton.vue";
-import { store, resetShiftAlpha } from "./store";
+import { store, resetShiftSto } from "./store";
 import KeyboardShiftSolid from "./shift_key/KeyboardShiftSolid.vue";
 import KeyboardShift from "./shift_key/KeyboardShift.vue";
 
