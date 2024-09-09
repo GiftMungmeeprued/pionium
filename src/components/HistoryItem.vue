@@ -2,7 +2,7 @@
 import { onMounted, ref } from "vue";
 import Simplebar from "simplebar-vue";
 import "simplebar-vue/dist/simplebar.min.css";
-
+import { store } from "./store.js";
 const props = defineProps({
   item: {
     type: Object,
@@ -18,6 +18,10 @@ function loadHistory(item) {
   mathField.latex(item.input);
   const answerField = MQ.StaticMath(document.getElementById("answer"));
   answerField.latex(item.answer);
+  // close the history tab if the history item is clicked for mobile screen
+  if (window.innerWidth < 640) {
+    store.showSidePane.historySidePane = false;
+  }
 }
 
 onMounted(() => {
