@@ -13,6 +13,7 @@ const props = defineProps({
 </script>
 <template>
   <button
+    tabindex="-1"
     type="button"
     :title="mainTitle"
     :class="`button font-semibold border-0 border-gray-400 rounded shadow text-center w-full tall:h-12 tall:text-3xl h-7 text-base select-none ${
