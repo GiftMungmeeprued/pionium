@@ -24,6 +24,7 @@ const data = reactive({
   solveMode: false,
   id: 0,
   displaymodes: [],
+  angle: "rad",
 });
 
 const helperText = ref("Enter the value of x :");
@@ -213,7 +214,7 @@ function preprocessInputLatex(latex) {
 
       count++;
       if (count === 10) {
-        throw Error("Invalid input: ", latex);
+        throw SyntaxError("Invalid input ");
       }
     }
     return latex;
@@ -221,30 +222,29 @@ function preprocessInputLatex(latex) {
 
   latex = parse(latex);
 
-  //////// Require recursion: contains nesting of || ////////
-  // deal with abs: \\left\|x\\right\| -> abs(x)
-  function parseAbs(latex) {
-    let count = 0;
-    while (/\|/.test(latex) && count < 10) {
-      latex = latex.replace(
-        /\\left\|([^\|]+)\\right\|/g,
-        (_, x) => `abs(${parseAbs(x)})`
-      );
+  // //////// Require recursion: contains nesting of || ////////
+  // // deal with abs: \\left\|x\\right\| -> abs(x)
+  // function parseAbs(latex) {
+  //   let count = 0;
+  //   while (/\|/.test(latex) && count < 10) {
+  //     latex = latex.replace(
+  //       /\\left\|([^\|]+)\\right\|/g,
+  //       (_, x) => `abs(${parseAbs(x)})`
+  //     );
 
-      count++;
-      if (count === 10) {
-        throw Error("Invalid input of |");
-      }
-    }
-    return latex;
-  }
+  //     count++;
+  //     if (count === 10) {
+  //       throw Error("Invalid input of |");
+  //     }
+  //   }
+  //   return latex;
+  // }
 
-  latex = parseAbs(latex);
+  // latex = parseAbs(latex);
 
   // deal with variables i,e,pi,A,B,C,D,x when use with no space
   latex = latex.replace(/i(?=([A-Dxie]|pi))/g, "i ");
   latex = latex.replace(/e(?=([A-Dxie]|pi))/g, "e ");
-  console.log(latex);
 
   return latex;
 }
@@ -271,7 +271,7 @@ function saveHistory(answer) {
   });
   localStorage.setItem("calcHistory", JSON.stringify(store.history));
   localStorage.setItem("historyId", store.id);
-  nerdamer.setVar("Ans", data.calculated.toString());
+  if (!data.solveMode) nerdamer.setVar("Ans", data.calculated.toString());
   store.variables = nerdamer.getVars("latex");
 }
 
@@ -279,21 +279,66 @@ function calculateInput() {
   const mathField = mathFieldRef.value;
   mathField.blur();
   store.displaymodeId = 0;
+  let exp;
   if (mathField.latex()) {
     console.log({ latex: mathField.latex() });
-    const exp = preprocessInputLatex(mathField.latex());
-    console.log({ exp: exp });
-    // evaluate mode
-    if (!exp.includes("=")) {
-      data.calculated =
-        exp.includes("factor") || exp.includes("diffat")
-          ? nerdamer(exp)
-          : nerdamer(exp, {}, ["expand"]);
-      // solve mode
-    } else {
-      data.calculated = nerdamer(`solve(${exp}, x)`);
-      data.solveMode = true;
+    try {
+      exp = preprocessInputLatex(mathField.latex());
+    } catch ({ name, message }) {
+      staticMathRef.value.latex(`\\text{${name}: ${message}}`);
+      return;
     }
+    console.log({ exp: exp });
+
+    try {
+      // evaluate mode
+      if (!exp.includes("=")) {
+        data.calculated =
+          exp.includes("factor") || exp.includes("diffat")
+            ? nerdamer(exp)
+            : nerdamer(exp, {}, ["expand"]);
+        // solve mode
+      } else {
+        function isEqualWithinBrackets(str) {
+          let parentheses = 0;
+          let curlyBraces = 0;
+          let squareBrackets = 0;
+
+          for (let i = 0; i < str.length; i++) {
+            let char = str[i];
+
+            // Handle opening brackets
+            if (char === "(") parentheses++;
+            if (char === "{") curlyBraces++;
+            if (char === "[") squareBrackets++;
+
+            // Handle closing brackets
+            if (char === ")") parentheses--;
+            if (char === "}") curlyBraces--;
+            if (char === "]") squareBrackets--;
+
+            // Check if '=' is within any open brackets
+            if (
+              char === "=" &&
+              (parentheses > 0 || curlyBraces > 0 || squareBrackets > 0)
+            ) {
+              return true; // '=' is within brackets
+            }
+          }
+
+          return false; // '=' is not within brackets
+        }
+        if (isEqualWithinBrackets(exp)) {
+          throw SyntaxError("Invalid position of equals sign (=)");
+        }
+        data.calculated = nerdamer(`solve(${exp}, x)`);
+        data.solveMode = true;
+      }
+    } catch ({ name, message }) {
+      staticMathRef.value.latex(`\\text{${name}: ${message.split(":")[0]}}`);
+      return;
+    }
+
     const answer = displayAnswer();
     saveHistory(answer);
     return answer;
@@ -373,60 +418,9 @@ onMounted(() => {
   });
 
   // test here
-  console.log(nerdamer("x").toString());
+  // console.log(nerdamer("solve(x!=6, x)").toString());
+  // console.log(nerdamer("sin x").toString());
 });
-
-function displayNumeric(number) {
-  // display format for complex and scientific notation from fractions
-  const realPartFraction = nerdamer(`realpart(${number})`).toString();
-  const imagPartFraction = nerdamer(`imagpart(${number})`).toString();
-
-  function convertToDecimals(fractionString) {
-    // convert 1.2488e-20 to 1.2488 \\cdot 10^{-20}
-    const decimalNumber = eval?.(`"use strict";(${fractionString})`).toString();
-
-    if (decimalNumber.includes("e")) {
-      const [coeff, expon] = decimalNumber.split("e");
-      const latex = `${coeff} \\cdot 10^{${expon}}`;
-      return latex;
-    } else {
-      return decimalNumber;
-    }
-  }
-
-  let latexReal, latexImag;
-  if (realPartFraction == "0") {
-    latexReal = "";
-  } else {
-    const realPartDecimal = convertToDecimals(realPartFraction);
-    latexReal = `${realPartDecimal}`;
-  }
-
-  if (imagPartFraction == "0") {
-    latexImag = "";
-  } else {
-    const imagPartDecimal = convertToDecimals(imagPartFraction);
-    latexImag = `${imagPartDecimal.includes("-") ? "" : "+"} ${
-      imagPartDecimal == "1"
-        ? ""
-        : imagPartDecimal == "-1"
-        ? "-"
-        : imagPartDecimal
-    }i`;
-  }
-
-  const latex = latexReal + latexImag;
-
-  if (latex === "") {
-    return "0";
-  } else {
-    if (latex.startsWith("+")) {
-      return latex.slice(1);
-    } else {
-      return latex;
-    }
-  }
-}
 
 function handleTypedText(character) {
   if (!(document.activeElement.nodeName === "TEXTAREA")) {
@@ -451,6 +445,97 @@ function handleKeystroke(keystroke) {
   resetShiftSto();
 }
 
+function formatComplex(real, imag) {
+  // format the complex number as standard a + bi
+  // ex (-1,2) -> -1+2i
+  // ex (1,2) -> 1+2i
+  // ex (0,0) -> 0
+  // ex (0, 1) -> i
+
+  let displayReal, displayImag;
+  if (real == "0") {
+    displayReal = "";
+  } else {
+    displayReal = `${real}`;
+  }
+
+  if (imag == "0") {
+    displayImag = "";
+  } else {
+    // add + in front of positive
+    displayImag = imag.startsWith("-") ? imag : `+${imag}`;
+    // remove 1 from 1i or -1i
+    displayImag = `${
+      displayImag === "+1" ? "+" : displayImag === "-1" ? "-" : displayImag
+    }i`;
+  }
+
+  const display = displayReal + displayImag;
+
+  if (display === "") {
+    return "0";
+  } else {
+    // remove + in +2i
+    if (display.startsWith("+")) {
+      return display.slice(1);
+    } else {
+      return display;
+    }
+  }
+}
+
+function displayDecimal(number) {
+  // display format for complex and scientific notation from fractions
+  const realPartFraction = nerdamer(`realpart(${number})`).toString();
+  const imagPartFraction = nerdamer(`imagpart(${number})`).toString();
+
+  function convertToDecimals(fractionString) {
+    // convert 1.2488e-20 to 1.2488 \\cdot 10^{-20}
+    // return [decimalString, displayDecimalOnlyBool]
+    const [numerator, denominator] = fractionString.split("/");
+    let decimalNumber;
+    if (denominator) {
+      decimalNumber = (numerator / denominator).toString();
+    } else {
+      decimalNumber = numerator;
+    }
+
+    // display standard form when denominator is defined (fractions not integers), and when denominator is not too large
+    const displayStandard = !denominator && denominator < 10000;
+
+    if (decimalNumber.includes("e")) {
+      const [coeff, expon] = decimalNumber.split("e");
+      const latex = `${coeff} \\cdot 10^{${expon}}`;
+      return [latex, displayStandard];
+    } else {
+      return [decimalNumber, displayStandard];
+    }
+  }
+
+  const [realPartDecimal, realPartdisplayStandard] =
+    convertToDecimals(realPartFraction);
+  const [imagPartDecimal, imagPartdisplayStandard] =
+    convertToDecimals(imagPartFraction);
+
+  const decimal = formatComplex(realPartDecimal, imagPartDecimal);
+  const displayStandard =
+    Boolean(realPartdisplayStandard) || Boolean(imagPartdisplayStandard);
+
+  return [decimal, displayStandard];
+}
+
+function displayDecimalSolutions(solutions) {
+  const solutionsArray = trim(solutions).split(",");
+  const decimalSolutionsArray = [];
+  const displayStandardArray = [];
+  for (const solution of solutionsArray) {
+    const [decimalSolution, displayStandard] = displayDecimal(solution);
+    decimalSolutionsArray.push(decimalSolution);
+    displayStandardArray.push(displayStandard);
+  }
+  return [decimalSolutionsArray.join(","), displayStandardArray.some(Boolean)];
+}
+
 function displayMixedFraction(fraction) {
   const numerator = fraction.numerator().toString();
   const denominator = fraction.denominator().toString();
@@ -465,12 +550,25 @@ function trim(x) {
   return x.substring(1, x.length - 1);
 }
 
-function displayNumericSolutions(solutions) {
+function displayStandard(answer) {
+  const realPart = nerdamer(`realpart(${answer})`).toTeX();
+  const imagPart = nerdamer(`imagpart(${answer})`).toTeX();
+  return formatComplex(realPart, imagPart);
+}
+
+function displayStandardSolutions(solutions) {
+  if (solutions == "[]") return "";
   const solutionsArray = trim(solutions).split(",");
-  return solutionsArray.map(displayNumeric);
+  return solutionsArray.map(displayStandard).join(",");
 }
 
 function displayAnswer() {
+  if (data.calculated.toString() === "[]") {
+    const noSolOutput = "\\text{No solutions found}";
+    staticMathRef.value.latex(noSolOutput);
+    return noSolOutput;
+  }
+
   const mustSimplify = /sin|cos|tan|csc|sec|cot|factorial|log/.test(
     data.calculated.toString()
   );
@@ -481,27 +579,28 @@ function displayAnswer() {
   // evaluate expression
   const fractionAns = data.calculated.evaluate();
   // display format: standard form ex 25/2, pi, e, sqrt(3)/2, x^2
+
   const standardAns = !data.solveMode
-    ? preprocessDisplayLatex(data.calculated.toTeX())
-    : preprocessDisplayLatex(trim(data.calculated.toTeX()));
-  let decimalAns;
+    ? preprocessDisplayLatex(displayStandard(data.calculated.toString()))
+    : preprocessDisplayLatex(
+        displayStandardSolutions(data.calculated.toString())
+      );
+  let decimalAns, shouldDisplayStandard;
   if (isEvaluable) {
     // display format: decimal point ex 1.254
-    decimalAns = !data.solveMode
-      ? displayNumeric(fractionAns.text("fractions"))
-      : displayNumericSolutions(fractionAns.text("fractions"));
-
-    console.log("denominator", fractionAns.denominator().toString());
+    [decimalAns, shouldDisplayStandard] = !data.solveMode
+      ? displayDecimal(fractionAns.text("fractions"))
+      : displayDecimalSolutions(fractionAns.text("fractions"));
 
     // find available display modes
     store.displaymodes = ["dec"];
     if (
-      standardAns !== decimalAns &&
       !mustSimplify &&
-      fractionAns.denominator().toString() < 9999
+      (shouldDisplayStandard ||
+        data.calculated.toString() !== fractionAns.text("fractions"))
     ) {
       store.displaymodes.push("std");
-      if (decimalAns > 1) {
+      if (decimalAns > 1 && !data.solveMode && shouldDisplayStandard) {
         store.displaymodes.push("mix");
       }
     }
@@ -509,7 +608,7 @@ function displayAnswer() {
     store.displaymodes = ["std"];
   }
 
-  let answer = "= ";
+  let answer = data.solveMode ? "x = " : "= ";
 
   const displaymode = store.displaymodes[store.displaymodeId];
   if (displaymode === "std") {
@@ -625,7 +724,7 @@ function handleCmd(cmd) {
 
 function storeVar(var_name) {
   store.onSto = false;
-  if (mathFieldRef.value.latex()) {
+  if (mathFieldRef.value.latex() && !data.solveMode) {
     const answer = calculateInput();
     nerdamer.setVar(var_name, data.calculated.toString());
     store.variables = nerdamer.getVars("latex");
@@ -642,17 +741,34 @@ function toggleDisplay() {
   store.displaymodeId = (store.displaymodeId + 1) % store.displaymodes.length;
   displayAnswer();
 }
+
+function toggleAngle() {
+  if (data.angle === "deg") {
+    data.angle = "rad";
+  } else {
+    data.angle = "deg";
+  }
+}
 </script>
 <template>
   <main>
     <div class="max-w-[416px] min-w-[320px] mx-auto">
       <div id="screen">
-        <div class="bg-gray-200 h-[20px] text-center">
-          <span
+        <div class="bg-gray-200 h-[20px]">
+          <button
+            class="rubik-font-bold text-gray-800 border-0 pb-0.5 px-1 ml-1 rounded text-xs font-bold align-[3px] uppercase"
+            @click="toggleAngle()"
+          >
+            {{ data.angle }}
+          </button>
+          <button class="px-3">
+            <i class="pi pi-copy text-sm text-gray-800 align-[2px]"></i>
+          </button>
+          <!-- <span
             class="text-gray-800 border-0 pb-0.5 px-1 ml-1 rounded text-sm align-top font-bold"
           >
             {{ helperText }}
-          </span>
+          </span> -->
           <!-- <span
             class="font-sans text-gray-200 border-0 pb-0.5 px-1 ml-1 rounded text-[9px] font-bold align-[1px]"
             :class="{ 'bg-gray-500': store.onShift }"
@@ -718,5 +834,12 @@ abbr {
   font-optical-sizing: auto;
   font-weight: 500;
   font-style: normal;
+}
+
+.rubik-font-bold {
+  font-family: "Rubik", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: bold;
 }
 </style>
