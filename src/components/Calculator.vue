@@ -753,7 +753,7 @@ function toggleAngle() {
 </script>
 <template>
   <main>
-    <div class="max-w-[416px] min-w-[320px] mx-auto">
+    <div class="max-w-[416px] min-w-[320px] mx-auto w-screen">
       <div id="screen">
         <div class="bg-[#E9EAEE] h-[20px] tall:h-[25px] flex justify-between">
           <button
