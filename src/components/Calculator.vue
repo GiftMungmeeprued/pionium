@@ -9,6 +9,7 @@ import Simplebar from "simplebar-vue";
 import "simplebar-vue/dist/simplebar.min.css";
 import constants from "../assets/constants.json";
 import prefixes from "../assets/prefixes.json";
+import CopyButton from "./CopyButton.vue";
 
 const MQ = MathQuill.getInterface(2);
 
@@ -762,9 +763,12 @@ function toggleAngle() {
           >
             <span class="text-bottom"> {{ data.angle }}</span>
           </button>
-          <button class="px-3">
-            <i class="pi pi-copy text-sm text-gray-800 align-[2px]"></i>
-          </button>
+          <CopyButton class="mx-2" />
+          <!-- <button class="px-3">
+            <i
+              class="pi pi-copy text-sm tall:text-base text-gray-800 align-[2px] tall:align-baseline"
+            ></i>
+          </button> -->
           <!-- <span
             class="text-gray-800 border-0 pb-0.5 px-1 ml-1 rounded text-sm align-top font-bold"
           >
