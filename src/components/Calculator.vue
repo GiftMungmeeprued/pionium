@@ -752,10 +752,15 @@ function toggleAngle() {
 }
 </script>
 <template>
-  <main>
-    <div class="max-w-[416px] min-w-[320px] mx-auto w-screen">
-      <div id="screen">
-        <div class="bg-[#E9EAEE] h-[20px] tall:h-[25px] flex justify-between">
+  <main class="h-full flex items-center">
+    <div
+      class="max-w-[416px] min-w-[320px] h-full max-h-[673px] tall:h-[673px] mx-auto w-screen flex flex-col border-solid border-2 border-[#E9EAEE]"
+    >
+      <div id="screen" class="grow flex flex-col">
+        <div
+          id="top-toolbar"
+          class="bg-[#E9EAEE] min-h-[20px] tall:h-[25px] flex justify-between"
+        >
           <button
             title="Convert between degree and radian"
             class="rubik-font-bold text-gray-500 hover:text-gray-700 border-0 w-8 mx-2 rounded font-bold uppercase text-xs tall:text-sm"
@@ -764,40 +769,20 @@ function toggleAngle() {
             <span class="text-bottom"> {{ data.angle }}</span>
           </button>
           <CopyButton class="mx-2" />
-          <!-- <button class="px-3">
-            <i
-              class="pi pi-copy text-sm tall:text-base text-gray-800 align-[2px] tall:align-baseline"
-            ></i>
-          </button> -->
           <!-- <span
             class="text-gray-800 border-0 pb-0.5 px-1 ml-1 rounded text-sm align-top font-bold"
           >
             {{ helperText }}
           </span> -->
-          <!-- <span
-            class="font-sans text-gray-200 border-0 pb-0.5 px-1 ml-1 rounded text-[9px] font-bold align-[1px]"
-            :class="{ 'bg-gray-500': store.onShift }"
-            >SHIFT</span
-          >
-          <span
-            class="font-sans text-gray-200 border-0 pb-0.5 px-1 ml-1 rounded text-[9px] font-bold align-[1px]"
-            :class="{ 'bg-gray-500': store.onAlpha }"
-            >ALPHA</span
-          >
-          <span
-            class="font-sans text-gray-200 border-0 pb-0.5 px-1 ml-1 rounded text-[9px] font-bold align-[1px]"
-            :class="{ 'text-gray-500': store.onSto }"
-            >STO</span
-          > -->
         </div>
         <div
-          class="w-full px-3 py-5 min-h-20 tall:h-30"
+          class="w-full px-3 py-5 h-20 tall:h-30 overflow-auto grow"
           ref="mathFieldEl"
           id="math-field"
         ></div>
         <div class="flex">
           <Simplebar
-            class="h-[60px] text-right leading-[60px] overflow-y-hidden w-10/12 grow"
+            class="h-[60px] text-right leading-[60px] overflow-auto w-10/12 grow"
           >
             <span ref="answerFieldEl" class="mx-2" id="answer"></span>
           </Simplebar>

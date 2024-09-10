@@ -41,7 +41,7 @@ const props = defineProps({
       @mousedown.prevent="$emit('btndown')"
       tabindex="-1"
       type="button"
-      :class="`button flex justify-center items-center font-semibold border-0 rounded shadow px-0.5 py-0 h-6 tall:h-8 text-xs tall:text-xl ${
+      :class="`button flex justify-center items-center font-semibold border-0 rounded shadow px-0.5 py-0 min-h-6 grow tall:h-8 text-[100%] tall:text-xl ${
         colors[props.color]
       } ${props.onPressed ? 'onpressed' : 'notpressed'}`"
       :title="mainTitle"
