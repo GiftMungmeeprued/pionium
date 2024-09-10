@@ -500,7 +500,7 @@ function displayDecimal(number) {
     }
 
     // display standard form when denominator is defined (fractions not integers), and when denominator is not too large
-    const displayStandard = !denominator && denominator < 10000;
+    const displayStandard = denominator && denominator < 10000;
 
     if (decimalNumber.includes("e")) {
       const [coeff, expon] = decimalNumber.split("e");
