@@ -418,8 +418,6 @@ onMounted(() => {
   });
 
   // test here
-  // console.log(nerdamer("solve(x!=6, x)").toString());
-  // console.log(nerdamer("sin x").toString());
 });
 
 function handleTypedText(character) {
@@ -745,8 +743,10 @@ function toggleDisplay() {
 function toggleAngle() {
   if (data.angle === "deg") {
     data.angle = "rad";
+    nerdamer.set("ANGLE_UNIT", "radian");
   } else {
     data.angle = "deg";
+    nerdamer.set("ANGLE_UNIT", "degree");
   }
 }
 </script>
@@ -754,12 +754,13 @@ function toggleAngle() {
   <main>
     <div class="max-w-[416px] min-w-[320px] mx-auto">
       <div id="screen">
-        <div class="bg-gray-200 h-[20px]">
+        <div class="bg-[#E9EAEE] h-[20px] tall:h-[25px] flex">
           <button
-            class="rubik-font-bold text-gray-800 border-0 pb-0.5 px-1 ml-1 rounded text-xs font-bold align-[3px] uppercase"
+            title="Convert between degree and radian"
+            class="rubik-font-bold text-gray-500 hover:text-gray-700 border-0 w-8 mx-2 rounded font-bold uppercase text-xs tall:text-sm"
             @click="toggleAngle()"
           >
-            {{ data.angle }}
+            <span class="text-bottom"> {{ data.angle }}</span>
           </button>
           <button class="px-3">
             <i class="pi pi-copy text-sm text-gray-800 align-[2px]"></i>
