@@ -755,7 +755,7 @@ function toggleAngle() {
   <main>
     <div class="max-w-[416px] min-w-[320px] mx-auto">
       <div id="screen">
-        <div class="bg-[#E9EAEE] h-[20px] tall:h-[25px] flex">
+        <div class="bg-[#E9EAEE] h-[20px] tall:h-[25px] flex justify-between">
           <button
             title="Convert between degree and radian"
             class="rubik-font-bold text-gray-500 hover:text-gray-700 border-0 w-8 mx-2 rounded font-bold uppercase text-xs tall:text-sm"
