@@ -42,22 +42,6 @@ function openSI() {
 }
 </script>
 
-<style>
-.kb-shift {
-  display: inline-block;
-  background-size: 100%;
-  background-image: url("./src/assets/shift-icon/keyboard-shift.svg");
-  background-repeat: no-repeat;
-}
-
-.kb-shift-solid {
-  display: inline-block;
-  background-size: 100%;
-  background-image: url("./src/assets/shift-icon/keyboard-shift-solid.svg");
-  background-repeat: no-repeat;
-}
-</style>
-
 <template>
   <div class="bg-[#E9EAEE] grid grid-cols-6 gap-1 p-1.5 pt-3 grow">
     <!-- First row -->
