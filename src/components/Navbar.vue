@@ -1,7 +1,7 @@
 <script setup>
-import { CalculatorIcon } from "@heroicons/vue/16/solid";
 import { VariableIcon } from "@heroicons/vue/24/outline";
 import SidePaneButton from "./SidePaneButton.vue";
+import Logo from "./Logo.vue";
 </script>
 
 <template>
@@ -11,9 +11,7 @@ import SidePaneButton from "./SidePaneButton.vue";
         class="relative flex sm:h-16 h-10 items-center justify-between sm:px-5"
       >
         <div class="flex flex-1 items-stretch justify-start">
-          <div class="flex flex-shrink-0 items-start">
-            <CalculatorIcon class="size-6 sm:size-8 align-middle text-white" />
-          </div>
+          <Logo class="h-[26px] w-[26px] tall:h-[40px] tall:w-[40px]" />
         </div>
         <div
           class="flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0"
