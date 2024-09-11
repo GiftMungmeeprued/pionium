@@ -418,6 +418,9 @@ onMounted(() => {
     }
   });
 
+  const textfield = document.querySelector("span.mq-textarea");
+  textfield.firstChild.setAttribute("inputmode", "none");
+
   // test here
 });
 
