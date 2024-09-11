@@ -1,4 +1,4 @@
-function handleConst(element) {
+window.handleConst = function (element) {
   const overlay = HSOverlay.getInstance(
     '[data-hs-overlay="#physical-constants"]',
     true
@@ -13,9 +13,9 @@ function handleConst(element) {
     mathField.keystroke("Right");
   }
   mathField.focus();
-}
+};
 
-function handlePrefix(element) {
+window.handlePrefix = function (element) {
   const overlay = HSOverlay.getInstance('[data-hs-overlay="#prefixes"]', true);
   overlay.element.close();
   const MQ = MathQuill.getInterface(2);
@@ -23,4 +23,4 @@ function handlePrefix(element) {
   const prefix = element.firstChild.children[1].textContent;
   mathField.typedText(prefix);
   mathField.focus();
-}
+};

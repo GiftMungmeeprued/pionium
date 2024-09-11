@@ -32,8 +32,9 @@
           data-hs-combo-box='{
           "isOpenOnFocus": true,
           "preventVisibility": true,
+          "preventSelection": true,
           "groupingType": "tabs",
-          "apiUrl": "src/assets/constants.json",
+          "apiUrl": "/constants.json",
           "apiGroupField": "category",
           "outputItemTemplate": "<div role=\"button\" onclick=\"handleConst(this)\" class=\"cursor-pointer p-2 space-y-0.5 w-full text-sm text-gray-800 hover:bg-gray-100 rounded-lg focus:outline-none focus:bg-gray-100 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:text-neutral-200 dark:focus:bg-neutral-700\" data-hs-combo-box-output-item><div class=\"grid grid-cols-2 justify-between items-center w-full\"><div data-hs-combo-box-output-item-field=\"name\" data-hs-combo-box-search-text></div><div class=\"pl-10 justify-self-end\" data-hs-combo-box-output-item-field=\"symbol\"></div><div class=\"col-span-2\"><span data-hs-combo-box-output-item-field=\"value\" data-hs-combo-box-search-text></span> <span data-hs-combo-box-output-item-field=\"unit\"></span><span class=\"hidden\" data-hs-combo-box-output-item-field=\"constant\" data-hs-combo-box-search-text></span><span class=\"hidden\" data-hs-combo-box-value></span></div></div></div></div>",
           "groupingTitleTemplate": "<button type=\"button\" class=\"capitalize py-1 px-2 inline-flex items-center gap-x-2 text-sm text-nowrap rounded-md border border-gray-200 bg-white text-gray-600 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-100 hs-combo-box-tab-active:bg-blue-600 hs-combo-box-tab-active:border-blue-600 hs-combo-box-tab-active:focus:border-blue-600 hs-combo-box-tab-active:text-white disabled:opacity-50 disabled:pointer-events-none dark:hs-combo-box-tab-active:bg-blue-500 dark:hs-combo-box-tab-active:text-white dark:hs-combo-box-tab-active:border-blue-500 dark:hs-combo-box-tab-active:focus:border-blue-500 dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700\"></button>",

@@ -1,0 +1,407 @@
+[
+  {
+    "name": "Proton mass",
+    "value": 1.67262192595e-27,
+    "unit": "kg",
+    "category": "Atomic and nuclear",
+    "constant": "m_p",
+    "latex": "m_\\{p\\}",
+    "symbol": "mₚ"
+  },
+  {
+    "name": "Neutron mass",
+    "value": 1.67492750056e-27,
+    "unit": "kg",
+    "category": "Atomic and nuclear",
+    "constant": "m_n",
+    "latex": "m_\\{n\\}",
+    "symbol": "mₙ"
+  },
+  {
+    "name": "Electron mass",
+    "value": 9.1093837139e-31,
+    "unit": "kg",
+    "category": "Atomic and nuclear",
+    "constant": "m_e",
+    "latex": "m_\\{e\\}",
+    "symbol": "mₑ"
+  },
+  {
+    "name": "Muon mass",
+    "value": 1.883531627e-28,
+    "unit": "kg",
+    "category": "Atomic and nuclear",
+    "constant": "m_mu",
+    "latex": "m_\\{\\\\mu\\}",
+    "symbol": "mμ"
+  },
+  {
+    "name": "Bohr radius",
+    "value": 5.29177210544e-11,
+    "unit": "m",
+    "category": "Atomic and nuclear",
+    "constant": "a_0",
+    "latex": "a_\\{0\\}",
+    "symbol": "a₀"
+  },
+  {
+    "name": "Planck constant",
+    "value": 6.62607015e-34,
+    "unit": "J s",
+    "category": "Quantum",
+    "constant": "h",
+    "latex": "h",
+    "symbol": "h"
+  },
+  {
+    "name": "Nuclear magneton",
+    "value": 5.0507837393e-27,
+    "unit": "J T⁻¹",
+    "category": "Atomic and nuclear",
+    "constant": "mu_N",
+    "latex": "\\\\mu_\\{N\\}",
+    "symbol": "μN"
+  },
+  {
+    "name": "Bohr magneton",
+    "value": 9.2740100657e-24,
+    "unit": "J T⁻¹",
+    "category": "Atomic and nuclear",
+    "constant": "mu_B",
+    "latex": "\\\\mu_\\{B\\}",
+    "symbol": "μB"
+  },
+  {
+    "name": "Reduced Planck constant",
+    "value": 1.054571817e-34,
+    "unit": "J s",
+    "category": "Quantum",
+    "constant": "hbar",
+    "latex": "\\\\hbar",
+    "symbol": "ℏ"
+  },
+  {
+    "name": "Fine-structure constant",
+    "value": 0.0072973525643,
+    "unit": "",
+    "category": "Atomic and nuclear",
+    "constant": "alpha",
+    "latex": "\\\\alpha",
+    "symbol": "α"
+  },
+  {
+    "name": "Classical electron radius",
+    "value": 2.8179403205e-15,
+    "unit": "m",
+    "category": "Atomic and nuclear",
+    "constant": "r_e",
+    "latex": "r_\\{e\\}",
+    "symbol": "rₑ"
+  },
+  {
+    "name": "Compton wavelength",
+    "value": 2.42631023538e-12,
+    "unit": "m",
+    "category": "Quantum",
+    "constant": "lambda_c",
+    "latex": "\\\\lambda_\\{c\\}",
+    "symbol": "λc"
+  },
+  {
+    "name": "Proton gyromagnetic ratio",
+    "value": 267522187.08,
+    "unit": "s⁻¹ T⁻¹",
+    "category": "Atomic and nuclear",
+    "constant": "gamma_p",
+    "latex": "\\\\gamma_\\{p\\}",
+    "symbol": "γₚ"
+  },
+  {
+    "name": "Proton Compton wavelength",
+    "value": 1.3214098536e-15,
+    "unit": "m",
+    "category": "Quantum",
+    "constant": "lambda_cp",
+    "latex": "\\\\lambda_\\{cp\\}",
+    "symbol": "λc,p"
+  },
+  {
+    "name": "Neutron Compton wavelength",
+    "value": 1.31959090382e-15,
+    "unit": "m",
+    "category": "Quantum",
+    "constant": "lambda_cn",
+    "latex": "\\\\lambda_\\{cn\\}",
+    "symbol": "λc,n"
+  },
+  {
+    "name": "Rydberg constant",
+    "value": 10973731.568157,
+    "unit": "m⁻¹",
+    "category": "Atomic and nuclear",
+    "constant": "R_inf",
+    "latex": "R_\\\\infinity",
+    "symbol": "R∞"
+  },
+  {
+    "name": "Unified atomic mass unit",
+    "value": 1.66053906892e-27,
+    "unit": "kg",
+    "category": "Chemistry",
+    "constant": "u",
+    "latex": "u",
+    "symbol": "u"
+  },
+  {
+    "name": "Proton magnetic moment",
+    "value": 1.41060679545e-26,
+    "unit": "J T⁻¹",
+    "category": "Atomic and nuclear",
+    "constant": "mu_p",
+    "latex": "\\\\mu_\\{p\\}",
+    "symbol": "μₚ"
+  },
+  {
+    "name": "Electron magnetic moment",
+    "value": -9.2847646917e-24,
+    "unit": "J T⁻¹",
+    "category": "Atomic and nuclear",
+    "constant": "mu_e",
+    "latex": "\\\\mu_\\{e\\}",
+    "symbol": "μₑ"
+  },
+  {
+    "name": "Neutron magnetic moment",
+    "value": -9.6623653e-27,
+    "unit": "J T⁻¹",
+    "category": "Atomic and nuclear",
+    "constant": "mu_n",
+    "latex": "\\\\mu_\\{n\\}",
+    "symbol": "μₙ"
+  },
+  {
+    "name": "Muon magnetic moment",
+    "value": -4.4904483e-26,
+    "unit": "J T⁻¹",
+    "category": "Atomic and nuclear",
+    "constant": "mu_mu",
+    "latex": "\\\\mu_\\{\\\\mu\\}",
+    "symbol": "μμ"
+  },
+  {
+    "name": "Faraday constant",
+    "value": 96485.33212,
+    "unit": "C mol⁻¹",
+    "category": "Chemistry",
+    "constant": "F",
+    "latex": "F",
+    "symbol": "F"
+  },
+  {
+    "name": "Elementary charge",
+    "value": 1.602176634e-19,
+    "unit": "C",
+    "category": "Universal",
+    "constant": "e",
+    "latex": "e",
+    "symbol": "e"
+  },
+  {
+    "name": "Avogadro constant",
+    "value": 6.02214076e23,
+    "unit": "mol⁻¹",
+    "category": "Chemistry",
+    "constant": "N_A",
+    "latex": "N_\\{A\\}",
+    "symbol": "Nₐ"
+  },
+  {
+    "name": "Boltzmann constant",
+    "value": 1.380649e-23,
+    "unit": "J K⁻¹",
+    "category": "Thermodynamics",
+    "constant": "k",
+    "latex": "k",
+    "symbol": "k"
+  },
+  {
+    "name": "Molar volume of ideal gas (273.15 K, 100 kPa)",
+    "value": 0.02271095464,
+    "unit": "m³ mol⁻¹",
+    "category": "Thermodynamics",
+    "constant": "V_m",
+    "latex": "V_\\{m\\}",
+    "symbol": "Vₘ"
+  },
+  {
+    "name": "Molar gas constant",
+    "value": 8.314462618,
+    "unit": "J mol⁻¹ K⁻¹",
+    "category": "Thermodynamics",
+    "constant": "R",
+    "latex": "R",
+    "symbol": "R"
+  },
+  {
+    "name": "Speed of light in vacuum",
+    "value": 299792458,
+    "unit": "m s⁻¹",
+    "category": "Universal",
+    "constant": "c",
+    "latex": "c",
+    "symbol": "c"
+  },
+  {
+    "name": "First radiation constant",
+    "value": 3.741771852e-16,
+    "unit": "W m²",
+    "category": "Quantum",
+    "constant": "c_1",
+    "latex": "c_\\{1\\}",
+    "symbol": "c₁"
+  },
+  {
+    "name": "Second radiation constant",
+    "value": 0.01438776877,
+    "unit": "m K",
+    "category": "Quantum",
+    "constant": "c_2",
+    "latex": "c_\\{2\\}",
+    "symbol": "c₂"
+  },
+  {
+    "name": "Stefan-Boltzmann constant",
+    "value": 5.670374419e-8,
+    "unit": "W m⁻² K⁻⁴",
+    "category": "Quantum",
+    "constant": "sigma",
+    "latex": "\\\\sigma",
+    "symbol": "σ"
+  },
+  {
+    "name": "Vacuum electric permittivity",
+    "value": 8.8541878188e-12,
+    "unit": "F m⁻¹",
+    "category": "Electromagnetism",
+    "constant": "epsilon_0",
+    "latex": "\\\\epsilon_0",
+    "symbol": "ε₀"
+  },
+  {
+    "name": "Vacuum magnetic permeability",
+    "value": 0.00000125663706127,
+    "unit": "N A⁻²",
+    "category": "Electromagnetism",
+    "constant": "mu_0",
+    "latex": "\\\\mu_0",
+    "symbol": "μ₀"
+  },
+  {
+    "name": "Magnetic flux quantum",
+    "value": 2.067833848e-15,
+    "unit": "Wb",
+    "category": "Quantum",
+    "constant": "phi_0",
+    "latex": "\\\\phi_0",
+    "symbol": "φ₀"
+  },
+  {
+    "name": "Standard acceleration of gravity",
+    "value": 9.80665,
+    "unit": "m s⁻²",
+    "category": "Mechanics",
+    "constant": "g",
+    "latex": "g",
+    "symbol": "g"
+  },
+  {
+    "name": "Conductance quantum",
+    "value": 0.00007748091729,
+    "unit": "s",
+    "category": "Quantum",
+    "constant": "G_0",
+    "latex": "G_0",
+    "symbol": "G₀"
+  },
+  {
+    "name": "Characteristic impedance of vacuum",
+    "value": 376.730313412,
+    "unit": "Ω",
+    "category": "Electromagnetism",
+    "constant": "Z_0",
+    "latex": "Z_0",
+    "symbol": "Z₀"
+  },
+  {
+    "name": "Celsius zero temperature",
+    "value": 273.15,
+    "unit": "K",
+    "category": "Thermodynamics",
+    "constant": "t",
+    "latex": "t",
+    "symbol": "t"
+  },
+  {
+    "name": "Newtonian constant of gravitation",
+    "value": 6.6743e-11,
+    "unit": "m³ kg⁻¹ s⁻²",
+    "category": "Mechanics",
+    "constant": "G",
+    "latex": "G",
+    "symbol": "G"
+  },
+  {
+    "name": "Standard atmosphere",
+    "value": 101325,
+    "unit": "Pa",
+    "category": "Thermodynamics",
+    "constant": "atm",
+    "latex": "atm",
+    "symbol": "atm"
+  },
+  {
+    "name": "Earth mass",
+    "value": 5.9722e24,
+    "unit": "kg",
+    "category": "Astronomy",
+    "constant": "M_earth",
+    "latex": "M_\\{earth\\}",
+    "symbol": "M🜨"
+  },
+  {
+    "name": "Earth volumetric mean radius",
+    "value": 6371000,
+    "unit": "m",
+    "category": "Astronomy",
+    "constant": "R_earth",
+    "latex": "R_\\{earth\\}",
+    "symbol": "R🜨"
+  },
+  {
+    "name": "Sun mass",
+    "value": 1.9884e30,
+    "unit": "kg",
+    "category": "Astronomy",
+    "constant": "M_sun",
+    "latex": "M_\\{sun\\}",
+    "symbol": "M☉"
+  },
+  {
+    "name": "Sun volumetric mean radius",
+    "value": 695700000,
+    "unit": "m",
+    "category": "Astronomy",
+    "constant": "R_sun",
+    "latex": "R_\\{sun\\}",
+    "symbol": "R☉"
+  },
+  {
+    "name": "Astronomical unit",
+    "value": 149597870700,
+    "unit": "m",
+    "category": "Astronomy",
+    "constant": "au",
+    "latex": "au",
+    "symbol": "au"
+  }
+]

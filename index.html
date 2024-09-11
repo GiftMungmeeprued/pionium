@@ -2,16 +2,16 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="/favicon.ico" />
+    <link rel="icon" href="src/assets/icon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Calculator</title>
+    <title>Pionium | Scientific Calculator</title>
     <!-- for mathquill -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <link rel="stylesheet" href="node_modules/mathquill/build/mathquill.css" />
-    <script src="node_modules/mathquill/build/mathquill.min.js"></script>
+    <script
+      type="module"
+      src="node_modules/mathquill/build/mathquill.min.js"
+    ></script>
     <link rel="stylesheet" href="src/assets/configure_mathquill.css" />
-    <!-- nerdamer -->
-    <script src="node_modules/nerdamer-prime/all.min.js"></script>
     <!-- reset margin -->
     <style>
       body,
@@ -31,10 +31,13 @@
     />
   </head>
   <body>
-    <script src="/src/init.js"></script>
+    <script type="module" src="/src/init.js"></script>
     <div id="app"></div>
     <script type="module" src="/src/main.js"></script>
-    <script src="node_modules/flowbite/dist/flowbite.min.js"></script>
-    <script src="./node_modules/preline/dist/preline.js"></script>
+    <script
+      type="module"
+      src="node_modules/flowbite/dist/flowbite.min.js"
+    ></script>
+    <script type="module" src="node_modules/preline/dist/preline.js"></script>
   </body>
 </html>

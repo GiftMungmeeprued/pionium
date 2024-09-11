@@ -7,9 +7,8 @@ import DisplayButton from "./DisplayButton.vue";
 
 import Simplebar from "simplebar-vue";
 import "simplebar-vue/dist/simplebar.min.css";
-import constants from "../assets/constants.json";
-import prefixes from "../assets/prefixes.json";
 import CopyButton from "./CopyButton.vue";
+import nerdamer from "nerdamer-prime/all.min.js";
 
 const MQ = MathQuill.getInterface(2);
 
@@ -17,6 +16,9 @@ const mathFieldEl = ref(null);
 const answerFieldEl = ref(null);
 const mathFieldRef = computed(() => MQ.MathField(mathFieldEl.value));
 const staticMathRef = computed(() => MQ.StaticMath(answerFieldEl.value));
+
+const constants = ref(null);
+const prefixes = ref(null);
 
 const data = reactive({
   calculated: null,
@@ -27,8 +29,6 @@ const data = reactive({
   displaymodes: [],
   angle: "rad",
 });
-
-const helperText = ref("Enter the value of x :");
 
 const latexFunctionMap = [
   { latex: "\\\\cdot", exp: "*" },
@@ -60,7 +60,7 @@ const latexFunctionMap = [
 function preprocessInputLatex(latex) {
   //////// Simple substitution : no nesting of {} ////////
   // constants
-  constants.forEach((item) => {
+  constants.value.forEach((item) => {
     const regex = new RegExp(`\\\\mathrm\\{\\\\ ${item.latex}\\}`, "g");
     latex = latex.replace(regex, "const_" + item.constant + " ");
   });
@@ -282,14 +282,12 @@ function calculateInput() {
   store.displaymodeId = 0;
   let exp;
   if (mathField.latex()) {
-    console.log({ latex: mathField.latex() });
     try {
       exp = preprocessInputLatex(mathField.latex());
     } catch ({ name, message }) {
       staticMathRef.value.latex(`\\text{${name}: ${message}}`);
       return;
     }
-    console.log({ exp: exp });
 
     try {
       // evaluate mode
@@ -345,7 +343,13 @@ function calculateInput() {
     return answer;
   }
 }
-onMounted(() => {
+onMounted(async () => {
+  const constantsRes = await fetch("/constants.json");
+  constants.value = await constantsRes.json();
+
+  const prefixesRes = await fetch("/prefixes.json");
+  prefixes.value = await prefixesRes.json();
+
   // prevent focus on answer field
   document.getElementsByClassName(
     "simplebar-content-wrapper"
@@ -388,10 +392,10 @@ onMounted(() => {
   mathFieldRef.value.config(config);
   mathFieldRef.value.focus();
 
-  constants.forEach((item) => {
+  constants.value.forEach((item) => {
     nerdamer.setConstant("const_" + item.constant, item.value);
   });
-  prefixes.forEach((item) => {
+  prefixes.value.forEach((item) => {
     nerdamer.setConstant(item.symbol, item.value);
   });
 
@@ -834,5 +838,9 @@ abbr {
   font-optical-sizing: auto;
   font-weight: 500;
   font-style: bold;
+}
+
+textarea {
+  pointer-events: none;
 }
 </style>
