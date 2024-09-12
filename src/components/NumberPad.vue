@@ -63,9 +63,9 @@ import { ArrowTurnDownLeftIcon } from "@heroicons/vue/16/solid";
     <Button
       main-title="Answer from previous calculation"
       @mousedown.prevent
-      @click="$emit('typedText', 'Ans')"
+      @click="$emit('typedText', 'ans')"
       color="gray"
-      >Ans</Button
+      >ans</Button
     >
     <Button main-title="One" @mousedown.prevent @click="$emit('typedText', '1')"
       >1</Button

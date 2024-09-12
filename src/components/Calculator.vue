@@ -256,7 +256,7 @@ function saveHistory(answer) {
   });
   localStorage.setItem("calcHistory", JSON.stringify(store.history));
   localStorage.setItem("historyId", store.id);
-  if (!data.solveMode) nerdamer.setVar("Ans", data.calculated.toString());
+  if (!data.solveMode) nerdamer.setVar("ans", data.calculated.toString());
   store.variables = nerdamer.getVars("latex");
 }
 

@@ -7,7 +7,7 @@ export const store = reactive({
   onSto: false,
   history: [],
   variables: {},
-  variableList: ["A", "B", "C", "D", "F", "Ans"],
+  variableList: ["A", "B", "C", "D", "F", "ans"],
   showSidePane: {
     historySidePane: false,
     variableSidePane: false,
