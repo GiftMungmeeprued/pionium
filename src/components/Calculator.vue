@@ -761,20 +761,13 @@ function toggleAngle() {
             <span class="text-bottom"> {{ data.angle }}</span>
           </button>
           <CopyButton class="mx-2" />
-          <!-- <span
-            class="text-gray-800 border-0 pb-0.5 px-1 ml-1 rounded text-sm align-top font-bold"
-          >
-            {{ helperText }}
-          </span> -->
         </div>
-        <div
-          class="w-full px-3 py-5 h-20 tall:h-30 overflow-auto grow"
-          ref="mathFieldEl"
-          id="math-field"
-        ></div>
+        <Simplebar class="overflow-y-auto w-full px-3 py-3 h-20 tall:h-30 grow">
+          <span ref="mathFieldEl" id="math-field"></span>
+        </Simplebar>
         <div class="flex">
           <Simplebar
-            class="h-[60px] text-right leading-[60px] overflow-auto w-10/12 grow"
+            class="h-[60px] text-right leading-[60px] overflow-auto w-full"
           >
             <span ref="answerFieldEl" class="mx-2" id="answer"></span>
           </Simplebar>

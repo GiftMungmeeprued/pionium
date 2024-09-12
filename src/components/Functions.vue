@@ -307,7 +307,7 @@ function openSI() {
           </msqrt>
         </math></template
       >
-      x<sup>2</sup>
+      a<sup>2</sup>
     </SmallButton>
     <SmallButton
       center-title="Nth root"
@@ -322,11 +322,8 @@ function openSI() {
             <mn>□</mn>
             <mn>□</mn>
           </mroot>
-        </math>
-      </template>
-      <span class="text-[14px] relative bottom-[2px] tall:text-[20px]"
-        >x<sup>□</sup></span
-      >
+        </math> </template
+      >a<sup>□</sup>
     </SmallButton>
     <SmallButton
       center-title="Argument of complex number"
