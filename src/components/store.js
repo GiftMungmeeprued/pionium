@@ -3,11 +3,11 @@ import { reactive } from "vue";
 export const store = reactive({
   inputText: "",
   onShift: false,
-  onAlpha: false,
+  shiftLock: false,
   onSto: false,
   history: [],
   variables: {},
-  variableList: ["A", "B", "C", "D", "Ans"],
+  variableList: ["A", "B", "C", "D", "F", "Ans"],
   showSidePane: {
     historySidePane: false,
     variableSidePane: false,

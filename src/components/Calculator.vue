@@ -224,9 +224,9 @@ function preprocessInputLatex(latex) {
   latex = parse(latex);
 
   // deal with variables i,e,pi,A,B,C,D,x when use with no space
-  latex = latex.replace(/i(?=([A-Dxie]|pi))/g, "i ");
-  latex = latex.replace(/e(?=([A-Dxie]|pi))/g, "e ");
-  latex = latex.replace(/x/g, " x ");
+  latex = latex.replace(/i(?=([A-DFxie]|pi))/g, "i ");
+  latex = latex.replace(/e(?=([A-DFxie]|pi))/g, "e ");
+  latex = latex.replace(/([A-DFx])/g, "$1 ");
 
   return latex;
 }
@@ -401,7 +401,7 @@ onMounted(async () => {
   });
 
   window.addEventListener("keydown", (evt) => {
-    if (evt.shiftKey === true && evt.ctrlKey === true) {
+    if (evt.shiftKey === true && evt.altKey === true) {
       store.onShift = !store.onShift;
     }
   });

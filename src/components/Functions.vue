@@ -1,12 +1,35 @@
 <script setup>
 import SmallButton from "./SmallButton.vue";
-import { store, resetShiftSto } from "./store";
+import { store } from "./store";
 import KeyboardShiftSolid from "./shift_key/KeyboardShiftSolid.vue";
+import KeyboardShiftSolidUppercase from "./shift_key/KeyboardShiftSolidUppercase.vue";
 import KeyboardShift from "./shift_key/KeyboardShift.vue";
+import Abs from "./button_icons/Abs.vue";
+import Fraction from "./button_icons/Fraction.vue";
+import Diff from "./button_icons/Diff.vue";
 
+let unshiftCooldown = false;
 function pressShift() {
-  store.onShift = !store.onShift;
-  store.onSto = false;
+  if (!unshiftCooldown) {
+    if (store.onShift) {
+      store.onShift = false;
+      store.shiftLock = false;
+      store.onSto = false;
+    } else {
+      store.onShift = true;
+      store.onSto = false;
+      store.shiftLock = false;
+    }
+  } else {
+    if (!store.shiftLock) {
+      store.shiftLock = true;
+      store.onShift = true;
+    }
+  }
+  unshiftCooldown = true;
+  setTimeout(() => {
+    unshiftCooldown = false;
+  }, 500);
 }
 
 function pressSto() {
@@ -52,7 +75,11 @@ function openSI() {
       color="gray"
       :on-pressed="store.onShift"
     >
-      <KeyboardShiftSolid v-if="store.onShift" class="h-5 tall:h-[25px]" />
+      <KeyboardShiftSolidUppercase
+        v-if="store.shiftLock"
+        class="h-5 tall:h-[25px]"
+      />
+      <KeyboardShiftSolid v-else-if="store.onShift" class="h-5 tall:h-[25px]" />
       <KeyboardShift v-else class="h-5 tall:h-[25px]" />
     </SmallButton>
     <SmallButton
@@ -104,12 +131,13 @@ function openSI() {
       "
     >
       <template v-slot:center>=</template>
-      <math display="inline" class="text-[15px] tall:text-[22px]">
-        <mfrac>
-          <mi class="relative -bottom-[2px] tall:-bottom-[3px]">▭</mi>
-          <mi class="relative -top-[3px] tall:-top-[5px]">▭</mi>
-        </mfrac>
-      </math>
+      <Fraction
+        :class="`${
+          store.onShift || store.onSto
+            ? 'relative top-[2px] w-[30px] h-[15px] tall:w-[30px] tall:h-[15px]'
+            : 'w-[30px] h-[17px] tall:w-[40px] tall:h-[23px]'
+        }`"
+      />
     </SmallButton>
     <SmallButton
       center-title="Differentiate and evaluate at given x"
@@ -117,30 +145,14 @@ function openSI() {
       @btndown="
         store.onShift ? $emit('cmd', '\\diffat') : $emit('cmd', '\\diff')
       "
-    >
-      <template v-slot:center>
-        <math
-          display="inline"
-          class="relative tall:-top-[2px] text-[10px] tall:text-[13px]"
-        >
-          <msub>
-            <mrow>
-              <!-- <mo>[</mo> -->
-              <mfrac bevelled="true">
-                <mi class="relative -bottom-[2px] tall:-bottom-[2px]">d</mi>
-                <mrow class="relative -top-[3px] tall:-top-[2px]">
-                  <mi>d</mi><mi>x</mi>
-                </mrow>
-              </mfrac>
-              <mi>▭</mi>
-              <mi class="text-xs tall:text-lg">|</mi>
-            </mrow>
-            <mrow
-              class="relative -top-[3px] tall:-top-[5px] text-[6px] tall:text-[8px]"
-              ><mi>x</mi><mn>=</mn><mi>▯</mi>
-            </mrow>
-          </msub>
-        </math>
+      ><template v-slot:center>
+        <Diff
+          :class="`${
+            store.onShift || store.onSto
+              ? 'w-[32px] h-[17px] tall:w-[40px] tall:h-[20px]'
+              : 'relative w-[30px] h-[15px] tall:top-[3px] tall:w-[30px] tall:h-[15px]'
+          }`"
+        />
       </template>
       <span>d/dx</span>
     </SmallButton>
@@ -152,18 +164,32 @@ function openSI() {
       center-title="Integrate with given limits"
     >
       <template v-slot:center>
-        <math display="inline" class="text-[10px] tall:text-[12px]">
+        <math
+          display="inline"
+          :class="`${
+            store.onShift || store.onSto
+              ? 'text-[15px] tall:text-[17px]'
+              : 'relative bottom-[2px] text-[10px] tall:text-[12px]'
+          }`"
+        >
           <mrow>
             <msubsup>
               <mo>&int;</mo>
               <mn>□</mn>
               <mn>□</mn>
             </msubsup>
-            <mi>▭</mi>
+            <mi>□</mi>
           </mrow>
         </math>
       </template>
-      <span class="text-[14px] tall:text-[20px] relative bottom-[2px]">∫</span>
+      <span
+        :class="`${
+          store.onShift || store.onSto
+            ? 'text-[14px] tall:text-[15px] relative bottom-[2px]'
+            : 'text-[14px] tall:text-[20px] relative bottom-[2px]'
+        }`"
+        >∫</span
+      >
     </SmallButton>
     <SmallButton
       main-title="Sum"
@@ -270,24 +296,24 @@ function openSI() {
 
     <!-- 4th row -->
     <SmallButton
-      center-title="Square"
-      main-title="Power"
-      @btndown="
-        store.onShift ? $emit('typedText', '^2') : $emit('typedText', '^')
-      "
+      center-title="Square root"
+      main-title="Square"
+      @btndown="store.onShift ? $emit('typedText', 'sqrt') : $emit('cmd', '^2')"
     >
-      <template v-slot:center> x<sup>2</sup></template>
-      <span class="text-[14px] relative bottom-[2px] tall:text-[20px]"
-        >x<sup>□</sup></span
+      <template v-slot:center>
+        <math display="block">
+          <msqrt>
+            <mn>□</mn>
+          </msqrt>
+        </math></template
       >
+      x<sup>2</sup>
     </SmallButton>
     <SmallButton
       center-title="Nth root"
-      main-title="Square root"
+      main-title="Power"
       @btndown="
-        store.onShift
-          ? $emit('typedText', 'nthroot')
-          : $emit('typedText', 'sqrt')
+        store.onShift ? $emit('typedText', 'nthroot') : $emit('typedText', '^')
       "
     >
       <template v-slot:center>
@@ -298,11 +324,9 @@ function openSI() {
           </mroot>
         </math>
       </template>
-      <math display="block">
-        <msqrt>
-          <mn>□</mn>
-        </msqrt>
-      </math>
+      <span class="text-[14px] relative bottom-[2px] tall:text-[20px]"
+        >x<sup>□</sup></span
+      >
     </SmallButton>
     <SmallButton
       center-title="Argument of complex number"
@@ -322,7 +346,7 @@ function openSI() {
       "
     >
       <template v-slot:center>
-        <span class="font-serif">e</span><sup>▭</sup>
+        <span class="font-serif">e</span><sup>□</sup>
       </template>
       <span class="font-serif">e</span>
     </SmallButton>
@@ -333,7 +357,7 @@ function openSI() {
         store.onShift ? $emit('typedText', '10^') : $emit('typedText', 'log(')
       "
     >
-      <template v-slot:center> 10<sup>▭</sup></template>
+      <template v-slot:center> 10<sup>□</sup></template>
       log
     </SmallButton>
     <SmallButton
@@ -343,79 +367,89 @@ function openSI() {
         store.onShift ? $emit('cmd', '\\logbase') : $emit('typedText', 'ln(')
       "
     >
-      <template v-slot:center> log<sub>▭</sub>▯</template>
+      <template v-slot:center> log<sub>□</sub>□</template>
       ln
     </SmallButton>
     <SmallButton
-      center-title="Equals sign for inputting equation"
+      center-title="Variable A"
       main-title="Absolute"
       @btndown="
-        store.onShift ? $emit('typedText', '=') : $emit('typedText', '|')
+        store.onShift
+          ? $emit('cmd', 'A')
+          : store.onSto
+          ? $emit('store', 'A')
+          : $emit('typedText', '|')
       "
+      :is-variable="true"
+      class="relative"
     >
-      <template v-slot:center></template>
-      <span class="text-[14px] relative bottom-[2px] tall:text-[20px]"
-        >|▭|</span
-      >
+      <template v-slot:center>A</template>
+      <Abs
+        :class="`${
+          store.onShift || store.onSto
+            ? 'relative top-[3px] w-[30px] h-[15px] tall:w-[30px] tall:h-[15px]'
+            : 'w-[30px] h-[15px] tall:w-[40px] tall:h-[20px]'
+        }`"
+      />
     </SmallButton>
     <SmallButton
-      center-title="Variable A"
+      center-title="Variable B"
       main-title="Pi"
       @btndown="
         store.onShift
-          ? $emit('cmd', '\\text{A}')
+          ? $emit('cmd', 'B')
           : store.onSto
-          ? $emit('store', 'A')
+          ? $emit('store', 'B')
           : $emit('typedText', 'pi')
       "
       :is-variable="true"
     >
-      <template v-slot:center>A</template>
-      <span class="text-[17px] tall:text-[23px] relative bottom-[2px]">π</span>
+      <template v-slot:center>B</template>
+      π
     </SmallButton>
     <SmallButton
-      center-title="Variable B"
+      center-title="Variable C"
       main-title="Left parenthesis"
       @btndown="
         store.onShift
-          ? $emit('cmd', '\\text{B}')
+          ? $emit('cmd', 'C')
           : store.onSto
-          ? $emit('store', 'B')
+          ? $emit('store', 'C')
           : $emit('typedText', '(')
       "
       :is-variable="true"
     >
-      <template v-slot:center>B</template>
+      <template v-slot:center>C</template>
       (
     </SmallButton>
     <SmallButton
-      center-title="Variable C"
+      center-title="Variable D"
       main-title="Right parenthesis"
       @btndown="
         store.onShift
-          ? $emit('cmd', '\\text{C}')
+          ? $emit('cmd', 'D')
           : store.onSto
-          ? $emit('store', 'C')
+          ? $emit('store', 'D')
           : $emit('typedText', ')')
       "
       :is-variable="true"
     >
-      <template v-slot:center>C</template>
+      <template v-slot:center>D</template>
       )
     </SmallButton>
     <SmallButton
-      center-title="Variable D"
+      center-title="Variable F"
       main-title="Percentage"
       @btndown="
         store.onShift
-          ? $emit('cmd', '\\text{D}')
+          ? $emit('cmd', 'F')
           : store.onSto
-          ? $emit('store', 'D')
+          ? $emit('store', 'F')
           : $emit('typedText', '%')
       "
       :is-variable="true"
     >
-      <template v-slot:center>D</template>
+      <template v-slot:center>F</template>
       %
     </SmallButton>
     <SmallButton

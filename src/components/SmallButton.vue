@@ -31,14 +31,18 @@ const props = defineProps({
 <template>
   <div class="flex flex-col select-none">
     <div
-      class="text-center px-1 text-xs tall:text-sm text-[#5F5F5F]"
+      class="text-center px-1 text-xs tall:text-sm text-[#5F5F5F] mx-auto"
       :title="centerTitle"
       :class="{ 'h-4 tall:h-5': upperSpace }"
     >
-      <slot name="center"></slot>
+      <slot
+        v-if="(store.onShift || store.onSto) && props.color === 'white'"
+      ></slot>
+      <slot v-else name="center"></slot>
     </div>
     <button
-      @mousedown.prevent="$emit('btndown')"
+      @mousedown.prevent
+      @click="$emit('btndown')"
       tabindex="-1"
       type="button"
       :class="`button flex justify-center items-center font-semibold border-0 rounded shadow px-0.5 py-0 min-h-6 grow tall:h-8 text-[100%] tall:text-xl ${
@@ -47,7 +51,11 @@ const props = defineProps({
       :title="mainTitle"
       :disabled="store.onSto && props.color === 'white' && !isVariable"
     >
-      <slot></slot>
+      <slot
+        v-if="(store.onShift || store.onSto) && props.color === 'white'"
+        name="center"
+      ></slot>
+      <slot v-else></slot>
     </button>
   </div>
 </template>
