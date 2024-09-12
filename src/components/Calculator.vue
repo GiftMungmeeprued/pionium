@@ -223,29 +223,10 @@ function preprocessInputLatex(latex) {
 
   latex = parse(latex);
 
-  // //////// Require recursion: contains nesting of || ////////
-  // // deal with abs: \\left\|x\\right\| -> abs(x)
-  // function parseAbs(latex) {
-  //   let count = 0;
-  //   while (/\|/.test(latex) && count < 10) {
-  //     latex = latex.replace(
-  //       /\\left\|([^\|]+)\\right\|/g,
-  //       (_, x) => `abs(${parseAbs(x)})`
-  //     );
-
-  //     count++;
-  //     if (count === 10) {
-  //       throw Error("Invalid input of |");
-  //     }
-  //   }
-  //   return latex;
-  // }
-
-  // latex = parseAbs(latex);
-
   // deal with variables i,e,pi,A,B,C,D,x when use with no space
   latex = latex.replace(/i(?=([A-Dxie]|pi))/g, "i ");
   latex = latex.replace(/e(?=([A-Dxie]|pi))/g, "e ");
+  latex = latex.replace(/x/g, " x ");
 
   return latex;
 }
@@ -260,6 +241,9 @@ function preprocessDisplayLatex(latex) {
   latex = latex.replace(/\\mathrm{asinh}/g, "\\arcsinh");
   latex = latex.replace(/\\mathrm{acosh}/g, "\\arccosh");
   latex = latex.replace(/\\mathrm{atanh}/g, "\\arctanh");
+
+  latex = latex.replace(/\\mathrm{log}_\{10\}/g, "\\log");
+  latex = latex.replace(/\\mathrm{log}/g, "\\mathrm{ln}");
   return latex;
 }
 
@@ -372,7 +356,7 @@ onMounted(async () => {
 
   const config = {
     autoCommands:
-      "pi sqrt sum nthroot binom mu epsilon gamma alpha sigma phi infinity lambda",
+      "pi sqrt sum nthroot binom mu epsilon gamma alpha sigma phi infinity lambda hbar",
     sumStartsWithNEquals: true,
     handlers: {
       edit: function () {
@@ -507,7 +491,7 @@ function displayDecimal(number) {
     }
 
     // display standard form when denominator is defined (fractions not integers), and when denominator is not too large
-    const displayStandard = denominator && denominator < 10000;
+    const displayStandard = Boolean(denominator) && denominator < 10000;
 
     if (decimalNumber.includes("e")) {
       const [coeff, expon] = decimalNumber.split("e");
@@ -581,11 +565,13 @@ function displayAnswer() {
   const isEvaluable = /^[0-9+\-/i\[\]\(\),*]*$/.test(
     data.calculated.evaluate().text("fractions")
   );
+  const hasExactForm = !/^[0-9+\-/i\[\]\(\),*]*$/.test(
+    data.calculated.toString()
+  );
 
   // evaluate expression
   const fractionAns = data.calculated.evaluate();
   // display format: standard form ex 25/2, pi, e, sqrt(3)/2, x^2
-
   const standardAns = !data.solveMode
     ? preprocessDisplayLatex(displayStandard(data.calculated.toString()))
     : preprocessDisplayLatex(
@@ -600,12 +586,11 @@ function displayAnswer() {
 
     // find available display modes
     store.displaymodes = ["dec"];
-    if (
-      !mustSimplify &&
-      (shouldDisplayStandard ||
-        data.calculated.toString() !== fractionAns.text("fractions"))
-    ) {
-      store.displaymodes.push("std");
+    // display standard form when
+    // 1. for exact form (pi, e, sqrt(3)/2), the form should not be in the form of sin(4), log(7), 30!, etc
+    // 2. for fraction, the denominator is not too large
+    if ((!mustSimplify && hasExactForm) || shouldDisplayStandard) {
+      store.displaymodes.unshift("std");
       if (decimalAns > 1 && !data.solveMode && shouldDisplayStandard) {
         store.displaymodes.push("mix");
       }
