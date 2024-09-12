@@ -10,7 +10,7 @@ export default {
   theme: {
     extend: {
       screens: {
-        tall: { raw: "((min-height: 750px) and (min-width: 425px))" },
+        tall: { raw: "((min-height: 750px) and (min-width: 440px))" },
       },
       filter: ["hover", "focus"],
     },

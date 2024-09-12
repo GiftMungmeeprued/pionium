@@ -746,9 +746,9 @@ function toggleAngle() {
 <template>
   <main class="h-full flex items-center">
     <div
-      class="max-w-[416px] min-w-[320px] h-full max-h-[673px] tall:h-[673px] mx-auto w-screen flex flex-col border-solid border-2 border-[#E9EAEE]"
+      class="max-w-[416px] min-w-[320px] h-full max-h-[915px] tall:h-[673px] mx-auto w-screen flex flex-col border-solid border-2 border-[#E9EAEE]"
     >
-      <div id="screen" class="grow flex flex-col">
+      <div id="screen" class="grow-[2] flex flex-col">
         <div
           id="top-toolbar"
           class="bg-[#E9EAEE] min-h-[20px] tall:h-[25px] flex justify-between"
