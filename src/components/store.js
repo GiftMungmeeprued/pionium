@@ -26,6 +26,6 @@ export function resetShiftSto() {
 
 export const colors = {
   white: "bg-white text-gray-800",
-  blue: "bg-blue-500 text-white",
+  blue: "bg-[#1A73E9] text-white",
   gray: "bg-[#CBCED5] text-gray-800",
 };

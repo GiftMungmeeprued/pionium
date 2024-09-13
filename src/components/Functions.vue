@@ -88,7 +88,10 @@ function openSI() {
       :upper-space="false"
       color="gray"
       :on-pressed="store.onSto"
-      ><span class="rubik-font text-xs tall:text-[16px]">STO</span></SmallButton
+      ><span
+        class="rubik-font text-xs tall:text-[16px] tall:relative tall:top-[2px]"
+        >STO</span
+      ></SmallButton
     >
     <SmallButton
       main-title="Move cursor left"
@@ -111,7 +114,10 @@ function openSI() {
       color="gray"
       @btndown="openConst()"
     >
-      <span class="rubik-font text-xs tall:text-[16px]">CONST</span>
+      <span
+        class="rubik-font text-xs tall:text-[16px] tall:relative tall:top-[2px]"
+        >CONST</span
+      >
     </SmallButton>
     <SmallButton
       main-title="SI (metric) prefixes"
@@ -119,7 +125,10 @@ function openSI() {
       color="gray"
       @btndown="openSI()"
     >
-      <span class="rubik-font text-xs tall:text-[16px]">SI</span>
+      <span
+        class="rubik-font text-xs tall:text-[16px] tall:relative tall:top-[2px]"
+        >SI</span
+      >
     </SmallButton>
 
     <!-- Second row -->
