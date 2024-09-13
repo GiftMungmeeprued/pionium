@@ -15,6 +15,7 @@ export const store = reactive({
   id: 0,
   displaymodes: [],
   displaymodeId: 0,
+  darkmode: false,
 });
 
 export function resetShiftSto() {
@@ -25,7 +26,7 @@ export function resetShiftSto() {
 }
 
 export const colors = {
-  white: "bg-white text-gray-800",
-  blue: "bg-[#1A73E9] text-white",
-  gray: "bg-[#CBCED5] text-gray-800",
+  white: "bg-white text-gray-800 dark:bg-[#484C4F] dark:text-white",
+  blue: "bg-[#1A73E9] text-white dark:bg-[#5F97F6]",
+  gray: "bg-[#CBCED5] text-gray-800 dark:bg-[#373C40] dark:text-white",
 };

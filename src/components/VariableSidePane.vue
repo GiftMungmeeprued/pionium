@@ -16,10 +16,13 @@ function clearVariable() {
 <template>
   <SidePane sidepane-id="variableSidePane" sidepane-label="variable sidepane">
     <div
-      class="offcanvas-header sticky top-0 py-2 px-4 border-solid border-b border-0 border-neutral-300 bg-white"
+      class="offcanvas-header sticky top-0 py-2 px-4 border-solid border-b border-0 border-neutral-300 dark:border-neutral-600"
     >
-      <h1 class="offcanvas-title m-0 text-gray-800" id="historySidepaneLabel">
-        <VariableIcon class="size-6 text-gray-800 align-[-5px] inline" />
+      <h1
+        class="offcanvas-title m-0 text-gray-800 dark:text-white"
+        id="historySidepaneLabel"
+      >
+        <VariableIcon class="size-6 align-[-5px] inline" />
         <span class="font-bold text-xl"> Variables </span>
         <SidePaneDropdown :clear-function="clearVariable" />
       </h1>

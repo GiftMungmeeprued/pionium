@@ -14,7 +14,7 @@ const props = defineProps({
     <div>
       <MenuButton class="inline">
         <i
-          class="pi pi-ellipsis-v text-sm border-solid rounded-full border-transparent hover:bg-gray-200 active:bg-gray-300 p-1"
+          class="pi pi-ellipsis-v text-sm border-solid rounded-full border-transparent hover:bg-gray-200 dark:hover:bg-[#4a5155] active:bg-gray-300 p-1"
           data-bs-toggle="dropdown"
           aria-expanded="false"
         ></i>
@@ -30,18 +30,22 @@ const props = defineProps({
       leave-to-class="transform opacity-0 scale-95"
     >
       <MenuItems
-        class="w-max absolute left-0 z-10 mt-2 origin-top-left rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+        class="w-max absolute left-0 z-10 mt-2 origin-top-left rounded-md bg-white dark:bg-[#4a5155] shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
       >
         <div class="py-1">
           <MenuItem v-slot="{ active }">
             <a
               :class="[
-                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                active
+                  ? 'bg-gray-100 text-gray-900 dark:text-white dark:hover:bg-[#687177]'
+                  : 'text-gray-700 dark:text-white',
                 'block px-4 py-2 text-sm',
               ]"
               @click="props.clearFunction"
             >
-              <TrashIcon class="size-5 align-text-top text-gray-600 inline" />
+              <TrashIcon
+                class="size-5 align-text-top text-gray-600 dark:text-white inline"
+              />
               Clear all</a
             >
           </MenuItem>

@@ -3,7 +3,9 @@ import Button from "./Button.vue";
 import { ArrowTurnDownLeftIcon } from "@heroicons/vue/16/solid";
 </script>
 <template>
-  <div class="bg-[#E9EAEE] grid grid-cols-5 gap-1 p-1.5 py-3 grow">
+  <div
+    class="bg-[#E9EAEE] dark:bg-[#3D4246] grid grid-cols-5 gap-1 p-1.5 py-3 grow"
+  >
     <Button
       main-title="Seven"
       @mousedown.prevent

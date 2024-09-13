@@ -23,4 +23,5 @@ export default {
   corePlugins: {
     preflight: true,
   },
+  darkMode: "selector",
 };

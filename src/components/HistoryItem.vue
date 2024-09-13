@@ -32,7 +32,7 @@ onMounted(() => {
 </script>
 <template>
   <div
-    class="border-solid border-b border-0 border-neutral-300 hover:bg-neutral-100 cursor-pointer"
+    class="border-solid border-b border-0 border-neutral-300 dark:border-neutral-600 hover:bg-neutral-100 dark:hover:bg-[#4a5155] cursor-pointer"
     @click="loadHistory(props.item)"
   >
     <Simplebar class="w-full pt-5 px-5">

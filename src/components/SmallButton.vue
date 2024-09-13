@@ -31,7 +31,7 @@ const props = defineProps({
 <template>
   <div class="flex flex-col select-none">
     <div
-      class="text-center px-1 text-xs tall:text-sm text-[#5F5F5F] mx-auto"
+      class="text-center px-1 text-xs tall:text-sm text-[#5F5F5F] dark:text-gray-400 mx-auto"
       :title="centerTitle"
       :class="{ 'h-4 tall:h-5': upperSpace }"
     >

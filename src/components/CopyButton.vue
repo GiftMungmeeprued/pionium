@@ -63,7 +63,7 @@ onMounted(() => {
       @click="handleCopy()"
       data-tooltip-target="tooltip-copy-npm-install-copy-button"
       data-tooltip-placement="bottom"
-      class="text-gray-500 hover:text-gray-700 h-6"
+      class="text-gray-500 hover:text-gray-700 dark:text-[#c2c7cbff] dark:hover:text-white h-6"
     >
       <span id="default-icon" ref="defaultIcon" class="relative -top-[1px]">
         <i class="pi pi-copy text-sm"></i>

@@ -5,6 +5,17 @@ import Navbar from "./components/Navbar.vue";
 import VariableSidePane from "./components/VariableSidePane.vue";
 import SearchBox from "./components/SearchBox.vue";
 import SearchBoxSI from "./components/SearchBoxSI.vue";
+import { store } from "./components/store";
+import { onMounted } from "vue";
+
+onMounted(() => {
+  // configure dark/light theme
+  const localStorageDark = localStorage.getItem("darkmode");
+  store.darkmode = localStorageDark ? localStorageDark === "true" : false;
+  if (store.darkmode) {
+    document.documentElement.classList.add("dark");
+  }
+});
 </script>
 <template>
   <div id="page" class="h-full flex flex-col justify-items-stretch">

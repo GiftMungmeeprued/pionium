@@ -5,7 +5,7 @@ import Logo from "./Logo.vue";
 </script>
 
 <template>
-  <nav class="bg-gray-800 min-w-[320px]">
+  <nav class="bg-gray-800 dark:bg-[#181b1eff] min-w-[320px]">
     <div class="px-2">
       <div
         class="relative flex sm:h-16 h-10 items-center justify-between sm:px-5"

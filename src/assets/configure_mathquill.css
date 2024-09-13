@@ -7,6 +7,17 @@
   background: rgba(0, 0, 0, 0);
   background-clip: content-box;
 }
+html.dark #math-field {
+  color: white;
+}
+
+html.dark #math-field span.mq-empty {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+html.dark .mq-math-mode {
+  color: white;
+}
 
 #math-field.mq-editable-field.mq-focused,
 #math-field.mq-math-mode .mq-editable-field.mq-focused {

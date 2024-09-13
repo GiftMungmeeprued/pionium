@@ -408,8 +408,6 @@ onMounted(async () => {
 
   const textfield = document.querySelector("span.mq-textarea");
   textfield.firstChild.setAttribute("inputmode", "none");
-
-  // test here
 });
 
 function handleTypedText(character) {
@@ -750,25 +748,49 @@ function toggleAngle() {
     nerdamer.set("ANGLE_UNIT", "degree");
   }
 }
+
+function toggleDarkmode() {
+  store.darkmode = !store.darkmode;
+  localStorage.setItem("darkmode", store.darkmode);
+  console.log(store.darkmode);
+  if (store.darkmode) {
+    document.documentElement.classList.add("dark");
+  } else {
+    document.documentElement.classList.remove("dark");
+  }
+}
 </script>
 <template>
   <main class="h-full flex items-center">
     <div
-      class="max-w-[416px] min-w-[320px] h-full max-h-[915px] tall:h-[673px] mx-auto w-screen flex flex-col border-solid border-2 border-[#E9EAEE]"
+      class="max-w-[416px] min-w-[320px] h-full max-h-[915px] tall:h-[673px] mx-auto w-screen flex flex-col border-solid border-2 border-[#E9EAEE] dark:border-[#3D4246]"
     >
-      <div id="screen" class="grow-[2] flex flex-col">
+      <div
+        id="screen"
+        class="grow-[2] flex flex-col bg-white dark:bg-[#313639ff]"
+      >
         <div
           id="top-toolbar"
-          class="bg-[#E9EAEE] min-h-[20px] tall:h-[25px] flex justify-between"
+          class="bg-[#E9EAEE] dark:bg-[#3D4246] min-h-[20px] tall:h-[25px] flex justify-between"
         >
           <button
             title="Convert between degree and radian"
-            class="rubik-font-bold text-gray-500 hover:text-gray-700 border-0 w-8 mx-2 rounded font-bold uppercase text-xs tall:text-sm"
+            class="rubik-font-bold border-0 w-8 mx-2 rounded font-bold uppercase text-xs tall:text-sm text-gray-500 dark:text-[#c2c7cbff] hover:text-gray-700 dark:hover:text-white"
             @click="toggleAngle()"
           >
             <span class="text-bottom"> {{ data.angle }}</span>
           </button>
-          <CopyButton class="mx-2" />
+          <div class="flex items-center">
+            <button
+              title="Toggle between light and dark modes"
+              class="text-gray-500 dark:text-[#c2c7cbff] hover:text-gray-700 dark:hover:text-white mr-1"
+              @click="toggleDarkmode"
+            >
+              <i v-if="store.darkmode" class="pi pi-sun text-sm"></i>
+              <i v-else class="pi pi-moon text-sm"></i>
+            </button>
+            <CopyButton class="mx-2" />
+          </div>
         </div>
         <Simplebar class="overflow-y-auto w-full px-3 py-3 h-20 tall:h-30 grow">
           <span ref="mathFieldEl" id="math-field"></span>

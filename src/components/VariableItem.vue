@@ -44,7 +44,7 @@ watch(
 <template>
   <tr
     scope="row"
-    class="odd:bg-white even:bg-gray-50 border-solid border-b border-0 border-neutral-300"
+    class="odd:bg-white even:bg-gray-50 dark:odd:bg-[#313639ff] dark:even:bg-[#3d4142] border-solid border-b border-0 border-neutral-300 dark:border-neutral-600"
   >
     <th class="py-3 text-center text-normal">
       <span ref="variableEl"></span>

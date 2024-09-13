@@ -66,7 +66,9 @@ function openSI() {
 </script>
 
 <template>
-  <div class="bg-[#E9EAEE] grid grid-cols-6 gap-1 p-1.5 pt-3 grow">
+  <div
+    class="bg-[#E9EAEE] dark:bg-[#3D4246] grid grid-cols-6 gap-1 p-1.5 pt-3 grow"
+  >
     <!-- First row -->
     <SmallButton
       main-title="Shift key"

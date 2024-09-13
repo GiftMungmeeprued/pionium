@@ -14,12 +14,12 @@ const props = defineProps({
 <template>
   <aside
     :id="props.sidepaneId"
-    class="fixed sm:relative top-0 left-auto right-0 z-40 w-full sm:w-1/3 h-screen sm:h-full transition-transform translate-x-full sm:translate-x-0 border border-neutral-300"
+    class="fixed sm:relative top-0 left-auto right-0 z-40 w-full sm:w-1/3 h-screen sm:h-full transition-transform translate-x-full sm:translate-x-0 border border-neutral-300 dark:border-neutral-600"
     :aria-label="sidepaneLabel"
     v-show="store.showSidePane[props.sidepaneId]"
   >
     <div
-      class="sm:absolute h-full w-full p-0 bg-white dark:bg-gray-800 overflow-auto"
+      class="sm:absolute h-full w-full p-0 bg-white dark:bg-[#313639ff] overflow-auto"
     >
       <button
         type="button"
