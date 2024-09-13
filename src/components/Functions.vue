@@ -457,7 +457,7 @@ function openSI() {
       "
     >
       <template v-slot:center>nCr</template>
-      <span class="text-[14px] relative bottom-[2px] tall:text-[20px]">x!</span>
+      <span class="text-[14px] relative bottom-[2px] tall:text-[20px]">a!</span>
     </SmallButton>
   </div>
 </template>
