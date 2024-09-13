@@ -18,7 +18,9 @@ export const store = reactive({
 });
 
 export function resetShiftSto() {
-  store.onShift = false;
+  if (!store.shiftLock) {
+    store.onShift = false;
+  }
   store.onSto = false;
 }
 
