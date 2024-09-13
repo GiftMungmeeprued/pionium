@@ -493,12 +493,20 @@ function displayDecimal(number) {
     // display standard form when denominator is defined (fractions not integers), and when denominator is not too large
     const displayStandard = Boolean(denominator) && denominator < 10000;
 
+    function roundTo(numStr, n = 7) {
+      const multiplier = 10 ** n;
+      return (
+        Math.round((parseFloat(numStr) + Number.EPSILON) * multiplier) /
+        multiplier
+      ).toString();
+    }
+
     if (decimalNumber.includes("e")) {
       const [coeff, expon] = decimalNumber.split("e");
-      const latex = `${coeff} \\cdot 10^{${expon}}`;
+      const latex = `${roundTo(coeff)} \\cdot 10^{${expon}}`;
       return [latex, displayStandard];
     } else {
-      return [decimalNumber, displayStandard];
+      return [roundTo(decimalNumber), displayStandard];
     }
   }
 
