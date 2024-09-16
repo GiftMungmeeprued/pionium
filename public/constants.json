@@ -284,7 +284,7 @@
     "unit": "F m⁻¹",
     "category": "Electromagnetism",
     "constant": "epsilon_0",
-    "latex": "\\\\epsilon_0",
+    "latex": "\\\\epsilon_\\{0\\}",
     "symbol": "ε₀"
   },
   {
@@ -293,7 +293,7 @@
     "unit": "N A⁻²",
     "category": "Electromagnetism",
     "constant": "mu_0",
-    "latex": "\\\\mu_0",
+    "latex": "\\\\mu_\\{0\\}",
     "symbol": "μ₀"
   },
   {
@@ -302,7 +302,7 @@
     "unit": "Wb",
     "category": "Quantum",
     "constant": "phi_0",
-    "latex": "\\\\phi_0",
+    "latex": "\\\\phi_\\{0\\}",
     "symbol": "φ₀"
   },
   {
@@ -320,7 +320,7 @@
     "unit": "s",
     "category": "Quantum",
     "constant": "G_0",
-    "latex": "G_0",
+    "latex": "G_\\{0\\}",
     "symbol": "G₀"
   },
   {
@@ -329,7 +329,7 @@
     "unit": "Ω",
     "category": "Electromagnetism",
     "constant": "Z_0",
-    "latex": "Z_0",
+    "latex": "Z_\\{0\\}",
     "symbol": "Z₀"
   },
   {
