@@ -1,29 +1,36 @@
-# calculator
+# Pionium Scientific Calculator
 
-This template should help get you started developing with Vue 3 in Vite.
+Link: [pionium.app](pionium.app)
 
-## Recommended IDE Setup
+## Description
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+Pionium is a beautiful and simple, free online scientific calculator designed for use in Physics, Mathematics and Engineering.
 
-## Customize configuration
+![](figures/poster.svg)
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+## Supported operations
 
-## Project Setup
+- Trigonometric and hyperbolic trigonometric functions: sin, cos, sinh, cosh, etc.
 
-```sh
-npm install
-```
+  <img src="figures/trig.png" alt="trigonometric operations" width="300"/>
 
-### Compile and Hot-Reload for Development
+- Complex number operations: including modulus and argument
+- Calculus (with limited functionality): differentiation, integration, sum, and product
+- Algebraic operation (univariate): including factor
 
-```sh
-npm run dev
-```
+  <img src="figures/algebra.png" alt="algebraic operation" width="300"/>
 
-### Compile and Minify for Production
+- Equation solve (univariate): solve mode is automatically detected by including = (equals sign) in the input
 
-```sh
-npm run build
-```
+  <img src="figures/solve.png" alt="equation solve" width="300"/>
+
+- physical constants and more.
+
+## Features
+
+- Toggle light/dark mode
+- Copy equation as LaTeX
+
+## Contributing
+
+Feature suggestions and bug reports are welcome.
