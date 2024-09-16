@@ -135,7 +135,7 @@ function openSI() {
 
     <!-- Second row -->
     <SmallButton
-      center-title="Modulo"
+      center-title="Equals sign"
       main-title="Fraction"
       @btndown="
         store.onShift ? $emit('typedText', '=') : $emit('typedText', '/')
@@ -338,7 +338,7 @@ function openSI() {
     </SmallButton>
     <SmallButton
       center-title="Argument of complex number"
-      main-title="Percentage"
+      main-title="Imaginary unit"
       @btndown="
         store.onShift ? $emit('typedText', 'arg(') : $emit('typedText', 'i')
       "
@@ -380,7 +380,7 @@ function openSI() {
     </SmallButton>
     <SmallButton
       center-title="Variable A"
-      main-title="Absolute"
+      main-title="Absolute or modulus of complex number"
       @btndown="
         store.onShift
           ? $emit('cmd', 'A')
