@@ -60,6 +60,7 @@ onMounted(() => {
 <template>
   <div class="flex items-center">
     <button
+      aria-label="Copy input as LaTeX"
       @click="handleCopy()"
       data-tooltip-target="tooltip-copy-npm-install-copy-button"
       data-tooltip-placement="bottom"
