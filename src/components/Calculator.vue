@@ -752,7 +752,6 @@ function toggleAngle() {
 function toggleDarkmode() {
   store.darkmode = !store.darkmode;
   localStorage.setItem("darkmode", store.darkmode);
-  console.log(store.darkmode);
   if (store.darkmode) {
     document.documentElement.classList.add("dark");
   } else {
