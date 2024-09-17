@@ -605,6 +605,21 @@ function displayAnswer() {
     store.displaymodes = ["std"];
   }
 
+  // for arg in radian
+  if (
+    data.angle === "rad" &&
+    /\((\d+)\/(\d+)\)\*pi/.test(data.calculated.toString())
+  ) {
+    const denominator = data.calculated.denominator();
+    if (denominator > 9999) {
+      const index = store.displaymodes.indexOf("std");
+      if (index > -1) {
+        // only splice array when item is found
+        store.displaymodes.splice(index, 1);
+      }
+    }
+  }
+
   let answer = data.solveMode ? "x = " : "= ";
 
   const displaymode = store.displaymodes[store.displaymodeId];
