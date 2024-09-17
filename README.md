@@ -2,11 +2,11 @@
 
 Link: [pionium.app](pionium.app)
 
+![Pionium calculator poster](figures/poster.svg)
+
 ## Description
 
 Pionium is a beautiful and simple, free online scientific calculator designed for use in Physics, Mathematics and Engineering.
-
-![](figures/poster.svg)
 
 ## Supported operations
 
@@ -15,7 +15,13 @@ Pionium is a beautiful and simple, free online scientific calculator designed fo
   <img src="figures/trig.png" alt="trigonometric operations" width="300"/>
 
 - Complex number operations: including modulus and argument
-- Calculus (with limited functionality): differentiation, integration, sum, and product
+
+  <img src="figures/complex.png" alt="algebraic operation" width="300"/>
+
+- Calculus (still with limited functionality): differentiation, integration, sum, and product
+
+  <img src="figures/calculus.png" alt="algebraic operation" width="300"/>
+
 - Algebraic operation (univariate): including factor
 
   <img src="figures/algebra.png" alt="algebraic operation" width="300"/>
@@ -24,12 +30,16 @@ Pionium is a beautiful and simple, free online scientific calculator designed fo
 
   <img src="figures/solve.png" alt="equation solve" width="300"/>
 
-- physical constants and more.
+- Inputting physical constants and SI prefixes
+
+  <img src="figures/constants.png" alt="equation solve" width="300"/>
 
 ## Features
 
 - Toggle light/dark mode
 - Copy equation as LaTeX
+- Store variables
+- Calculation history
 
 ## Contributing
 
