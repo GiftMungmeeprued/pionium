@@ -32,7 +32,7 @@
           data-hs-combo-box='{
           "isOpenOnFocus": true,
           "preventVisibility": true,
-          "preventSelection": true,
+          "preventSelection": false,
           "groupingType": "tabs",
           "apiUrl": "/constants.json",
           "apiGroupField": "category",
