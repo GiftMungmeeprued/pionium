@@ -1,6 +1,6 @@
 # Pionium Scientific Calculator
 
-Link: [pionium.app](pionium.app)
+Link: [https://pionium.app/](https://pionium.app/)
 
 ![Pionium calculator poster](figures/poster.svg)
 
