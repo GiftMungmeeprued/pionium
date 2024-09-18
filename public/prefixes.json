@@ -27,13 +27,13 @@
     "name": "giga",
     "value": 1e9,
     "symbol": "G",
-    "display": "10⁶"
+    "display": "10⁹"
   },
   {
     "name": "nano",
     "value": 1e-9,
     "symbol": "n",
-    "display": "10⁻⁶"
+    "display": "10⁻⁹"
   },
   {
     "name": "tera",
