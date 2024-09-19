@@ -12,28 +12,13 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
-  <defs
-     id="defs6" />
-  <sodipodi:namedview
-     id="namedview6"
-     pagecolor="#ffffff"
-     bordercolor="#000000"
-     borderopacity="0.25"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="12.703125"
-     inkscape:cx="-2.2435424"
-     inkscape:cy="10.430504"
-     inkscape:window-width="1920"
-     inkscape:window-height="1009"
-     inkscape:window-x="1192"
-     inkscape:window-y="410"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="Abacus-Flat--Streamline-Fluent-Emoji.svg" />
-  <desc
-     id="desc1">Abacus Flat Streamline Emoji: https://streamlinehq.com</desc>
+  <path
+     d="m 7.04,2.56 h 17.92 c 2.4742,0 4.48,2.0058 4.48,4.48 v 17.92 c 0,2.4742 -2.0058,4.48 -4.48,4.48 H 7.04 c -2.4742,0 -4.48,-2.0058 -4.48,-4.48 V 7.04 c 0,-2.4742 2.0058,-4.48 4.48,-4.48 z"
+     fill="#FF6723"
+     stroke-width="1"
+     id="path2-0"
+     style="fill:#f6f6f6;fill-opacity:1;stroke-width:1;stroke-dasharray:none"
+     sodipodi:nodetypes="sssssssss" />
   <path
      d="M7.04 0.32C3.3286 0.32 0.32 3.3286 0.32 7.04V24.96C0.32 28.6713 3.3286 31.68 7.04 31.68H24.96C28.6713 31.68 31.68 28.6713 31.68 24.96V7.04C31.68 3.3286 28.6713 0.32 24.96 0.32H7.04ZM7.04 2.56H24.96C27.4342 2.56 29.44 4.5658 29.44 7.04V24.96C29.44 27.4342 27.4342 29.44 24.96 29.44H7.04C4.5658 29.44 2.56 27.4342 2.56 24.96V7.04C2.56 4.5658 4.5658 2.56 7.04 2.56Z"
      fill="#FF6723"
