@@ -14,7 +14,7 @@ const props = defineProps({
 <template>
   <button
     type="button"
-    :class="`flex items-center justify-center bg-transparent rounded mx-1 h-7 w-7 sm:h-10 sm:w-10 border-solid border-2 ${
+    :class="`flex items-center justify-center bg-transparent rounded mx-1 h-7 w-7 tall:h-10 tall:w-10 border-solid border-2 ${
       store.showSidePane[props.sidepaneId]
         ? 'border-white/50 text-white'
         : 'border-transparent text-gray-300 hover:text-white'

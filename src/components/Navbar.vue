@@ -8,7 +8,7 @@ import Logo from "./Logo.vue";
   <nav class="bg-gray-800 dark:bg-[#181b1eff] min-w-[320px]">
     <div class="px-2">
       <div
-        class="relative flex sm:h-16 h-10 items-center justify-between sm:px-5"
+        class="relative flex tall:h-16 h-10 items-center justify-between sm:px-5"
       >
         <div class="flex flex-1 items-stretch justify-start">
           <Logo class="h-[26px] w-[26px] tall:h-[40px] tall:w-[40px]" />
@@ -35,14 +35,14 @@ import Logo from "./Logo.vue";
             sidepane-label="history sidepane"
           >
             <i
-              class="pi pi-history sm:text-xl text-base align-[-0.15em] mx-1"
+              class="pi pi-history tall:text-xl text-base align-[-0.15em] tall:mx-1"
             ></i
           ></SidePaneButton>
           <SidePaneButton
             sidepane-id="variableSidePane"
             sidepane-label="variable sidepane"
           >
-            <VariableIcon class="size-6 sm:size-8 m-0"
+            <VariableIcon class="size-6 tall:size-8 m-0"
           /></SidePaneButton>
         </div>
       </div>
