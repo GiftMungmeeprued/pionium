@@ -19,7 +19,7 @@ export default defineConfig({
         short_name: "pionium",
         description:
           "Beautiful and simple, free online scientific calculator for all",
-        theme_color: "#ffffff",
+        theme_color: "#000000",
         icons: [
           {
             src: "pwa-64x64.png",
