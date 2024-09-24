@@ -1,5 +1,14 @@
 [
   {
+    "name": "Speed of light in vacuum",
+    "value": 299792458,
+    "unit": "m s⁻¹",
+    "category": "Universal",
+    "constant": "c",
+    "latex": "c",
+    "symbol": "c"
+  },
+  {
     "name": "Proton mass",
     "value": 1.67262192595e-27,
     "unit": "kg",
@@ -48,10 +57,37 @@
     "name": "Planck constant",
     "value": 6.62607015e-34,
     "unit": "J s",
-    "category": "Quantum",
+    "category": "Universal",
     "constant": "h",
     "latex": "h",
     "symbol": "h"
+  },
+  {
+    "name": "Planck length",
+    "value": 1.616255e-35,
+    "unit": "m",
+    "category": "Universal",
+    "constant": "l_P",
+    "latex": "l_\\{P\\}",
+    "symbol": "lₚ"
+  },
+  {
+    "name": "Planck time",
+    "value": 5.391247e-44,
+    "unit": "s",
+    "category": "Universal",
+    "constant": "t_P",
+    "latex": "t_\\{P\\}",
+    "symbol": "tₚ"
+  },
+  {
+    "name": "Planck temperature",
+    "value": 1.416784e32,
+    "unit": "K",
+    "category": "Universal",
+    "constant": "T_P",
+    "latex": "T_\\{P\\}",
+    "symbol": "Tₚ"
   },
   {
     "name": "Nuclear magneton",
@@ -241,15 +277,6 @@
     "constant": "R",
     "latex": "R",
     "symbol": "R"
-  },
-  {
-    "name": "Speed of light in vacuum",
-    "value": 299792458,
-    "unit": "m s⁻¹",
-    "category": "Universal",
-    "constant": "c",
-    "latex": "c",
-    "symbol": "c"
   },
   {
     "name": "First radiation constant",
