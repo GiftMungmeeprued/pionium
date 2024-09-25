@@ -16,6 +16,10 @@ export const store = reactive({
   displaymodes: [],
   displaymodeId: 0,
   darkmode: false,
+  exponMin: -2,
+  exponMax: 7,
+  roundToNumDigits: 7,
+  displaySetting: "Norm",
 });
 
 export function resetShiftSto() {

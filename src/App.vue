@@ -7,6 +7,7 @@ import SearchBox from "./components/SearchBox.vue";
 import SearchBoxSI from "./components/SearchBoxSI.vue";
 import { store } from "./components/store";
 import { onMounted } from "vue";
+import Toolbar from "./components/Toolbar.vue";
 
 onMounted(() => {
   // configure dark/light theme
@@ -26,6 +27,7 @@ onMounted(() => {
       <VariableSidePane />
     </div>
   </div>
+  <Toolbar />
   <SearchBox />
   <SearchBoxSI />
 </template>

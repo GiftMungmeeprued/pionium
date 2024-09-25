@@ -28,6 +28,8 @@ const data = reactive({
   id: 0,
   displaymodes: [],
   angle: "rad",
+  standardAns: "",
+  decimalAns: "",
 });
 
 const latexFunctionMap = [
@@ -268,6 +270,7 @@ function calculateInput() {
   if (mathField.latex()) {
     try {
       exp = preprocessInputLatex(mathField.latex());
+      console.log(exp);
     } catch ({ name, message }) {
       staticMathRef.value.latex(`\\text{${name}: ${message}}`);
       return;
@@ -472,12 +475,26 @@ function formatComplex(real, imag) {
   }
 }
 
+function digitsSep(number) {
+  const str = number.toString().split(".");
+  str[0] = str[0].replace(/(\d)(?=(\d{3})+$)/g, "$1\\ ");
+  if (str[1]) {
+    str[1] = str[1].replace(/(\d{3})/g, "$1\\ ");
+  }
+  console.log(str);
+  return str.join(".");
+}
+
 function displayDecimal(number) {
   // display format for complex and scientific notation from fractions
   const realPartFraction = nerdamer(`realpart(${number})`).toString();
   const imagPartFraction = nerdamer(`imagpart(${number})`).toString();
 
   function convertToDecimals(fractionString) {
+    if (fractionString == 0) {
+      return [fractionString, false];
+    }
+
     // convert 1.2488e-20 to 1.2488 \\cdot 10^{-20}
     // return [decimalString, displayDecimalOnlyBool]
     const [numerator, denominator] = fractionString.split("/");
@@ -499,13 +516,51 @@ function displayDecimal(number) {
       ).toString();
     }
 
-    if (decimalNumber.includes("e")) {
-      const [coeff, expon] = decimalNumber.split("e");
-      const latex = `${roundTo(coeff)} \\cdot 10^{${expon}}`;
+    function toLatex(coeff, expon, engMode = false) {
+      if (!engMode) {
+        return `${digitsSep(
+          roundTo(coeff, store.roundToNumDigits)
+        )} \\cdot 10^{${expon}}`;
+      } else {
+        const quotient = Math.floor(expon / 3);
+        const remainder = expon - quotient * 3;
+        return `${digitsSep(
+          roundTo(coeff, store.roundToNumDigits) * 10 ** remainder
+        )} \\cdot 10^{${quotient * 3}}`;
+      }
+    }
+
+    const [coeff, expon] = parseFloat(decimalNumber)
+      .toExponential()
+      .split("e")
+      .map((item) => Number(item));
+
+    if (store.displaySetting === "Norm") {
+      if (expon < store.exponMin || expon > store.exponMax) {
+        const latex = toLatex(coeff, expon, false);
+        return [latex, displayStandard];
+      } else {
+        return [
+          digitsSep(roundTo(decimalNumber, store.roundToNumDigits)),
+          displayStandard,
+        ];
+      }
+    } else if (store.displaySetting === "Sci") {
+      const latex = toLatex(coeff, expon, false);
       return [latex, displayStandard];
     } else {
-      return [roundTo(decimalNumber), displayStandard];
+      // engineering notatation
+      const latex = toLatex(coeff, expon, true);
+      return [latex, displayStandard];
     }
+
+    // if (decimalNumber.includes("e")) {
+    //   const [coeff, expon] = decimalNumber.split("e");
+    //   const latex = `${roundTo(coeff)} \\cdot 10^{${expon}}`;
+    //   return [latex, displayStandard];
+    // } else {
+    //   return [roundTo(decimalNumber), displayStandard];
+    // }
   }
 
   const [realPartDecimal, realPartdisplayStandard] =
@@ -560,13 +615,7 @@ function displayStandardSolutions(solutions) {
   return solutionsArray.map(displayStandard).join(",");
 }
 
-function displayAnswer() {
-  if (data.calculated.toString() === "[]") {
-    const noSolOutput = "\\text{No solutions found}";
-    staticMathRef.value.latex(noSolOutput);
-    return noSolOutput;
-  }
-
+function getDisplayModes() {
   const mustSimplify = /sin|cos|tan|csc|sec|cot|factorial|log/.test(
     data.calculated.toString()
   );
@@ -580,7 +629,7 @@ function displayAnswer() {
   // evaluate expression
   const fractionAns = data.calculated.evaluate();
   // display format: standard form ex 25/2, pi, e, sqrt(3)/2, x^2
-  const standardAns = !data.solveMode
+  data.standardAns = !data.solveMode
     ? preprocessDisplayLatex(displayStandard(data.calculated.toString()))
     : preprocessDisplayLatex(
         displayStandardSolutions(data.calculated.toString())
@@ -592,6 +641,8 @@ function displayAnswer() {
       ? displayDecimal(fractionAns.text("fractions"))
       : displayDecimalSolutions(fractionAns.text("fractions"));
 
+    data.decimalAns = decimalAns;
+
     // find available display modes
     store.displaymodes = ["dec"];
     // display standard form when
@@ -599,7 +650,12 @@ function displayAnswer() {
     // 2. for fraction, the denominator is not too large
     if ((!mustSimplify && hasExactForm) || shouldDisplayStandard) {
       store.displaymodes.unshift("std");
-      if (decimalAns > 1 && !data.solveMode && shouldDisplayStandard) {
+      if (
+        (fractionAns.text("decimals") > 1 ||
+          fractionAns.text("decimals") < -1) &&
+        !data.solveMode &&
+        shouldDisplayStandard
+      ) {
         store.displaymodes.push("mix");
       }
     }
@@ -621,17 +677,32 @@ function displayAnswer() {
       }
     }
   }
+}
+
+function displayAnswer(togglemode = false) {
+  if (data.calculated.toString() === "[]") {
+    const noSolOutput = "\\text{No solutions found}";
+    staticMathRef.value.latex(noSolOutput);
+    return noSolOutput;
+  }
+
+  // get available display modes when not in the toggle mode (only need to do it once per answer)
+  if (!togglemode) {
+    getDisplayModes();
+  }
 
   let answer = data.solveMode ? "x = " : "= ";
 
+  const fractionAns = data.calculated.evaluate();
+
   const displaymode = store.displaymodes[store.displaymodeId];
   if (displaymode === "std") {
-    answer = answer + standardAns;
+    answer = answer + data.standardAns;
   } else if (displaymode === "mix") {
     answer = answer + displayMixedFraction(fractionAns);
   } else {
     // simple decimal format
-    answer = answer + decimalAns;
+    answer = answer + data.decimalAns;
   }
 
   staticMathRef.value.latex(answer);
@@ -654,24 +725,6 @@ function handleCmd(cmd) {
   }
 
   switch (cmd) {
-    case "SD":
-      if (data.calculated) {
-        data.displayDecimal = !data.displayDecimal;
-        displayAnswer();
-      }
-      break;
-    case "mixedFraction":
-      if (data.calculated) {
-        data.mixedFraction = !data.mixedFraction;
-        staticMath.latex(
-          `= ${
-            data.mixedFraction
-              ? displayMixedFraction(data.calculated)
-              : preprocessDisplayLatex(data.calculated.toTeX())
-          }`
-        );
-      }
-      break;
     case "\\int":
       mathField.write("\\int\\left[\\right] dx");
       for (let i = 0; i < 3; i++) {
@@ -753,7 +806,7 @@ function storeVar(var_name) {
 function toggleDisplay() {
   // go to the next display mode in the array displaymodes
   store.displaymodeId = (store.displaymodeId + 1) % store.displaymodes.length;
-  displayAnswer();
+  displayAnswer(true);
 }
 
 function toggleAngle() {
@@ -798,14 +851,24 @@ function toggleDarkmode() {
           </button>
           <div class="flex items-center">
             <button
+              title="Display settings"
+              class="text-gray-500 dark:text-[#c2c7cbff] hover:text-gray-700 dark:hover:text-white mr-3"
+              aria-haspopup="dialog"
+              aria-expanded="false"
+              aria-controls="toolbar-modal"
+              data-hs-overlay="#toolbar-modal"
+            >
+              <i class="pi pi-cog text-sm"></i>
+            </button>
+            <button
               title="Toggle between light and dark modes"
-              class="text-gray-500 dark:text-[#c2c7cbff] hover:text-gray-700 dark:hover:text-white mr-1"
+              class="text-gray-500 dark:text-[#c2c7cbff] hover:text-gray-700 dark:hover:text-white mr-3"
               @click="toggleDarkmode"
             >
               <i v-if="store.darkmode" class="pi pi-sun text-sm"></i>
               <i v-else class="pi pi-moon text-sm"></i>
             </button>
-            <CopyButton class="mx-2" />
+            <CopyButton class="mr-2" />
           </div>
         </div>
         <Simplebar class="overflow-y-auto w-full px-3 py-3 h-20 tall:h-30 grow">
