@@ -535,9 +535,11 @@ function displayDecimalSolutions(solutions) {
 function displayMixedFraction(fraction) {
   const numerator = fraction.numerator().toString();
   const denominator = fraction.denominator().toString();
-  const quotient = Math.floor(numerator / denominator);
-  const remainder = numerator % denominator;
-  return `${quotient != 0 ? quotient : ""}${
+  const isNegative = numerator < 0;
+  const numeratorAbs = Math.abs(numerator).toString();
+  const quotient = Math.floor(numeratorAbs / denominator);
+  const remainder = numeratorAbs % denominator;
+  return `${isNegative ? "-" : ""}${quotient != 0 ? quotient : ""}${
     remainder != 0 ? `\\frac{${remainder}}{${denominator}}` : ""
   }`;
 }
